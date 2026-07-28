@@ -1,0 +1,744 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Integrate — design tokens                                          */
+/*  Light, engineered, surgical. Warm paper, warm ink, one accent.     */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  /* Surfaces — warm whites & greys, never pure cold grey */
+  --color-paper: #f7f5f0;
+  --color-paper-2: #efece4;
+  --color-paper-3: #e7e3d8;
+  --color-card: #fdfcfa;
+
+  /* Ink — warm near-black, stepped */
+  --color-ink: #1b1a16;
+  --color-ink-2: #565349;
+  /* Tertiary ink is used for small mono labels — kept ≥4.5:1 on paper (AA). */
+  --color-ink-3: #74705f;
+
+  /* Hairlines */
+  --color-line: #dedacd;
+  --color-line-2: #cfcaba;
+
+  /* The one accent: brushed silver. Metallic and engineered rather than a
+     flat hue — solid uses take the graphite token (AA-legible on paper);
+     showpiece moments take the .text-silver / .silver-sheen gradients. */
+  --color-accent: #6b6f77;
+  --color-accent-deep: #45484e;
+  --color-accent-tint: #eceef1;
+  --color-silver-hi: #c8ccd2;
+  --color-silver-lo: #4d5056;
+
+  /* ---------------------------------------------------------------- */
+  /*  Integrate Web Design — the dark "gallery" theme.                 */
+  /*  A separate room in the same building: deep neutral charcoal,     */
+  /*  warm ivory text, one restrained platinum accent. Scoped to the   */
+  /*  /web-design route; the light homepage never touches these.       */
+  /* ---------------------------------------------------------------- */
+  --color-carbon: #0a0a0c; /* page ground — near-black, faint warmth */
+  --color-carbon-2: #101013; /* raised surfaces / cards */
+  --color-carbon-3: #16161a; /* elevated / hover */
+  --color-graphite: #23232a; /* hairlines on dark */
+  --color-graphite-2: #34343d; /* stronger dividers */
+  --color-ivory: #f2f1ec; /* primary text — warm white, brand-matched */
+  --color-mist: #9a9ba3; /* secondary text (AA on carbon) */
+  --color-mist-2: #6c6d76; /* tertiary / mono labels */
+  --color-halo: #c9ced7; /* the one accent: cool platinum */
+  --color-halo-dim: #767c88; /* muted platinum for lines/markers */
+  /* Web Design sub-brand accent — the purple from the nav's "snake light"
+     pill, threaded through the hub sparingly as a secondary accent. Platinum
+     stays dominant; iris is the signature thread, never the main action. */
+  --color-iris: #a855f7; /* small marks, dots, hover states */
+  --color-iris-soft: #c084fc; /* lighter violet for dark-text chips */
+
+  /* Type */
+  --font-display: var(--font-fraunces), "Georgia", serif;
+  --font-sans: var(--font-instrument), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), "SFMono-Regular", "Consolas", monospace;
+
+  /* Shadows — soft, warm, layered (light theme depth without darkness) */
+  --shadow-lift:
+    0 1px 2px rgb(27 26 22 / 0.04), 0 4px 12px rgb(27 26 22 / 0.05),
+    0 16px 40px rgb(27 26 22 / 0.06);
+  --shadow-float:
+    0 2px 4px rgb(27 26 22 / 0.05), 0 12px 32px rgb(27 26 22 / 0.08),
+    0 32px 80px rgb(27 26 22 / 0.1);
+  --shadow-hairline: inset 0 0 0 1px rgb(27 26 22 / 0.07);
+
+  /* Easing — nothing linear, nothing default */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.25, 0.46, 0.2, 1);
+
+  /* Marquees */
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-marquee-slow: marquee 72s linear infinite;
+  --animate-marquee-slow-reverse: marquee-reverse 72s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Web Design CTA — purple "snake" light rotating around the pill border */
+  --animate-wd-spin: wd-spin 3.2s linear infinite;
+
+  @keyframes wd-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+html {
+  scroll-behavior: smooth;
+  /* Belt-and-braces with body below: kill any sideways scroll from decorative
+     off-canvas glows/blooms. `clip` (not `hidden`) so it never creates a scroll
+     container that would break the sticky section headers. */
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-marquee-slow-reverse {
+    animation: none;
+  }
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Outlines follow each element's own border-radius — never override it here,
+   or pill buttons would snap square while focused. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                          */
+/* ------------------------------------------------------------------ */
+
+/* Page gutter + max width — every section uses this */
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 82rem;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* Editorial display type — Fraunces with tuned optical settings */
+@utility font-display-tuned {
+  font-family: var(--font-display);
+  font-variation-settings:
+    "opsz" 90,
+    "SOFT" 0,
+    "WONK" 0;
+  letter-spacing: -0.02em;
+}
+
+/* Brushed-metal text — for showpiece display accent words. A legible
+   metallic gradient clipped to the glyphs; falls back to graphite where
+   background-clip:text is unsupported. */
+@utility text-silver {
+  color: var(--color-accent-deep);
+  background-image: linear-gradient(
+    118deg,
+    #4d5056 0%,
+    #8a8e96 20%,
+    #55585e 42%,
+    #9498a0 64%,
+    #5a5d63 82%,
+    #7f838b 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Brushed-metal fill — for small chrome surfaces (dots, chips, markers). */
+@utility silver-sheen {
+  background-image: linear-gradient(
+    135deg,
+    #b9bdc4 0%,
+    #eef0f2 45%,
+    #a7abb2 56%,
+    #cfd2d7 100%
+  );
+}
+
+/* Mono eyebrow label */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+/* Frosted glass panel on light paper */
+@utility glass {
+  background: rgb(253 252 250 / 0.72);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: var(--shadow-hairline);
+}
+
+/* Soft accent glow wash (radial, for section backdrops) */
+@utility glow-accent {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 40%,
+    rgb(120 124 132 / 0.09),
+    transparent 70%
+  );
+}
+
+/* Fade the edges of marquee strips */
+@utility mask-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+/* Hairline borders */
+@utility hairline-t {
+  border-top: 1px solid var(--color-line);
+}
+@utility hairline-b {
+  border-bottom: 1px solid var(--color-line);
+}
+@utility hairline {
+  border: 1px solid var(--color-line);
+}
+
+/* Film grain — applied once in layout as a fixed overlay */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.41 0 0 0 0 0.38 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Integrate Web Design — dark "gallery" utilities                    */
+/*  Only used under .theme-portfolio (the /web-design layout wrapper). */
+/* ------------------------------------------------------------------ */
+
+/* The global multiply grain is invisible on near-black, so the dark
+   theme re-tints selection + focus to the platinum accent and lays its
+   own faint screen-blend grain for texture. */
+.theme-portfolio ::selection {
+  background: var(--color-halo);
+  color: #0a0a0c;
+}
+.theme-portfolio :focus-visible {
+  outline: 2px solid var(--color-halo);
+  outline-offset: 3px;
+}
+/* The shared `eyebrow` utility hard-codes a light-theme ink colour. Re-tint it
+   inside the dark room via a descendant selector, which outranks the single
+   utility class regardless of stylesheet order. */
+.theme-portfolio .eyebrow {
+  color: var(--color-halo-dim);
+}
+
+/* Screen-blend film grain for the dark theme — sits behind content as a
+   fixed backdrop layer inside the portfolio wrapper. */
+@utility grain-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.028 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Frosted panel on carbon — for the dark nav bar. Translucent enough that
+   the aurora atmosphere reads through it while scrolling. */
+@utility glass-dark {
+  background: rgb(10 10 12 / 0.55);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: inset 0 -1px 0 0 rgb(255 255 255 / 0.06);
+}
+
+/* Brushed-platinum display text for the dark theme — brighter than the
+   light theme's .text-silver so it lifts off the carbon ground. Falls
+   back to solid platinum where background-clip:text is unsupported. */
+@utility text-platinum {
+  color: var(--color-halo);
+  background-image: linear-gradient(
+    118deg,
+    #aeb4be 0%,
+    #f6f8fb 22%,
+    #b6bcc6 46%,
+    #eef1f5 68%,
+    #aab0ba 86%,
+    #d6dae1 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Soft platinum bloom wash for dark section backdrops */
+@utility glow-halo {
+  background: radial-gradient(
+    ellipse 55% 45% at 50% 38%,
+    rgb(201 206 215 / 0.1),
+    transparent 70%
+  );
+}
+
+/* Faint violet bloom — the Web Design sub-brand accent, used sparingly to
+   tint a section backdrop without shouting. Pairs over glow-halo. */
+@utility glow-iris {
+  background: radial-gradient(
+    ellipse 48% 40% at 50% 30%,
+    rgb(168 85 247 / 0.09),
+    transparent 72%
+  );
+}
+
+/* Hairline borders on dark */
+@utility hairline-dark {
+  border: 1px solid var(--color-graphite);
+}
+@utility hairline-dark-t {
+  border-top: 1px solid var(--color-graphite);
+}
+@utility hairline-dark-b {
+  border-bottom: 1px solid var(--color-graphite);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Integrate Web Design — interaction layer (dark hub only)          */
+/* ------------------------------------------------------------------ */
+
+/* Ambient purple blooms drifting slowly behind the top of the page. */
+@keyframes wd-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.12);
+  }
+}
+@keyframes wd-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-5%, 4%, 0) scale(1.08);
+  }
+}
+@keyframes wd-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.14);
+  }
+}
+.wd-ambient-a {
+  animation: wd-drift-a 26s ease-in-out infinite;
+}
+.wd-ambient-b {
+  animation: wd-drift-b 34s ease-in-out infinite;
+}
+.wd-ambient-c {
+  animation: wd-drift-c 42s ease-in-out infinite;
+}
+
+/* The atmosphere "switches on" once per page load, in step with the intro. */
+.wd-atmo-in {
+  animation: wd-atmo-in 1.6s var(--ease-out-soft) both;
+}
+@keyframes wd-atmo-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hero montage — columns of real work drifting slowly behind the headline.
+   Each column holds two copies of its image set, so a -50% translate advances
+   by exactly one set and loops seamlessly. Paused under reduced motion. */
+@keyframes wd-montage-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+@keyframes wd-montage-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.wd-montage-up {
+  animation: wd-montage-up 55s linear infinite;
+}
+.wd-montage-down {
+  animation: wd-montage-down 55s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wd-montage-up,
+  .wd-montage-down {
+    animation: none;
+  }
+}
+
+/* Mid-ground depth layer: a faint engineering grid between the aurora and the
+   content, masked so it concentrates where the light falls. */
+.wd-linework {
+  background-image:
+    linear-gradient(to right, rgb(201 206 215 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(201 206 215 / 0.03) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(85% 65% at 50% 26%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(85% 65% at 50% 26%, black, transparent 80%);
+}
+
+/* Vignette + top light falloff — the page reads as lit, not uniformly dark.
+   Sits over the content at whisper opacity; center stays fully legible. */
+.wd-vignette {
+  background:
+    radial-gradient(120% 80% at 50% -4%, rgb(214 218 225 / 0.05), transparent 52%),
+    radial-gradient(145% 115% at 50% 45%, transparent 62%, rgb(3 3 6 / 0.42) 100%);
+}
+
+/* Giant stroked chapter numerals used as background texture, editorial-style. */
+.wd-ghost-numeral {
+  color: rgb(242 241 236 / 0.02);
+  -webkit-text-stroke: 1px rgb(201 206 215 / 0.1);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Intro — the room's lights come on, then the curtain lifts.        */
+/*  Pure CSS so it works before hydration and without JS entirely;    */
+/*  an inline script skips it after the first view in a session.      */
+/* ------------------------------------------------------------------ */
+
+#wd-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+#wd-intro[data-skip] {
+  display: none;
+}
+
+.wd-intro-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #070709;
+  animation: wd-intro-lift 0.7s var(--ease-out-expo) 0.68s forwards;
+  will-change: transform;
+}
+@keyframes wd-intro-lift {
+  to {
+    transform: translateY(-101%);
+    visibility: hidden;
+  }
+}
+
+.wd-intro-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  animation: wd-intro-fade 0.32s ease-out 0.64s forwards;
+}
+@keyframes wd-intro-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+.wd-intro-mark {
+  opacity: 0;
+  transform: translateY(12px) scale(0.94);
+  filter: blur(8px);
+  animation: wd-intro-mark 0.55s var(--ease-out-expo) 0.05s forwards;
+}
+@keyframes wd-intro-mark {
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.wd-intro-line {
+  height: 1px;
+  width: 172px;
+  transform: scaleX(0);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(168 85 247 / 0.9),
+    transparent
+  );
+  animation: wd-intro-line 0.5s var(--ease-out-expo) 0.22s forwards;
+}
+@keyframes wd-intro-line {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.wd-intro-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: wd-intro-tag 0.5s var(--ease-out-expo) 0.3s forwards;
+}
+@keyframes wd-intro-tag {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Typography centrepiece — one-shot platinum sheen across accent    */
+/*  headline words on load. Short and once-only, so the text raster   */
+/*  cost never rides scroll (see Services.tsx gotcha).                */
+/* ------------------------------------------------------------------ */
+
+.wd-sheen-word {
+  color: var(--color-halo);
+  background-image: linear-gradient(
+    110deg,
+    #aab0ba 0%,
+    #b6bcc6 34%,
+    #f7f9fc 50%,
+    #b6bcc6 66%,
+    #d6dae1 100%
+  );
+  background-size: 250% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wd-sheen 1.3s var(--ease-out-soft) both;
+}
+@keyframes wd-sheen {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Themed scrollbar — only while the dark portfolio room is open.    */
+/* ------------------------------------------------------------------ */
+
+@supports selector(::-webkit-scrollbar) {
+  html:has(.theme-portfolio)::-webkit-scrollbar {
+    width: 11px;
+  }
+  html:has(.theme-portfolio)::-webkit-scrollbar-track {
+    background: #0a0a0c;
+  }
+  html:has(.theme-portfolio)::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #34343d, #2c2637);
+    border-radius: 8px;
+    border: 3px solid #0a0a0c;
+  }
+  html:has(.theme-portfolio)::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #45404f, #4c3568);
+  }
+}
+@supports not selector(::-webkit-scrollbar) {
+  html:has(.theme-portfolio) {
+    scrollbar-color: #34343d #0a0a0c;
+  }
+}
+
+/* Live card preview: the page body "scrolls" inside the browser frame while the
+   card is hovered. `--wd-mock` (0 → 1) is flipped by group-hover on the card;
+   the translate is in cqi so it scales with the card size. */
+.wd-mock-track {
+  transform: translateY(calc(var(--wd-mock, 0) * -26cqi));
+  transition: transform 1.6s var(--ease-out-expo);
+}
+
+/* Custom cursor: hide the native cursor only while the JS cursor is mounted. */
+.theme-portfolio:has(#wd-cursor),
+.theme-portfolio:has(#wd-cursor) * {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wd-ambient-a,
+  .wd-ambient-b,
+  .wd-ambient-c,
+  .wd-atmo-in,
+  .wd-sheen-word {
+    animation: none;
+  }
+  /* No intro under reduced motion — the page is simply there, with the
+     static atmosphere already giving it the premium ground. */
+  #wd-intro {
+    display: none;
+  }
+  .wd-mock-track {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  "Selected work" section — faithful port of the integratewebdesign  */
+/*  .vercel.app treatment (ink + neon coverflow). Scoped to .iwd-*.    */
+/* ------------------------------------------------------------------ */
+
+/* Dot grid, radially masked so it fades toward the edges. */
+.iwd-dot-grid {
+  background-image: radial-gradient(#ddb8ff38 1px, transparent 1px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(115% 105%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(115% 105%, #000 55%, transparent 100%);
+}
+
+/* Fine film grain (animated in tiny steps). */
+.iwd-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  animation: iwd-grain-shift 0.7s steps(3, end) infinite;
+}
+@keyframes iwd-grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-3%, 2%);
+  }
+  66% {
+    transform: translate(2%, -3%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Slowly-rotating conic border-glow on the eyebrow pill. */
+@property --iwd-badge-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.iwd-badge-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--iwd-badge-angle, 0deg),
+    transparent 0deg,
+    #b25dff 60deg,
+    #ddb8ff 90deg,
+    transparent 170deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: iwd-badge-spin 6s linear infinite;
+}
+@keyframes iwd-badge-spin {
+  to {
+    --iwd-badge-angle: 360deg;
+  }
+}
+
+/* Caption cross-fade as the active card changes. */
+.iwd-rise {
+  animation: iwd-rise-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes iwd-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iwd-grain,
+  .iwd-badge-glow::before,
+  .iwd-rise {
+    animation: none;
+  }
+  .iwd-rise {
+    opacity: 1;
+    transform: none;
+  }
+}
