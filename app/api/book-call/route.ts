@@ -132,17 +132,18 @@ async function upsertContact(token: string, locationId: string, lead: Lead) {
     throw new Error(`GHL contacts API responded ${res.status} ${detail.slice(0, 200)}`);
   }
 
+  const json = (await res.json().catch(() => null)) as
+    | { contact?: { id?: string } }
+    | null;
+  const contactId = json?.contact?.id;
+
   // The upsert body has no field for free text, so the enquiry itself goes on
   // as a note. Best-effort: the lead is already saved, so a failure here is
   // logged rather than shown to the visitor as a failed submission.
   if (lead.message) {
-    const json = (await res.json().catch(() => null)) as
-      | { contact?: { id?: string } }
-      | null;
-    const contactId = json?.contact?.id;
     if (!contactId) {
       console.warn("[book-call] upsert returned no contact id — note not added");
-      return;
+      return contactId;
     }
     const noteRes = await postJson(
       `${GHL_API_BASE}/contacts/${contactId}/notes`,
@@ -160,6 +161,8 @@ async function upsertContact(token: string, locationId: string, lead: Lead) {
       console.warn(`[book-call] note not added: GHL responded ${noteRes.status}`);
     }
   }
+
+  return contactId;
 }
 
 export async function POST(req: Request) {
@@ -170,8 +173,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
   }
 
-  // Honeypot — real users never fill this hidden field.
-  if (data.company_website) {
+  // Honeypot — real users never fill this hidden field. Trimmed, so a stray
+  // space from an autofill can't silently bin a real lead.
+  if (typeof data.company_website === "string" && data.company_website.trim()) {
+    console.warn("[book-call] rejected: honeypot filled — not delivered");
     return NextResponse.json({ ok: true });
   }
 
@@ -210,19 +215,40 @@ export async function POST(req: Request) {
     tags: cleanTags(data.tags),
   };
 
-  const webhookUrl = process.env.GHL_WEBHOOK_URL;
-  const token = process.env.GHL_API_TOKEN;
-  const locationId = process.env.GHL_LOCATION_ID;
+  const webhookUrl = process.env.GHL_WEBHOOK_URL?.trim();
+  const token = process.env.GHL_API_TOKEN?.trim();
+  const locationId = process.env.GHL_LOCATION_ID?.trim();
+
+  // Which credentials the deploy can see, without ever printing them. This is
+  // the first thing to read in the Vercel log when a lead doesn't show up.
+  console.log(
+    `[book-call] config: webhook=${webhookUrl ? (/^https?:\/\//.test(webhookUrl) ? "url" : "SET-BUT-NOT-A-URL") : "unset"} token=${token ? "set" : "unset"} location=${locationId ? "set" : "unset"}`,
+  );
+
+  // A non-URL webhook value (e.g. a pit- token pasted into the wrong variable)
+  // would throw on fetch and 502 every lead. Ignore it and use the API instead.
+  const usableWebhook = webhookUrl && /^https?:\/\//.test(webhookUrl) ? webhookUrl : undefined;
+  if (webhookUrl && !usableWebhook) {
+    console.error("[book-call] GHL_WEBHOOK_URL is not an http(s) URL — ignoring it; falling back to the Contacts API");
+  }
 
   try {
-    if (webhookUrl) {
-      await forwardToWebhook(webhookUrl, lead);
-      return NextResponse.json({ ok: true });
+    if (usableWebhook) {
+      // NB: a GHL Inbound Webhook accepts the POST and returns 2xx whether or
+      // not its Workflow is published or has a "Create Contact" action — so a
+      // 200 here does NOT prove a contact was created. Say so in the log.
+      await forwardToWebhook(usableWebhook, lead);
+      console.log(
+        `[book-call] delivered via webhook (${lead.email}) — contact creation depends on the GHL Workflow`,
+      );
+      return NextResponse.json({ ok: true, via: "webhook" });
     }
     if (token && locationId) {
-      await upsertContact(token, locationId, lead);
-      return NextResponse.json({ ok: true });
+      const contactId = await upsertContact(token, locationId, lead);
+      console.log(`[book-call] delivered via contacts API (${lead.email}) — contact ${contactId ?? "id unknown"}`);
+      return NextResponse.json({ ok: true, via: "contacts-api" });
     }
+    console.error("[book-call] NOT DELIVERED: no GHL_WEBHOOK_URL and no GHL_API_TOKEN + GHL_LOCATION_ID");
 
     // Not configured yet.
     if (process.env.NODE_ENV !== "production") {
