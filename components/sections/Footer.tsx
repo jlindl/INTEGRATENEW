@@ -34,13 +34,17 @@ function FooterLink({ href, children }: { href: string; children: string }) {
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group relative inline-block text-[0.95rem] text-ink-2 transition-colors duration-300 hover:text-ink"
+      /* py on touch widths lifts the hit area from 23px to ~43px; the
+         underline hangs off the inner span so it still hugs the text. */
+      className="group inline-block py-2.5 text-[0.95rem] text-ink-2 transition-colors duration-300 hover:text-ink lg:py-0"
     >
-      {children}
-      <span
-        aria-hidden="true"
-        className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
-      />
+      <span className="relative inline-block">
+        {children}
+        <span
+          aria-hidden="true"
+          className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
+        />
+      </span>
     </a>
   );
 }
@@ -49,7 +53,7 @@ function LinkColumn({ title, links }: { title: string; links: LinkItem[] }) {
   return (
     <nav aria-label={title} className="lg:col-span-3">
       <h3 className="eyebrow mb-5">{title}</h3>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-0.5 lg:gap-3">
         {links.map((link) => (
           <li key={link.label}>
             <FooterLink href={link.href}>{link.label}</FooterLink>
@@ -94,12 +98,13 @@ export function Footer() {
             <p className="font-mono text-[0.75rem] text-ink-3">
               © 2026 Integrate AI Solutions Limited. All rights reserved.
             </p>
-            <nav aria-label="Legal" className="flex flex-wrap gap-x-5 gap-y-2">
+            <nav aria-label="Legal" className="flex flex-wrap gap-x-5 sm:gap-y-2">
               {LEGAL_DOCS.map((doc) => (
                 <a
                   key={doc.slug}
                   href={`/legal/${doc.slug}`}
-                  className="text-[0.75rem] text-ink-3 transition-colors duration-300 hover:text-ink"
+                  /* Same touch-target lift as the nav columns above. */
+                  className="inline-block py-3 text-[0.75rem] text-ink-3 transition-colors duration-300 hover:text-ink sm:py-0"
                 >
                   {doc.label}
                 </a>

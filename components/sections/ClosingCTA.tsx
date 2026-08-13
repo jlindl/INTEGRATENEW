@@ -74,9 +74,9 @@ export function ClosingCTA() {
           </motion.h2>
 
           <Reveal as="p" delay={0.1} className="mx-auto mt-8 max-w-[46ch] text-lg leading-relaxed text-ink-2 md:text-xl">
-            Book a 30-minute strategy call. We&apos;ll map out exactly which AI
-            systems will have the highest ROI for your business. No fluff, no
-            pressure.
+            Leave your details and we&apos;ll call you back to set up a
+            30-minute strategy call, mapping out exactly which AI systems will
+            have the highest ROI for your business. No fluff, no pressure.
           </Reveal>
 
           <Reveal delay={0.18} className="mt-11">

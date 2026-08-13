@@ -124,7 +124,9 @@ export function Hero() {
   useEffect(() => {
     const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const lowEnd = (navigator.hardwareConcurrency ?? 8) < 4;
-    const wide = window.innerWidth >= 768;
+    // >= lg only: below that the object is a faint backdrop behind the copy,
+    // which doesn't justify a WebGL context (and tablets ran it over the text).
+    const wide = window.innerWidth >= 1024;
     let webgl = false;
     try {
       const c = document.createElement("canvas");
@@ -173,10 +175,12 @@ export function Hero() {
       {/* Soft accent wash behind the object */}
       <div className="glow-accent absolute inset-0" aria-hidden="true" />
 
-      {/* The visual — right half on desktop, faded backdrop on mobile */}
+      {/* The visual — right half on desktop. Below lg it's a corner motif:
+          tucked up and out to the right, and faint, so it reads as texture
+          instead of sitting on top of the headline and buttons. */}
       <motion.div
         style={reduce ? undefined : { y: visualY }}
-        className="pointer-events-none absolute -right-[30%] top-[2%] h-[118vw] w-[118vw] opacity-45 md:opacity-100 lg:-right-[3%] lg:top-1/2 lg:h-[min(50vw,840px)] lg:w-[min(50vw,840px)] lg:-translate-y-1/2"
+        className="pointer-events-none absolute -right-[26%] -top-[10%] h-[76vw] w-[76vw] opacity-[0.13] sm:-right-[20%] sm:h-[62vw] sm:w-[62vw] lg:-right-[3%] lg:top-1/2 lg:h-[min(50vw,840px)] lg:w-[min(50vw,840px)] lg:-translate-y-1/2 lg:opacity-100"
         aria-hidden="true"
       >
         {/* Grounding shadow */}
