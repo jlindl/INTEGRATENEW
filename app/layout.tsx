@@ -1,27 +1,32 @@
 import type { Metadata } from "next";
-import { Fraunces, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-/* Editorial display face — variable, with optical sizing */
-const fraunces = Fraunces({
-  subsets: ["latin"],
+/* Editorial display face — variable, with optical sizing (opsz/SOFT/WONK) */
+const fraunces = localFont({
+  src: [
+    { path: "../assets/fonts/fraunces/fraunces-100-900.woff2", weight: "100 900", style: "normal" },
+    { path: "../assets/fonts/fraunces/fraunces-100-900-italic.woff2", weight: "100 900", style: "italic" },
+  ],
   variable: "--font-fraunces",
-  style: ["normal", "italic"],
-  axes: ["opsz", "SOFT", "WONK"],
   display: "swap",
 });
 
 /* Clean, highly legible body face */
-const instrument = Instrument_Sans({
-  subsets: ["latin"],
+const instrument = localFont({
+  src: [
+    { path: "../assets/fonts/instrument-sans/instrument-sans-400-700.woff2", weight: "400 700", style: "normal" },
+  ],
   variable: "--font-instrument",
   display: "swap",
 });
 
 /* Engineered mono for labels, numbers, system readouts */
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const plexMono = localFont({
+  src: [
+    { path: "../assets/fonts/ibm-plex-mono/ibm-plex-mono-400.woff2", weight: "400", style: "normal" },
+    { path: "../assets/fonts/ibm-plex-mono/ibm-plex-mono-500.woff2", weight: "500", style: "normal" },
+  ],
   variable: "--font-plex-mono",
   display: "swap",
 });

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Spectral, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { Accolades } from "./_components/Accolades";
 import { Approach } from "./_components/Approach";
@@ -13,17 +13,24 @@ import { SiteFooter } from "./_components/SiteFooter";
 import { SiteHeader } from "./_components/SiteHeader";
 
 /* Serif-led display face — editorial gravitas */
-const spectral = Spectral({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+const spectral = localFont({
+  src: [
+    { path: "../../../../assets/fonts/spectral/spectral-400.woff2", weight: "400", style: "normal" },
+    { path: "../../../../assets/fonts/spectral/spectral-400-italic.woff2", weight: "400", style: "italic" },
+    { path: "../../../../assets/fonts/spectral/spectral-500.woff2", weight: "500", style: "normal" },
+    { path: "../../../../assets/fonts/spectral/spectral-500-italic.woff2", weight: "500", style: "italic" },
+    { path: "../../../../assets/fonts/spectral/spectral-600.woff2", weight: "600", style: "normal" },
+    { path: "../../../../assets/fonts/spectral/spectral-600-italic.woff2", weight: "600", style: "italic" },
+  ],
   variable: "--font-hl-display",
   display: "swap",
 });
 
 /* Clean, highly legible body face */
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: [
+    { path: "../../../../assets/fonts/inter/inter-100-900.woff2", weight: "100 900", style: "normal" },
+  ],
   variable: "--font-hl-body",
   display: "swap",
 });

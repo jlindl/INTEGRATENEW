@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Barlow, Barlow_Condensed } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { Areas } from "./_components/Areas";
 import { Certifications } from "./_components/Certifications";
@@ -14,17 +14,23 @@ import { Reviews } from "./_components/Reviews";
 import { Services } from "./_components/Services";
 
 /* Uppercase condensed display face for headlines and numerals */
-const veDisplay = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const veDisplay = localFont({
+  src: [
+    { path: "../../../../assets/fonts/barlow-condensed/barlow-condensed-500.woff2", weight: "500", style: "normal" },
+    { path: "../../../../assets/fonts/barlow-condensed/barlow-condensed-600.woff2", weight: "600", style: "normal" },
+    { path: "../../../../assets/fonts/barlow-condensed/barlow-condensed-700.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-ve-display",
   display: "swap",
 });
 
 /* Workhorse body face */
-const veBody = Barlow({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const veBody = localFont({
+  src: [
+    { path: "../../../../assets/fonts/barlow/barlow-400.woff2", weight: "400", style: "normal" },
+    { path: "../../../../assets/fonts/barlow/barlow-500.woff2", weight: "500", style: "normal" },
+    { path: "../../../../assets/fonts/barlow/barlow-600.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-ve-body",
   display: "swap",
 });

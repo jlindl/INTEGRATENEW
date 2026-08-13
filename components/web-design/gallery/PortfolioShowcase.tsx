@@ -8,15 +8,16 @@
  * The builds are data-driven from lib/webDesignData — add a niche there and it
  * joins the carousel automatically.
  */
-import { Inter_Tight } from "next/font/google";
+import localFont from "next/font/local";
 import { Reveal } from "@/components/ui/Reveal";
 import { WorkCarousel } from "@/components/web-design/gallery/WorkCarousel";
 import { IndustryGrid } from "@/components/web-design/gallery/IndustryGrid";
 
 /* Inter Tight — the live site's face for this section. */
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const interTight = localFont({
+  src: [
+    { path: "../../../assets/fonts/inter-tight/inter-tight-100-900.woff2", weight: "100 900", style: "normal" },
+  ],
   display: "swap",
 });
 

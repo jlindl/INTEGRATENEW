@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Public_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { Advisory } from "./_components/Advisory";
 import { ContactCta } from "./_components/ContactCta";
@@ -14,18 +14,20 @@ import { TrustBar } from "./_components/TrustBar";
 import { WhoWeHelp } from "./_components/WhoWeHelp";
 
 /* Serif-led display face: headlines in 500, pull-quote in italic */
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+const newsreader = localFont({
+  src: [
+    { path: "../../../../assets/fonts/newsreader/newsreader-200-800.woff2", weight: "200 800", style: "normal" },
+    { path: "../../../../assets/fonts/newsreader/newsreader-200-800-italic.woff2", weight: "200 800", style: "italic" },
+  ],
   variable: "--font-mc-display",
   display: "swap",
 });
 
 /* Plain-spoken body face */
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const publicSans = localFont({
+  src: [
+    { path: "../../../../assets/fonts/public-sans/public-sans-100-900.woff2", weight: "100 900", style: "normal" },
+  ],
   variable: "--font-mc-body",
   display: "swap",
 });

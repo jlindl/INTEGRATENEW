@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Schibsted_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { ClientRow } from "./_components/ClientRow";
 import { FinalCta } from "./_components/FinalCta";
@@ -13,17 +13,19 @@ import { Sectors } from "./_components/Sectors";
 import { TwoDoors } from "./_components/TwoDoors";
 
 /* Sharp editorial grotesk for headlines and the wordmark */
-const atDisplay = Schibsted_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const atDisplay = localFont({
+  src: [
+    { path: "../../../../assets/fonts/schibsted-grotesk/schibsted-grotesk-400-900.woff2", weight: "400 900", style: "normal" },
+  ],
   variable: "--font-at-display",
   display: "swap",
 });
 
 /* Friendly, legible body face */
-const atBody = Figtree({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const atBody = localFont({
+  src: [
+    { path: "../../../../assets/fonts/figtree/figtree-300-900.woff2", weight: "300 900", style: "normal" },
+  ],
   variable: "--font-at-body",
   display: "swap",
 });

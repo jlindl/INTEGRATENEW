@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { BoilerFeature } from "./_components/BoilerFeature";
 import { Contact } from "./_components/Contact";
@@ -13,17 +13,19 @@ import { Reviews } from "./_components/Reviews";
 import { Services } from "./_components/Services";
 
 /* Confident geometric display face for headings and the wordmark */
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
+const jakarta = localFont({
+  src: [
+    { path: "../../../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-200-800.woff2", weight: "200 800", style: "normal" },
+  ],
   variable: "--font-nl-display",
   display: "swap",
 });
 
 /* Warm, highly legible body face */
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const manrope = localFont({
+  src: [
+    { path: "../../../../assets/fonts/manrope/manrope-200-800.woff2", weight: "200 800", style: "normal" },
+  ],
   variable: "--font-nl-body",
   display: "swap",
 });

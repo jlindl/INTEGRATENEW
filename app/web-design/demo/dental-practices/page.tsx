@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
 import { BookingCta } from "./_components/BookingCta";
 import { Hero } from "./_components/Hero";
@@ -12,16 +12,19 @@ import { Treatments } from "./_components/Treatments";
 import { TrustBar } from "./_components/TrustBar";
 
 /* Rounded, friendly display face — calm and modern */
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const jakarta = localFont({
+  src: [
+    { path: "../../../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-200-800.woff2", weight: "200 800", style: "normal" },
+  ],
   variable: "--font-bw-display",
   display: "swap",
 });
 
 /* Clean, highly legible body face */
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: [
+    { path: "../../../../assets/fonts/inter/inter-100-900.woff2", weight: "100 900", style: "normal" },
+  ],
   variable: "--font-bw-body",
   display: "swap",
 });
