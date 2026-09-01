@@ -82,11 +82,12 @@ type LinkRow = {
   primary?: boolean;
 };
 
-/* Paste the profile URLs here. Rows with an empty href are skipped, so the
-   page never ships a link that goes nowhere. */
-const INSTAGRAM_URL = "";
-const TIKTOK_URL = "";
-const LINKEDIN_URL = "";
+/* Canonical profile URLs — share-sheet tracking params (igsi, utm_source,
+   _r, _t) stripped. A row with an empty href is skipped, so blanking one here
+   removes it from the page rather than shipping a link that goes nowhere. */
+const INSTAGRAM_URL = "https://www.instagram.com/integrate_tech";
+const TIKTOK_URL = "https://www.tiktok.com/@integrate.ai";
+const LINKEDIN_URL = "https://www.linkedin.com/company/integrate-tech/";
 
 const ROWS: LinkRow[] = [
   {
