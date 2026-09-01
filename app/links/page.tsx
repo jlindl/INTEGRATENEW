@@ -4,103 +4,70 @@ import { Reveal } from "@/components/ui/Reveal";
 import { LEGAL_DOCS } from "@/lib/legalData";
 
 /**
- * /links — the link-in-bio page. A single centred column: who we are, the
- * actions worth taking, then socials. Built mobile-first because effectively
- * all of its traffic arrives from a phone via a social profile.
+ * /links — the link-in-bio page. Four rows and nothing else: book a call,
+ * then the three social profiles. Built mobile-first because effectively all
+ * of its traffic arrives from a phone via a social profile.
  *
- * Social icons are drawn monochrome rather than in brand colours so the page
- * stays calm and reads as Integrate, not as a strip of other companies' logos.
+ * The social rows carry each platform's real mark in its own brand colours,
+ * so they're recognisable at a glance rather than a row of lookalike outlines.
  */
-
-const SALES_EMAIL = "sales@integrate.co.uk";
-/* 07765 977085 in international WhatsApp format: +44, leading 0 dropped. */
-const WHATSAPP_HREF =
-  "https://wa.me/447765977085?text=" +
-  encodeURIComponent("Hi Integrate, I'd like to talk about a project.");
 
 /* ---------------------------------------------------------------- icons -- */
 
-function Icon({ children }: { children: ReactNode }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="20"
-      height="20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {children}
-    </svg>
-  );
-}
-
 const CalendarIcon = (
-  <Icon>
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
     <path d="M3.5 10h17M8 3.5v3M16 3.5v3" />
-  </Icon>
+  </svg>
 );
 
-const WhatsAppIcon = (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35z" />
+/* Instagram's glyph on its corner-to-corner brand gradient. */
+const InstagramIcon = (
+  <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+    <defs>
+      <linearGradient id="links-ig" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stopColor="#FEDA75" />
+        <stop offset="0.25" stopColor="#FA7E1E" />
+        <stop offset="0.5" stopColor="#D62976" />
+        <stop offset="0.75" stopColor="#962FBF" />
+        <stop offset="1" stopColor="#4F5BD5" />
+      </linearGradient>
+    </defs>
     <path
-      d="M12 2.5a9.5 9.5 0 00-8.13 14.4L2.5 21.5l4.7-1.34A9.5 9.5 0 1012 2.5z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
+      fill="url(#links-ig)"
+      d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm7.846-10.405a1.441 1.441 0 01-2.881 0 1.44 1.44 0 012.881 0z"
     />
   </svg>
 );
 
-const LayoutIcon = (
-  <Icon>
-    <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
-    <path d="M3.5 9.5h17M9 9.5V20" />
-  </Icon>
-);
-
-const QuoteIcon = (
-  <Icon>
-    <path d="M9.5 6.5C7 7.5 5.5 9.7 5.5 12.4c0 2 1.2 3.4 2.9 3.4 1.5 0 2.7-1.1 2.7-2.6 0-1.4-1-2.5-2.4-2.5-.3 0-.6 0-.8.1.3-1.3 1.2-2.4 2.5-3.1z" />
-    <path d="M18 6.5c-2.5 1-4 3.2-4 5.9 0 2 1.2 3.4 2.9 3.4 1.5 0 2.7-1.1 2.7-2.6 0-1.4-1-2.5-2.4-2.5-.3 0-.6 0-.8.1.3-1.3 1.2-2.4 2.5-3.1z" />
-  </Icon>
-);
-
-const MailIcon = (
-  <Icon>
-    <rect x="3" y="5" width="18" height="14" rx="2.5" />
-    <path d="M4 7l8 6 8-6" />
-  </Icon>
-);
-
-const InstagramIcon = (
-  <Icon>
-    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-    <circle cx="12" cy="12" r="4" />
-    <circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none" />
-  </Icon>
-);
+/* TikTok's mark is the note with its cyan and red channels offset behind it. */
+const TIKTOK_NOTE =
+  "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z";
 
 const TikTokIcon = (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M16.5 3h-2.7v12.1a2.3 2.3 0 1 1-2.3-2.3c.2 0 .4 0 .6.1v-2.7a5 5 0 1 0 4.4 5V8.9a6 6 0 0 0 3.5 1.1V7.3a3.4 3.4 0 0 1-3.5-3.3V3Z" />
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d={TIKTOK_NOTE} fill="#25F4EE" transform="translate(-1.1 0.6)" />
+    <path d={TIKTOK_NOTE} fill="#FE2C55" transform="translate(1.1 -0.6)" />
+    <path d={TIKTOK_NOTE} fill="#010101" />
   </svg>
 );
 
 const LinkedInIcon = (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9.5h4v11H3v-11ZM9.5 9.5h3.8v1.5a4.2 4.2 0 0 1 3.7-2c3 0 4 1.9 4 4.8v6.7h-4v-6c0-1.4-.5-2.4-1.8-2.4-1 0-1.6.7-1.9 1.4-.1.2-.1.6-.1.9v6.1h-4v-11Z" />
-  </svg>
-);
-
-const GoogleIcon = (
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-    <path d="M12.24 10.4v3.36h5.56c-.24 1.44-1.68 4.22-5.56 4.22a6.14 6.14 0 0 1 0-12.28c1.9 0 3.18.81 3.91 1.51l2.66-2.56A9.36 9.36 0 0 0 12.24 2a9.8 9.8 0 1 0 0 19.6c5.5 0 9.15-3.87 9.15-9.32 0-.63-.07-1.11-.15-1.58h-9Z" />
+  <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+    <path
+      fill="#0A66C2"
+      d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"
+    />
   </svg>
 );
 
@@ -110,55 +77,28 @@ type LinkRow = {
   href: string;
   icon: ReactNode;
   label: string;
-  note: string;
+  note?: string;
   external?: boolean;
   primary?: boolean;
 };
+
+/* Paste the profile URLs here. Rows with an empty href are skipped, so the
+   page never ships a link that goes nowhere. */
+const INSTAGRAM_URL = "";
+const TIKTOK_URL = "";
+const LINKEDIN_URL = "";
 
 const ROWS: LinkRow[] = [
   {
     href: "/#book-call",
     icon: CalendarIcon,
-    label: "Book a strategy call",
+    label: "Book a call",
     note: "30 minutes, no pressure. We'll call you back.",
     primary: true,
   },
-  {
-    href: WHATSAPP_HREF,
-    icon: WhatsAppIcon,
-    label: "WhatsApp us",
-    note: "Fastest way to get a reply.",
-    external: true,
-  },
-  {
-    href: "/web-design",
-    icon: LayoutIcon,
-    label: "Integrate Web Design",
-    note: "Bespoke sites, tuned to how your industry buys.",
-  },
-  {
-    href: "/testimonials",
-    icon: QuoteIcon,
-    label: "Client results",
-    note: "What we've built, and what it changed.",
-  },
-  {
-    href: `mailto:${SALES_EMAIL}`,
-    icon: MailIcon,
-    label: "Email sales",
-    note: SALES_EMAIL,
-  },
-];
-
-type Social = { label: string; href: string; icon: ReactNode };
-
-/* Paste the profile URLs here and each icon appears automatically. Entries
-   with an empty href are skipped, so the page never ships a dead link. */
-const SOCIALS: Social[] = [
-  { label: "Instagram", href: "", icon: InstagramIcon },
-  { label: "TikTok", href: "", icon: TikTokIcon },
-  { label: "LinkedIn", href: "", icon: LinkedInIcon },
-  { label: "Google Business Profile", href: "", icon: GoogleIcon },
+  { href: INSTAGRAM_URL, icon: InstagramIcon, label: "Instagram", external: true },
+  { href: TIKTOK_URL, icon: TikTokIcon, label: "TikTok", external: true },
+  { href: LINKEDIN_URL, icon: LinkedInIcon, label: "LinkedIn", external: true },
 ];
 
 /* ------------------------------------------------------------ components -- */
@@ -176,22 +116,25 @@ function LinkCard({ href, icon, label, note, external, primary }: LinkRow) {
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={`${base} ${tone}`}
     >
+      {/* Brand marks sit on white so their own colours stay true. */}
       <span
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${
-          primary ? "bg-paper/15 text-paper" : "bg-accent-tint text-accent-deep"
+          primary ? "bg-paper/15 text-paper" : "border border-line bg-white"
         }`}
       >
         {icon}
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-[1.02rem] font-medium leading-snug">{label}</span>
-        <span
-          className={`mt-0.5 block text-[0.875rem] leading-snug ${
-            primary ? "text-paper/70" : "text-ink-3"
-          }`}
-        >
-          {note}
-        </span>
+        {note && (
+          <span
+            className={`mt-0.5 block text-[0.875rem] leading-snug ${
+              primary ? "text-paper/70" : "text-ink-3"
+            }`}
+          >
+            {note}
+          </span>
+        )}
       </span>
       <span
         aria-hidden="true"
@@ -208,7 +151,7 @@ function LinkCard({ href, icon, label, note, external, primary }: LinkRow) {
 /* ------------------------------------------------------------------ page -- */
 
 export default function LinksPage() {
-  const socials = SOCIALS.filter((s) => s.href);
+  const rows = ROWS.filter((r) => r.href);
 
   return (
     <section className="relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-14 sm:pt-20">
@@ -250,39 +193,17 @@ export default function LinksPage() {
           </span>
         </Reveal>
 
-        {/* Actions */}
+        {/* Links */}
         <div className="mt-11 flex flex-col gap-3">
-          {ROWS.map((row, i) => (
-            <Reveal key={row.label} delay={0.05 + i * 0.05} y={18}>
+          {rows.map((row, i) => (
+            <Reveal key={row.label} delay={0.05 + i * 0.06} y={18}>
               <LinkCard {...row} />
             </Reveal>
           ))}
         </div>
 
-        {/* Socials */}
-        {socials.length > 0 && (
-          <Reveal delay={0.4} className="mt-11">
-            <p className="eyebrow text-center">Follow us</p>
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  title={s.label}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-card text-ink-2 shadow-lift transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] hover:-translate-y-0.5 hover:text-accent-deep hover:shadow-float"
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
-          </Reveal>
-        )}
-
         {/* Footer */}
-        <Reveal delay={0.48} className="mt-14 border-t border-line pt-7 text-center">
+        <Reveal delay={0.36} className="mt-14 border-t border-line pt-7 text-center">
           <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-5">
             {LEGAL_DOCS.map((doc) => (
               <a

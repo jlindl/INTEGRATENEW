@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Links — Integrate",
   description:
-    "Every way to reach Integrate: book a strategy call, message us on WhatsApp, explore Integrate Web Design, or follow us.",
+    "Book a call with Integrate, or follow us on Instagram, TikTok and LinkedIn.",
   robots: { index: true, follow: true },
 };
 
