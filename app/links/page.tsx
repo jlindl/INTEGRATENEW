@@ -90,7 +90,7 @@ const LINKEDIN_URL = "https://www.linkedin.com/company/integrate-tech/";
 
 const ROWS: LinkRow[] = [
   {
-    href: "/#book-call",
+    href: "/book",
     icon: CalendarIcon,
     label: "Book a call",
     note: "30 minutes, no pressure. We'll call you back.",
