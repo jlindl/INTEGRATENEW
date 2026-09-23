@@ -162,8 +162,25 @@ export const config = {
     maxHookChars: 150,
     minHashtags: 3,
     maxHashtags: 5,
-    /** UTM tags on the contact link; utm_source=linkedin and utm_content=<slug> are added in code. */
+    /** LinkedIn's limit for the whole post, links and hashtags included. */
+    maxChars: 3000,
+    /** UTM tags on both links; utm_source=linkedin and utm_content=<slug> are added in code. */
     utm: { medium: "social", campaign: "seo-engine" },
+    /**
+     * UK times posts go out. Each post takes the next free day for its type's
+     * slot, so a backlog is spread over several days instead of posting at once.
+     */
+    slots: { location: "10:30", service: "13:30" },
+    /** How long to wait for a merged post to be live on the site before giving up. */
+    liveCheck: { timeoutMs: 15 * 60 * 1000, intervalMs: 20 * 1000 },
+    /** Publishing attempts per post before it's left for a human to look at. */
+    maxPublishAttempts: 3,
+  },
+
+  /** Which Publisher sends posts to LinkedIn (swappable, e.g. for Postiz later). */
+  publisher: {
+    provider: "ayrshare",
+    ayrshare: { baseUrl: "https://api.ayrshare.com/api" },
   },
 
   /** GitHub issue settings for failures. */

@@ -1,0 +1,100 @@
+name: SEO publish (LinkedIn)
+
+# Sends LinkedIn posts for blog posts that are live on the site.
+#
+# Runs when new posts land on main (you merge the review PR), when "SEO
+# generate" commits in auto mode, daily at 15:00 UTC to confirm scheduled
+# posts went out and retry failures, and by hand.
+#
+# Status is saved back to seo-engine/linkedin/ on main. That commit can't loop:
+# pushes made with GITHUB_TOKEN don't start workflows, this workflow only
+# reacts to content/blog changes, and vercel.json skips the site build when
+# only seo-engine/linkedin/ changed.
+
+on:
+  push:
+    branches: [main]
+    paths: ["content/blog/**"]
+  schedule:
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: Only this post (optional; also retries it past the attempt limit)
+        required: false
+        default: ""
+      now:
+        description: Post immediately instead of waiting for the next slot
+        type: boolean
+        default: false
+      dry_run:
+        description: Dry run (no posting, no changes)
+        type: boolean
+        default: false
+  workflow_call:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: seo-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AYRSHARE_API_KEY: ${{ secrets.AYRSHARE_API_KEY }}
+      SITE_URL: ${{ secrets.SITE_URL || 'https://integrate-tech.co.uk' }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SLUG: ${{ inputs.slug }}
+      POST_NOW: ${{ inputs.now }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Git identity and issue label
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh label create seo-engine --color 0E8A16 --description "Opened by the SEO engine" --force
+
+      - name: Publish to LinkedIn
+        run: |
+          args=()
+          if [ -n "$SLUG" ]; then args+=(--slug "$SLUG"); fi
+          if [ "$POST_NOW" = "true" ]; then args+=(--now); fi
+          if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          npm run seo:publish -- "${args[@]}"
+
+      - name: Save LinkedIn status
+        if: always() && env.DRY_RUN != 'true'
+        run: |
+          git add seo-engine/linkedin
+          if git diff --cached --quiet; then
+            echo "No status changes."
+            exit 0
+          fi
+          git commit -m "SEO engine: LinkedIn status update"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Report a failed run
+        if: failure()
+        run: |
+          gh issue create --label seo-engine \
+            --title "SEO engine: LinkedIn publish run failed ($(TZ=Europe/London date +%F))" \
+            --body "The publish run stopped before finishing. Log: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

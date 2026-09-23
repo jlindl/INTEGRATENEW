@@ -35,15 +35,23 @@ export type LinkedInState = {
   title: string;
   /** Live post URL, checked before anything is posted. */
   postUrl: string;
-  /** Final caption, link and hashtags included. Null if caption generation failed. */
+  /** Final caption, links and hashtags included. Null if caption generation failed. */
   caption: string | null;
-  status: "pending" | "posted" | "failed";
-  /** Set by the publisher once posted. */
-  postId?: string;
-  postedUrl?: string;
-  postedAt?: string;
-  error?: string;
+  /**
+   * pending: waiting to be sent. scheduled: accepted by the publisher for a
+   * future slot. posted: live on LinkedIn. failed: see `error`; retried by the
+   * publisher up to config.linkedin.maxPublishAttempts if a caption exists.
+   */
+  status: "pending" | "scheduled" | "posted" | "failed";
   generatedAt: string;
+  /** Set by the publisher. */
+  publisherId?: string;
+  scheduledFor?: string;
+  linkedinPostId?: string;
+  linkedinUrl?: string;
+  postedAt?: string;
+  publishAttempts?: number;
+  error?: string;
 };
 
 const li = config.linkedin;
@@ -103,7 +111,7 @@ export function contactUrl(slug: string): string {
 const words = (t: string) => TOKENS.reduce((s, tok) => s.split(tok).join(" "), t).split(/\s+/).filter(Boolean).length;
 
 /** Code checks for the caption. Returns failure messages (empty = pass). */
-export function checkCaption(c: CaptionDraft): string[] {
+export function checkCaption(c: CaptionDraft, slug: string): string[] {
   const failures = findForbiddenText([["text", c.text]]);
 
   for (const token of TOKENS) {
@@ -133,6 +141,9 @@ export function checkCaption(c: CaptionDraft): string[] {
   const bad = c.hashtags.filter((h) => !/^#[A-Za-z0-9]+$/.test(h));
   if (bad.length) failures.push(`hashtags must be single words like #Roofing: fix ${bad.join(", ")}.`);
   if (new Set(c.hashtags.map((h) => h.toLowerCase())).size !== c.hashtags.length) failures.push("hashtags contains duplicates.");
+
+  const full = composeCaption(c, slug).length;
+  if (full > li.maxChars) failures.push(`the finished post is ${full} characters with links and hashtags; LinkedIn allows ${li.maxChars}. Shorten the text.`);
   return failures;
 }
 
@@ -159,7 +170,7 @@ export async function buildLinkedInState(input: CaptionInput): Promise<{ state: 
     try {
       const { data, usage: u, assistant } = await generateStructured(CaptionSchema, LINKEDIN_SYSTEM_PROMPT, messages);
       usage = addUsage(usage, u);
-      problems = checkCaption(data);
+      problems = checkCaption(data, input.slug);
       console.log(`  linkedin caption attempt ${attempt + 1}: ${problems.length ? `FAIL (${problems.length})` : "PASS"}`);
       for (const f of problems) console.log(`    - ${f}`);
       if (problems.length === 0) caption = composeCaption(data, input.slug);
