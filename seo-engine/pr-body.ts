@@ -1,7 +1,7 @@
 /**
  * Prints the pull request description for the pending-posts PR: every post
- * added on this branch (compared with main), with its LinkedIn caption, so the
- * whole day can be reviewed from the PR page.
+ * added on this branch (compared with main), plus its LinkedIn caption when
+ * captions are on, so the whole day can be reviewed from the PR page.
  *
  *   npx tsx seo-engine/pr-body.ts [--base origin/main] [--log seo-engine/logs/generate-<date>.json]
  */
@@ -32,11 +32,11 @@ const posts = added
 
 const out: string[] = [];
 out.push(`## ${posts.length} new blog post${posts.length === 1 ? "" : "s"} from the SEO engine`, "");
+const withCaptions = config.linkedin.enabled;
 out.push(
-  "Merging publishes these on the site. Once each post is live, its LinkedIn post is scheduled for the next free slot " +
-    `(location posts ${config.linkedin.slots.location}, service posts ${config.linkedin.slots.service}, UK time).`,
+  "Merging publishes these on the site.",
   "",
-  "To drop a post, delete its `.mdx` file and its `seo-engine/linkedin/` file from this branch before merging. " +
+  `To drop a post, delete its \`.mdx\` file${withCaptions ? " and its `seo-engine/linkedin/` file" : ""} from this branch before merging. ` +
     "To change wording, edit the files here. The Vercel preview deployment on this PR shows the posts as they'll appear.",
   "",
 );
@@ -52,9 +52,9 @@ posts.forEach((p, i) => {
     `- File: \`${p.file}\` · page: \`/blog/${d.slug}\``,
   );
   const cap = p.linkedin;
-  if (cap?.caption) {
+  if (withCaptions && cap?.caption) {
     out.push("", "<details><summary>LinkedIn caption</summary>", "", ...cap.caption.split("\n").map((l) => (l ? `> ${l}` : ">")), "", "</details>");
-  } else {
+  } else if (withCaptions) {
     out.push(`- ⚠️ No LinkedIn caption (${cap?.error ?? "missing"}). After merging, run \`npm run seo:caption -- ${d.slug}\`.`);
   }
   out.push("");

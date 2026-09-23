@@ -154,8 +154,13 @@ export const config = {
   /** Publishing mode for the scheduled job: "pr" opens a pull request, "auto" commits to main. */
   publishMode: (process.env.PUBLISH_MODE === "auto" ? "auto" : "pr") as "pr" | "auto",
 
-  /** LinkedIn company page posts (the only social channel). */
+  /** LinkedIn company page captions (the only social channel). */
   linkedin: {
+    /**
+     * Off until LinkedIn grants API access (see "LinkedIn (paused)" in the
+     * README). While off, no captions are written and nothing is posted.
+     */
+    enabled: false as boolean,
     /** Word range for the caption text (not counting the link or hashtags). */
     minWords: 150,
     maxWords: 250,
@@ -166,21 +171,6 @@ export const config = {
     maxChars: 3000,
     /** UTM tags on both links; utm_source=linkedin and utm_content=<slug> are added in code. */
     utm: { medium: "social", campaign: "seo-engine" },
-    /**
-     * UK times posts go out. Each post takes the next free day for its type's
-     * slot, so a backlog is spread over several days instead of posting at once.
-     */
-    slots: { location: "10:30", service: "13:30" },
-    /** How long to wait for a merged post to be live on the site before giving up. */
-    liveCheck: { timeoutMs: 15 * 60 * 1000, intervalMs: 20 * 1000 },
-    /** Publishing attempts per post before it's left for a human to look at. */
-    maxPublishAttempts: 3,
-  },
-
-  /** Which Publisher sends posts to LinkedIn (swappable, e.g. for Postiz later). */
-  publisher: {
-    provider: "ayrshare",
-    ayrshare: { baseUrl: "https://api.ayrshare.com/api" },
   },
 
   /** GitHub issue settings for failures. */

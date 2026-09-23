@@ -11,8 +11,8 @@
  *
  * Each post is generated, run through the quality gate, and retried once with
  * the failure reasons if it fails. A post that fails twice is skipped, logged
- * in the ledger and reported in a GitHub issue. Posts that pass get a LinkedIn
- * caption (see lib/linkedin.ts).
+ * in the ledger and reported in a GitHub issue. When config.linkedin.enabled
+ * is on, posts that pass also get a LinkedIn caption (see lib/linkedin.ts).
  */
 import fs from "node:fs";
 import os from "node:os";
@@ -173,7 +173,10 @@ async function main() {
   const outDir = dryRun ? path.join(os.tmpdir(), "seo-engine", date) : config.paths.blog;
   fs.mkdirSync(outDir, { recursive: true });
 
-  console.log(`seo:generate ${date}${dryRun ? " (dry run)" : ""}, mode ${config.publishMode}, model ${config.model.id}`);
+  console.log(
+    `seo:generate ${date}${dryRun ? " (dry run)" : ""}, mode ${config.publishMode}, model ${config.model.id}, ` +
+      `LinkedIn captions ${config.linkedin.enabled ? "on" : "off"}`,
+  );
   if (topics.length === 0) console.log("Nothing to generate.");
 
   const takenSlugs = new Set([
@@ -188,30 +191,34 @@ async function main() {
     results.push(result);
 
     if (article) {
-      const linkedin = await buildLinkedInState({
-        slug: article.slug,
-        title: article.title,
-        excerpt: article.excerpt,
-        targetKeyword: article.targetKeyword,
-        body: article.body,
-        place: topic.type === "location" ? `${topic.location.name}, ${topic.location.county}` : undefined,
-      });
-      result.usage = addUsage(result.usage, linkedin.usage);
-      const linkedinFile = writeLinkedInState(linkedin.state, dryRun ? path.join(outDir, "linkedin") : config.paths.linkedin);
-      result.linkedin = { file: path.relative(config.paths.root, linkedinFile), status: linkedin.state.status, problems: linkedin.problems };
-
       const file = path.join(outDir, `${article.slug}.mdx`);
       fs.writeFileSync(file, buildPostFile(article, topic, date));
       result.file = path.relative(config.paths.root, file);
-      console.log(`  wrote ${result.file} and ${result.linkedin.file}`);
+      console.log(`  wrote ${result.file}`);
 
-      if (linkedin.problems.length && !dryRun) {
-        await openIssue(
-          `SEO engine: LinkedIn caption failed for ${article.slug}`,
-          `The post **${article.title}** was generated, but its LinkedIn caption failed the checks twice, so it won't be posted to LinkedIn until it's fixed:\n\n` +
-            `${linkedin.problems.map((p) => `- ${p}`).join("\n")}\n\n` +
-            `To retry: \`npm run seo:caption -- ${article.slug}\``,
-        );
+      // LinkedIn captions are paused until LinkedIn grants API access (config.linkedin.enabled).
+      if (config.linkedin.enabled) {
+        const linkedin = await buildLinkedInState({
+          slug: article.slug,
+          title: article.title,
+          excerpt: article.excerpt,
+          targetKeyword: article.targetKeyword,
+          body: article.body,
+          place: topic.type === "location" ? `${topic.location.name}, ${topic.location.county}` : undefined,
+        });
+        result.usage = addUsage(result.usage, linkedin.usage);
+        const linkedinFile = writeLinkedInState(linkedin.state, dryRun ? path.join(outDir, "linkedin") : config.paths.linkedin);
+        result.linkedin = { file: path.relative(config.paths.root, linkedinFile), status: linkedin.state.status, problems: linkedin.problems };
+        console.log(`  wrote ${result.linkedin.file}`);
+
+        if (linkedin.problems.length && !dryRun) {
+          await openIssue(
+            `SEO engine: LinkedIn caption failed for ${article.slug}`,
+            `The post **${article.title}** was generated, but its LinkedIn caption failed the checks twice:\n\n` +
+              `${linkedin.problems.map((p) => `- ${p}`).join("\n")}\n\n` +
+              `To retry: \`npm run seo:caption -- ${article.slug}\``,
+          );
+        }
       }
 
       // Later posts in this run must not duplicate this one, and may link to it.

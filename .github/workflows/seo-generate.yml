@@ -1,6 +1,7 @@
 name: SEO generate
 
-# Writes the day's two blog posts and their LinkedIn captions.
+# Writes the day's two blog posts (plus LinkedIn captions when they're switched
+# on in seo-engine/config.ts; they're paused until LinkedIn API access).
 #
 # GitHub cron runs in UTC: 05:00 UTC is 06:00 UK in summer (BST) and 05:00 UK
 # in winter (GMT), so it's early morning either way. Re-running on the same
@@ -8,10 +9,10 @@ name: SEO generate
 #
 # PUBLISH_MODE (repository variable, default "pr"):
 #   pr    Posts are added to one rolling pull request (branch seo/pending-posts).
-#         Nothing goes live until you merge it; merging triggers "SEO publish".
-#         While that PR is open, each day's posts are added to it, so the
-#         ledger stays continuous and topics can't repeat.
-#   auto  Posts are committed straight to main, then "SEO publish" runs.
+#         Nothing goes live until you merge it. While that PR is open, each
+#         day's posts are added to it, so the ledger stays continuous and
+#         topics can't repeat.
+#   auto  Posts are committed straight to main and go live on the next deploy.
 
 on:
   schedule:
@@ -40,8 +41,6 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    outputs:
-      pushed_to_main: ${{ steps.commit.outputs.pushed_to_main }}
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       SITE_URL: ${{ secrets.SITE_URL || 'https://integrate-tech.co.uk' }}
@@ -84,14 +83,16 @@ jobs:
             echo "FRESH_BRANCH=true" >> "$GITHUB_ENV"
           fi
 
-      - name: Generate posts and captions
+      - name: Generate posts
         run: |
           if [ "$ONLY" = "both" ]; then npm run seo:generate; else npm run seo:generate -- --only "$ONLY"; fi
 
       - name: Commit
         id: commit
         run: |
-          git add content/blog seo-engine/data/ledger.json seo-engine/linkedin
+          git add content/blog seo-engine/data/ledger.json
+          # Caption files only exist while LinkedIn captions are switched on.
+          if [ -d seo-engine/linkedin ]; then git add seo-engine/linkedin; fi
           if git diff --cached --quiet; then
             echo "Nothing new to commit."
             exit 0
@@ -100,7 +101,6 @@ jobs:
           echo "committed=true" >> "$GITHUB_OUTPUT"
           if [ "$PUBLISH_MODE" = "auto" ]; then
             git push origin HEAD:main
-            echo "pushed_to_main=true" >> "$GITHUB_OUTPUT"
           elif [ "${FRESH_BRANCH:-}" = "true" ]; then
             # Replaces a leftover branch from a merged or closed PR.
             git push --force origin "HEAD:refs/heads/$PENDING_BRANCH"
@@ -136,9 +136,3 @@ jobs:
           gh issue create --label seo-engine \
             --title "SEO engine: daily generation failed ($(TZ=Europe/London date +%F))" \
             --body "The generate run stopped before finishing. Log: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-
-  publish:
-    needs: generate
-    if: needs.generate.outputs.pushed_to_main == 'true'
-    uses: ./.github/workflows/seo-publish.yml
-    secrets: inherit

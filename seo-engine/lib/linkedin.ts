@@ -7,9 +7,11 @@
  * caption is guaranteed to link to both. The article link comes first so
  * LinkedIn builds its preview card from the post.
  *
- * The caption and its publish status live in seo-engine/linkedin/<slug>.json,
- * so recording a publish never touches the blog content (and never triggers a
- * site rebuild).
+ * The caption and its status live in seo-engine/linkedin/<slug>.json, apart
+ * from the blog content.
+ *
+ * Switched off (config.linkedin.enabled) until LinkedIn grants API access;
+ * posting itself will be added then.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -37,20 +39,9 @@ export type LinkedInState = {
   postUrl: string;
   /** Final caption, links and hashtags included. Null if caption generation failed. */
   caption: string | null;
-  /**
-   * pending: waiting to be sent. scheduled: accepted by the publisher for a
-   * future slot. posted: live on LinkedIn. failed: see `error`; retried by the
-   * publisher up to config.linkedin.maxPublishAttempts if a caption exists.
-   */
-  status: "pending" | "scheduled" | "posted" | "failed";
+  /** pending: ready to post once publishing exists. failed: the caption failed its checks (see `error`). */
+  status: "pending" | "failed";
   generatedAt: string;
-  /** Set by the publisher. */
-  publisherId?: string;
-  scheduledFor?: string;
-  linkedinPostId?: string;
-  linkedinUrl?: string;
-  postedAt?: string;
-  publishAttempts?: number;
   error?: string;
 };
 
@@ -158,7 +149,7 @@ export type CaptionInput = { slug: string; title: string; excerpt: string; targe
 /**
  * Writes and checks the caption, retrying once with the failure reasons.
  * Never throws for a bad caption: the post still publishes, and the LinkedIn
- * state is marked "failed" so the publisher skips it.
+ * state is marked "failed" (retry with `npm run seo:caption -- <slug>`).
  */
 export async function buildLinkedInState(input: CaptionInput): Promise<{ state: LinkedInState; usage: Usage; problems: string[] }> {
   const messages: Anthropic.MessageParam[] = [{ role: "user", content: captionUserPrompt(input) }];
