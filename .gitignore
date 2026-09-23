@@ -14,3 +14,6 @@ next-env.d.ts
 # One-off puppeteer / screenshot scripts
 shoot-*.mjs
 wd-demo-capture.mjs
+
+# SEO engine run logs (summaries go into PRs / Actions logs)
+seo-engine/logs/

@@ -9,7 +9,8 @@ import { Footer } from "@/components/sections/Footer";
 export const metadata: Metadata = {
   title: "Blog — Integrate",
   description:
-    "Field notes on AI, automation, and building leverage for high-growth B2B, from the Integrate team.",
+    "Practical notes on getting found, turning enquiries into booked work, and automating the admin, from the Integrate team.",
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogLayout({
