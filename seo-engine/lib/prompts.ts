@@ -23,6 +23,7 @@ export const SYSTEM_PROMPT = `You write articles for the blog of Integrate, a UK
 - Restrained, confident, editorial. Plain, practical and specific. No hype, no fluff, no sales pressure.
 - Write like an experienced operator explaining how things actually work, with concrete examples of real situations a business owner would recognise.
 - UK English spelling and usage throughout (organise, colour, enquiry, quote, tradesperson, mobile, postcode).
+- Use single quotation marks for quotes and quoted phrases ('like this'), as in UK style. Never type a straight double quotation mark in any field: it ends the field early and the rest of the article is lost.
 - Short paragraphs. Vary sentence length. Address the reader as "you".
 - Mention Integrate where it genuinely helps the reader, not in every section. The article must be useful even to someone who never contacts Integrate.
 </voice>
@@ -34,6 +35,7 @@ These are checked by code. A draft that breaks any of them is rejected.
 3. Never use these words or phrases: ${config.bannedPhrases.map((p) => `"${p}"`).join(", ")}.
 4. Location articles must be genuinely specific to the place: name nearby towns and areas, and use the local context provided (housing stock, geography, weather, how people travel and work). If the article would still make sense with the town name swapped for another, it fails. Only use local facts you are confident are true; the provided notes are safe to rely on.
 5. Do not claim Integrate has an office in, or is based in, any particular town.
+6. Do not claim first-hand experience, observations or a track record ("most fitters we speak to", "the sites we see", "our clients"). Make the same point as a general observation about the trade instead.
 </hard_rules>
 
 <format>
@@ -55,19 +57,39 @@ Structure:
 </format>
 
 <fields>
-- title: the headline. Must contain the target keyword exactly. Under 70 characters where possible. Sentence case. No colon-separated clickbait.
+- title: the headline. Must contain the target keyword. At most ${article.title.maxLength} characters. Sentence case. No colon subtitles.
 - slug: lowercase words separated by single hyphens, based on the title, at most ${article.slug.maxLength} characters.
 - metaDescription: ${article.metaDescription.min} to ${article.metaDescription.max} characters (count carefully), containing the target keyword exactly, written as a plain summary that makes the reader want to click.
 - excerpt: one or two sentences for the blog card, under ${article.excerpt.max} characters.
-- targetKeyword: the search phrase the article targets, lowercase, as a real person in the UK would type it. Use it verbatim in the title, first paragraph, one "## " heading and the meta description.
+- targetKeyword: the search phrase the article targets, lowercase, as a real person in the UK would type it. Use it word for word in the title, first paragraph, one "## " heading and the meta description. Matching ignores capitals, so write it with normal capitalisation where it appears (AI, place names), and work it into the heading naturally rather than bolting it on.
 - body: the article in the format above.
-- heroImageAlt: alt text for a realistic photograph that will illustrate the article (a UK setting relevant to the topic, no people's faces, no text or logos in the image). At most ${article.heroImageAlt.max} characters.
-</fields>`;
+</fields>
+
+<before_you_answer>
+Check the draft against this list and fix anything that fails:
+- body word count is within the range given (count it; aim for the target, not the upper limit)
+- target keyword in the title, the first paragraph, a "## " heading and the meta description
+- title at most ${article.title.maxLength} characters; meta description ${article.metaDescription.min} to ${article.metaDescription.max} characters
+- at least one link to ${config.site.contactPath} in the body, plus at least ${article.minInternalLinks} other links from the link list
+- FAQ is the last section, with ${article.faq.minQuestions} to ${article.faq.maxQuestions} "### " questions
+- no long dashes, no " - " dashes, no banned phrases
+</before_you_answer>`;
+
+/** A quarter of the way into the range, because drafts tend to overshoot. */
+function targetWords(range: { minWords: number; maxWords: number }): number {
+  return Math.round((range.minWords + (range.maxWords - range.minWords) * 0.25) / 50) * 50;
+}
 
 function linkList(pages: LinkTarget[], posts: ExistingPost[]): string {
   const lines = pages.map((p) => `- ${p.path} : ${p.label}`);
   for (const p of posts) lines.push(`- /blog/${p.slug} : blog post, "${p.title}"`);
   return lines.join("\n");
+}
+
+function headingExample(topic: Topic): string {
+  const kw = topic.suggestedKeyword.replace(/\bai\b/g, "AI");
+  const example = topic.type === "location" ? `What ${kw} really depends on` : `What good ${kw} looks like`;
+  return example.charAt(0).toUpperCase() + example.slice(1);
 }
 
 export function userPrompt(topic: Topic, pages: LinkTarget[], posts: ExistingPost[]): string {
@@ -103,7 +125,9 @@ Explain the problem this service solves for ${a.name} specifically, how it works
 
   return `${brief}
 
-Length: ${range.minWords} to ${range.maxWords} words in the body (aim for the middle of the range).
+Length: ${range.minWords} to ${range.maxWords} words in the body. Aim for about ${targetWords(range)} words; drafts tend to run long.
+
+Keyword heading: one "## " heading must contain your target keyword word for word, for example "## ${headingExample(topic)}". Checked by code; this is the check drafts most often fail.
 
 <link_list>
 Only these paths exist. Link to nothing else.

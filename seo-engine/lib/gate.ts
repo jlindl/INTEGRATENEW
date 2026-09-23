@@ -48,7 +48,6 @@ function textFields(a: Article): [string, string][] {
     ["metaDescription", a.metaDescription],
     ["excerpt", a.excerpt],
     ["targetKeyword", a.targetKeyword],
-    ["heroImageAlt", a.heroImageAlt],
     ["body", a.body],
   ];
 }
@@ -128,11 +127,11 @@ export async function runGate(a: Article, topic: GateTopic, ctx: GateContext): P
   if (!a.excerpt.trim() || a.excerpt.length > rules.excerpt.max) {
     failures.push(`excerpt must be 1 to ${rules.excerpt.max} characters (it is ${a.excerpt.length}).`);
   }
-  if (!a.heroImageAlt.trim() || a.heroImageAlt.length > rules.heroImageAlt.max) {
-    failures.push(`heroImageAlt must be present and at most ${rules.heroImageAlt.max} characters (it is ${a.heroImageAlt.length}).`);
-  }
 
-  // Slug and title uniqueness.
+  // Title length, slug and title uniqueness.
+  if (a.title.length > rules.title.maxLength) {
+    failures.push(`title is ${a.title.length} characters; the maximum is ${rules.title.maxLength}.`);
+  }
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(a.slug)) failures.push(`slug "${a.slug}" must be lowercase words separated by single hyphens.`);
   if (a.slug.length > rules.slug.maxLength) failures.push(`slug is ${a.slug.length} characters; the maximum is ${rules.slug.maxLength}.`);
   if (ctx.takenSlugs.has(a.slug)) failures.push(`slug "${a.slug}" is already used by another post. Choose a different title and slug.`);
@@ -157,6 +156,14 @@ export async function runGate(a: Article, topic: GateTopic, ctx: GateContext): P
     if (!has(plainText(firstParagraph))) failures.push(`the first paragraph must contain the target keyword "${a.targetKeyword}" exactly.`);
     if (!h2s.some(has)) failures.push(`at least one "## " heading must contain the target keyword "${a.targetKeyword}" exactly.`);
     if (!has(a.metaDescription)) failures.push(`metaDescription must contain the target keyword "${a.targetKeyword}" exactly.`);
+  }
+
+  // A body cut off mid-sentence usually means a straight double quote ended the JSON string early.
+  const lastLine = a.body.trim().split(/\r?\n/).at(-1) ?? "";
+  if (!/[.!?)'"’”*]$/.test(lastLine.trim())) {
+    failures.push(
+      `body is cut off mid-sentence (it ends with "${lastLine.trim().slice(-40)}"). This happens when a straight double quotation mark ends the text early: use single quotation marks ('like this') for all quotes, and write the full article again.`,
+    );
   }
 
   // Structure: headings and FAQ.

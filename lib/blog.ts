@@ -15,17 +15,6 @@ export const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 export type PostType = "location" | "service";
 
-export type SocialPlatform = "linkedin" | "facebook" | "instagram";
-
-/** Publish state per platform, written back by the SEO engine. */
-export type SocialStatus = {
-  status: "pending" | "posted" | "failed";
-  id?: string;
-  url?: string;
-  postedAt?: string;
-  error?: string;
-};
-
 export type Post = {
   slug: string;
   title: string;
@@ -56,7 +45,6 @@ export type Post = {
   author: string;
   featured?: boolean;
   readMinutes: number;
-  social?: Partial<Record<SocialPlatform, SocialStatus>>;
   /** Raw MDX body (frontmatter stripped). */
   body: string;
 };
@@ -135,7 +123,6 @@ function parsePost(file: string): Post {
     author: str(data, "author", file, false) ?? "Integrate",
     featured: data.featured === true,
     readMinutes: Math.max(1, Math.round(countWords(content) / WORDS_PER_MINUTE)),
-    social: (data.social as Post["social"]) ?? undefined,
     body: content,
   };
 }

@@ -1,4 +1,7 @@
-/** Turns a generated article into an MDX file in the site's post format. */
+/**
+ * Turns a generated article into an MDX file in the site's post format.
+ * The LinkedIn caption and publish status live in seo-engine/linkedin/, not here.
+ */
 import matter from "gray-matter";
 import { config } from "../config";
 import type { Article } from "./claude";
@@ -20,11 +23,8 @@ export function buildPostFile(article: Article, topic: Topic, date: string): str
       ? { location: topic.location.name, region: topic.location.county }
       : { service: topic.service.name }),
     trade: topic.audience.name,
-    // heroImage is added by the image step (Phase 3); the alt text is ready now.
-    heroImageAlt: article.heroImageAlt,
     author: config.site.author,
     topicKey: topic.key,
-    social: Object.fromEntries(config.platforms.map((p) => [p, { status: "pending" }])),
   };
 
   return matter.stringify(`\n${article.body.trim()}\n`, data);

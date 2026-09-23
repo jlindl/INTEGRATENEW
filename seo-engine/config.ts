@@ -1,11 +1,17 @@
 /**
  * SEO engine configuration. Every tunable (model, word ranges, thresholds,
- * banned phrases, schedule, platforms) lives here so behaviour can be changed
+ * banned phrases, LinkedIn caption rules, schedule) lives here so behaviour can be changed
  * without touching engine code.
  */
+import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
+
+// Local runs read keys from .env.local (git-ignored). Variables already set in
+// the environment, e.g. GitHub Actions secrets, take precedence.
+const envFile = path.join(ROOT, ".env.local");
+if (fs.existsSync(envFile)) process.loadEnvFile(envFile);
 
 export const config = {
   site: {
@@ -20,11 +26,12 @@ export const config = {
     data: path.join(ROOT, "seo-engine", "data"),
     ledger: path.join(ROOT, "seo-engine", "data", "ledger.json"),
     blog: path.join(ROOT, "content", "blog"),
-    images: path.join(ROOT, "public", "blog"),
     logs: path.join(ROOT, "seo-engine", "logs"),
+    /** One JSON file per post: the LinkedIn caption and its publish status. */
+    linkedin: path.join(ROOT, "seo-engine", "linkedin"),
   },
 
-  /** Claude settings for article generation. */
+  /** Claude settings for article and caption generation. */
   model: {
     id: "claude-sonnet-5",
     effort: "high" as const,
@@ -48,9 +55,9 @@ export const config = {
   article: {
     location: { minWords: 900, maxWords: 1400, category: "Local guides" },
     service: { minWords: 1200, maxWords: 1800, category: "Playbooks" },
+    title: { maxLength: 70 },
     metaDescription: { min: 140, max: 160 },
     excerpt: { max: 220 },
-    heroImageAlt: { max: 150 },
     slug: { maxLength: 70 },
     minInternalLinks: 2,
     minH2: 3,
@@ -133,13 +140,31 @@ export const config = {
     "stand out from the crowd",
     "one-stop shop",
     "best-kept secret",
+    // Claims of first-hand experience or a track record that nobody has verified.
+    "our clients",
+    "clients tell us",
+    "customers tell us",
+    "we speak to",
+    "we've seen",
+    "we have seen",
+    "the sites we see",
+    "in our experience",
   ],
 
   /** Publishing mode for the scheduled job: "pr" opens a pull request, "auto" commits to main. */
   publishMode: (process.env.PUBLISH_MODE === "auto" ? "auto" : "pr") as "pr" | "auto",
 
-  /** Social platforms (used from Phase 3 on). */
-  platforms: ["linkedin", "facebook", "instagram"] as const,
+  /** LinkedIn company page posts (the only social channel). */
+  linkedin: {
+    /** Word range for the caption text (not counting the link or hashtags). */
+    minWords: 150,
+    maxWords: 250,
+    maxHookChars: 150,
+    minHashtags: 3,
+    maxHashtags: 5,
+    /** UTM tags on the contact link; utm_source=linkedin and utm_content=<slug> are added in code. */
+    utm: { medium: "social", campaign: "seo-engine" },
+  },
 
   /** GitHub issue settings for failures. */
   issues: { label: "seo-engine" },

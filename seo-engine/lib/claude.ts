@@ -1,6 +1,6 @@
 /**
- * Article generation via the Anthropic SDK, with structured JSON output
- * validated against a Zod schema. Supports a follow-up turn for retries.
+ * Claude calls via the Anthropic SDK, with structured JSON output validated
+ * against a Zod schema. Used for articles and for social captions.
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
@@ -15,7 +15,6 @@ export const ArticleSchema = z.object({
   excerpt: z.string(),
   targetKeyword: z.string(),
   body: z.string(),
-  heroImageAlt: z.string(),
 });
 
 export type Article = z.infer<typeof ArticleSchema>;
@@ -69,21 +68,21 @@ function getClient(): Anthropic {
 }
 
 /**
- * One generation turn. Pass the running conversation; the returned
+ * One structured-output turn. Pass the running conversation; the returned
  * `assistant` param should be appended before a retry turn so the model sees
- * its previous draft.
+ * its previous attempt.
  */
-export async function generateArticle(messages: Anthropic.MessageParam[]): Promise<{
-  article: Article;
-  usage: Usage;
-  assistant: Anthropic.MessageParam;
-}> {
+export async function generateStructured<T>(
+  schema: z.ZodType<T>,
+  system: string,
+  messages: Anthropic.MessageParam[],
+): Promise<{ data: T; usage: Usage; assistant: Anthropic.MessageParam }> {
   const response = await getClient().messages.parse({
     model: config.model.id,
     max_tokens: config.model.maxTokens,
     thinking: { type: "adaptive" },
-    output_config: { effort: config.model.effort, format: zodOutputFormat(ArticleSchema) },
-    system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
+    output_config: { effort: config.model.effort, format: zodOutputFormat(schema) },
+    system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
     messages,
   });
 
@@ -95,18 +94,19 @@ export async function generateArticle(messages: Anthropic.MessageParam[]): Promi
   };
 
   if (response.stop_reason === "refusal") {
-    throw new GenerationError("The model declined to write this article.", usage);
+    throw new GenerationError("The model declined the request.", usage);
   }
   if (response.stop_reason === "max_tokens") {
     throw new GenerationError("The response hit the max_tokens limit and was cut off.", usage);
   }
   if (!response.parsed_output) {
-    throw new GenerationError("The response did not match the article schema.", usage);
+    throw new GenerationError("The response did not match the expected schema.", usage);
   }
 
-  return {
-    article: response.parsed_output,
-    usage,
-    assistant: { role: "assistant", content: response.content },
-  };
+  return { data: response.parsed_output as T, usage, assistant: { role: "assistant", content: response.content } };
+}
+
+export async function generateArticle(messages: Anthropic.MessageParam[]) {
+  const { data, usage, assistant } = await generateStructured(ArticleSchema, SYSTEM_PROMPT, messages);
+  return { article: data, usage, assistant };
 }

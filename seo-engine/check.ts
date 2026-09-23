@@ -25,6 +25,8 @@ async function main() {
   }
 
   const all = loadExistingPosts();
+  // Posts checked together (e.g. one dry run's output) may link to each other.
+  const checkedSlugs = targets.map((f) => ({ slug: path.basename(f, ".mdx") }));
   const locations = loadLocations();
   let failed = 0;
 
@@ -45,15 +47,13 @@ async function main() {
         metaDescription: String(data.description ?? ""),
         excerpt: String(data.excerpt ?? ""),
         targetKeyword: String(data.targetKeyword ?? ""),
-        heroImageAlt: String(data.heroImageAlt ?? ""),
         body: content,
       },
       topic,
       {
         existing: others,
         takenSlugs: new Set(others.map((p) => p.slug)),
-        // Treat the checked post as live, so links to it (e.g. from dry-run siblings) resolve.
-        validPaths: validPaths(all.some((p) => p.slug === slug) ? all : [...all, { slug }]),
+        validPaths: validPaths([...all, ...checkedSlugs]),
       },
     );
 
