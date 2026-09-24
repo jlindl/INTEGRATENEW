@@ -120,9 +120,9 @@ industries as data + real screenshots.
 - [ ] **Stats figures** in `components/sections/Stats.tsx` are placeholders
       (marked in code + a visible footnote). Swap in audited figures and
       remove the footnote.
-- [ ] **Booking link** — CTAs point at `#book-call` / a placeholder
-      `mailto:hello@integrate.agency`. Swap in the real Cal.com/Calendly URL
-      in `ClosingCTA.tsx` and `Footer.tsx`.
+- [x] **Booking link** — every "Book a call" CTA goes to `/contact`, whose
+      call-back form (`BookCallForm`) posts to `/api/book-call` → GoHighLevel.
+      The homepage `#book-call` section keeps the same form.
 - [ ] **Contact email + Social Hub URL** in `Footer.tsx`.
 - [ ] **Nav anchors** — About / Our Systems / Our Process resolve to homepage
       sections (`/#services`, `/#case-studies`, `/#process`); Blog is a real

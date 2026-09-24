@@ -231,7 +231,7 @@ export function Hero() {
           transition={{ duration: 0.8, ease: EASE, delay: 0.72 }}
           className="mt-11 flex flex-wrap items-center gap-4"
         >
-          <MagneticButton href="#book-call" variant="primary">
+          <MagneticButton href="/contact" variant="primary">
             Book a Strategy Call
           </MagneticButton>
           <MagneticButton href="#case-studies" variant="secondary">

@@ -178,7 +178,7 @@ export function WebDesignPromo() {
             <Reveal delay={0.2} className="mt-9 flex flex-wrap items-center gap-4">
               <WebDesignCta size="lg" label="Explore Integrate Web Design" className="inline-flex" />
               <a
-                href="/#book-call"
+                href="/contact"
                 className="inline-flex items-center gap-2.5 rounded-full border border-graphite-2 px-7 py-3.5 text-[0.9375rem] font-medium text-ivory transition-colors duration-300 hover:border-mist"
               >
                 Book a call

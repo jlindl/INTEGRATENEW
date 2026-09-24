@@ -116,12 +116,12 @@ export function Nav() {
             {/* Secondary entry point to the dark portfolio hub. Opens in a new
                 tab so the light→dark jump reads as a deliberate second room. */}
             <WebDesignCta className="hidden lg:inline-flex" />
-            <a
-              href="/#book-call"
+            <Link
+              href="/contact"
               className="hidden rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-accent lg:inline-block"
             >
               Book a call
-            </a>
+            </Link>
 
             {/* Mobile toggle */}
             <button
@@ -178,13 +178,13 @@ export function Nav() {
                 />
               </li>
               <li>
-                <a
-                  href="/#book-call"
+                <Link
+                  href="/contact"
                   onClick={() => setOpen(false)}
                   className="block rounded-full bg-ink px-5 py-3 text-center font-medium text-paper"
                 >
                   Book a call
-                </a>
+                </Link>
               </li>
             </ul>
           </motion.div>

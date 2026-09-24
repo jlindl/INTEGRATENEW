@@ -23,7 +23,7 @@ const CONNECT_LINKS: LinkItem[] = [
   { label: "Contact Us", href: "/contact" },
   { label: "WhatsApp Us", href: "https://wa.me/447765977085" },
   { label: "Email Sales", href: "mailto:sales@integrate.co.uk" },
-  { label: "Book Strategy", href: "/#book-call" },
+  { label: "Book Strategy", href: "/contact" },
 ];
 
 /* Same animated left-origin accent underline as the nav links. External links

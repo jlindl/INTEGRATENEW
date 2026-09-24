@@ -143,7 +143,7 @@ export default function PricingPage() {
                   </p>
 
                   <MagneticLink
-                    href="/#book-call"
+                    href="/contact"
                     className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-halo px-7 py-3.5 text-base font-semibold text-carbon transition-colors duration-300 hover:bg-ivory"
                   >
                     Book a call

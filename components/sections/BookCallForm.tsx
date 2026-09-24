@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * BookCallForm — the lead capture in the #book-call section.
+ * BookCallForm — the call-back lead capture on /contact (where every "Book a
+ * call" button goes), /book, and the homepage #book-call section.
  *
  * Deliberately short: contact details plus one tap saying what the call is
  * about. Everything else (industry, role, website, AI experience, 90-day

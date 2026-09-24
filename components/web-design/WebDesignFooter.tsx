@@ -77,7 +77,7 @@ export function WebDesignFooter() {
             <ul className="flex flex-col gap-3">
               <li><FooterLink href="/">Main site</FooterLink></li>
               <li><FooterLink href="/#services">What we build</FooterLink></li>
-              <li><FooterLink href="/#book-call">Book a call</FooterLink></li>
+              <li><FooterLink href="/contact">Book a call</FooterLink></li>
               <li><FooterLink href="#contact">Start a project</FooterLink></li>
             </ul>
           </nav>

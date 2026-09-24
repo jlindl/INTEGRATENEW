@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { Reveal } from "@/components/ui/Reveal";
-import { ContactForm } from "@/components/contact/ContactForm";
+import { BookCallForm } from "@/components/sections/BookCallForm";
 
 /**
- * /contact — an editorial header, direct contact methods (email + WhatsApp),
- * and the enquiry form. Light main-site theme; nav + footer come from the
- * segment layout.
+ * /contact — where every "Book a call" button lands. An editorial header,
+ * direct contact methods (email + WhatsApp), and the call-back form. Light
+ * main-site theme; nav + footer come from the segment layout.
  */
 
 const SALES_EMAIL = "sales@integrate.co.uk";
@@ -100,9 +100,9 @@ export default function ContactPage() {
             </h1>
           </Reveal>
           <Reveal as="p" delay={0.16} className="mt-7 max-w-[54ch] text-lg leading-relaxed text-ink-2">
-            Tell us what you&apos;re working on and we&apos;ll come back with a
-            clear, no-pressure view of how we&apos;d approach it. Prefer to talk
-            now? WhatsApp is the fastest way to reach us.
+            Leave your details and we&apos;ll call you back within one business
+            day to set up a 30-minute strategy call. No fluff, no pressure.
+            Prefer to talk now? WhatsApp is the fastest way to reach us.
           </Reveal>
         </div>
 
@@ -135,9 +135,9 @@ export default function ContactPage() {
             </div>
           </Reveal>
 
-          {/* Form */}
-          <Reveal delay={0.1}>
-            <ContactForm />
+          {/* Form: first on mobile, since most people arrive from "Book a call". */}
+          <Reveal delay={0.1} className="max-lg:order-first">
+            <BookCallForm source="Contact page — Book a call" />
           </Reveal>
         </div>
       </div>

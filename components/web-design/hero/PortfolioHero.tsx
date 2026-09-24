@@ -128,7 +128,7 @@ export function PortfolioHero() {
             </span>
           </MagneticLink>
           <MagneticLink
-            href="/#book-call"
+            href="/contact"
             className="inline-flex items-center gap-2.5 rounded-full border border-graphite-2 px-8 py-4 text-base font-medium text-ivory transition-colors duration-300 hover:border-mist"
           >
             Book a call
