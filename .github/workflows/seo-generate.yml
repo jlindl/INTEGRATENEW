@@ -97,6 +97,8 @@ jobs:
           git commit -m "SEO engine: posts for $(TZ=Europe/London date +%F)"
           echo "committed=true" >> "$GITHUB_OUTPUT"
           if [ "$PUBLISH_MODE" = "auto" ]; then
+            # Pick up anything pushed to main while the posts were being written.
+            git pull --rebase origin main
             git push origin HEAD:main
           elif [ "${FRESH_BRANCH:-}" = "true" ]; then
             # Replaces a leftover branch from a merged or closed PR.
