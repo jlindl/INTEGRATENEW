@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
-import { MagneticButton } from "@/components/ui/MagneticButton";
-import { allPostSlugs, getPost, type PostBlock } from "@/lib/blogData";
+import { BlogCard } from "@/components/blog/BlogCard";
+import { ContactCta } from "@/components/blog/ContactCta";
+import { PostBody } from "@/components/blog/mdx";
+import { PostJsonLd } from "@/components/blog/PostJsonLd";
+import { allPostSlugs, getPost, getRelatedPosts } from "@/lib/blog";
 
 type Params = { slug: string };
 
@@ -21,31 +25,34 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Not found — Integrate Blog" };
+
+  const images = post.heroImage
+    ? [{ url: post.heroImage, width: 1080, height: 1080, alt: post.heroImageAlt }]
+    : undefined;
+
   return {
     title: `${post.title} — Integrate Blog`,
-    description: post.excerpt,
+    description: post.description,
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url: `/blog/${post.slug}`,
+      siteName: "Integrate",
+      locale: "en_GB",
+      publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
+      authors: [post.author],
+      ...(images ? { images } : {}),
+    },
+    twitter: {
+      card: post.heroImage ? "summary_large_image" : "summary",
+      title: post.title,
+      description: post.description,
+      ...(post.heroImage ? { images: [post.heroImage] } : {}),
+    },
   };
-}
-
-/* Render one content block with the right typographic treatment. */
-function Block({ block }: { block: PostBlock }) {
-  if (block.type === "h2") {
-    return (
-      <h2 className="font-display-tuned mt-14 text-[clamp(1.6rem,3vw,2.1rem)] font-medium leading-tight text-ink">
-        {block.text}
-      </h2>
-    );
-  }
-  if (block.type === "quote") {
-    return (
-      <blockquote className="my-10 border-l-2 border-accent pl-6">
-        <p className="font-display-tuned text-[clamp(1.3rem,2.4vw,1.7rem)] font-medium italic leading-snug text-ink">
-          {block.text}
-        </p>
-      </blockquote>
-    );
-  }
-  return <p className="mt-6 text-lg leading-relaxed text-ink-2">{block.text}</p>;
 }
 
 export default async function BlogPost({
@@ -56,9 +63,11 @@ export default async function BlogPost({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+  const related = getRelatedPosts(post);
 
   return (
     <article className="relative overflow-hidden pt-32 pb-28 md:pt-40 md:pb-36">
+      <PostJsonLd post={post} />
       <div className="glow-accent pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="container-x relative">
@@ -87,28 +96,29 @@ export default async function BlogPost({
             <span>{post.readMinutes} min read</span>
           </Reveal>
 
+          {/* Hero */}
+          {post.heroImage && (
+            <Reveal delay={0.14} className="mt-10">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-paper-2 hairline">
+                <Image
+                  src={post.heroImage}
+                  alt={post.heroImageAlt ?? ""}
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 44rem, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </Reveal>
+          )}
+
           {/* Body */}
           <Reveal delay={0.16} className="mt-4">
-            {post.body.map((block, i) => (
-              <Block key={i} block={block} />
-            ))}
+            <PostBody source={post.body} />
           </Reveal>
 
-          {/* Closing CTA */}
-          <div className="mt-16 rounded-3xl bg-paper-2 p-8 text-center md:p-12">
-            <p className="font-display-tuned text-[clamp(1.5rem,3vw,2.1rem)] font-medium leading-tight text-ink">
-              Have a process worth automating?
-            </p>
-            <p className="mx-auto mt-3 max-w-[44ch] leading-relaxed text-ink-2">
-              Book a free audit call and we&apos;ll show you exactly what we can
-              streamline.
-            </p>
-            <div className="mt-7 flex justify-center">
-              <MagneticButton href="/#book-call" variant="primary">
-                Book a strategy call
-              </MagneticButton>
-            </div>
-          </div>
+          {/* Closing CTA: always rendered, independent of the post body */}
+          <ContactCta variant="closing" />
 
           {/* Back */}
           <div className="mt-12 text-center">
@@ -120,6 +130,21 @@ export default async function BlogPost({
             </Link>
           </div>
         </div>
+
+        {/* Related posts */}
+        {related.length > 0 && (
+          <section aria-labelledby="related-heading" className="mx-auto mt-24 max-w-6xl">
+            <h2 id="related-heading" className="eyebrow flex items-center gap-3">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+              Keep reading
+            </h2>
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {related.map((p) => (
+                <BlogCard key={p.slug} post={p} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </article>
   );

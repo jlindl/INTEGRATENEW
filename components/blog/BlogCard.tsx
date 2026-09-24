@@ -4,7 +4,7 @@
  * component; entrance animation is handled by the index's RevealGroup.
  */
 import Link from "next/link";
-import type { Post } from "@/lib/blogData";
+import type { Post } from "@/lib/blog";
 
 export function BlogCard({ post }: { post: Post }) {
   return (

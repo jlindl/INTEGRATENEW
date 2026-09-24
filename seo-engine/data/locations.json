@@ -1,0 +1,349 @@
+{
+  "_readme": "Places for location posts. tier 1 = Lancashire and Greater Manchester (used first), 2 = wider North West, 3 = UK cities. 'notes' is passed to the model as local context: keep it to general, verifiable facts (geography, housing stock, transport, character). No statistics.",
+  "locations": [
+    {
+      "id": "preston",
+      "name": "Preston",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Fulwood", "Penwortham", "Longridge", "Bamber Bridge", "Walton-le-Dale", "Lostock Hall", "Cottam", "Ashton-on-Ribble"],
+      "notes": "City on the River Ribble where the M6, M55 and M61 meet, which puts much of central Lancashire within easy reach. Housing ranges from dense Victorian terraces around Deepdale, Plungington and Ashton-on-Ribble to interwar semis in Fulwood and large newer estates on the north-west edge around Cottam. Home to the University of Central Lancashire, so there is a sizeable rental and student housing market alongside owner-occupied suburbs."
+    },
+    {
+      "id": "chorley",
+      "name": "Chorley",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Euxton", "Whittle-le-Woods", "Clayton-le-Woods", "Adlington", "Coppull", "Eccleston", "Buckshaw Village"],
+      "notes": "Market town between Preston and Bolton with quick access to the M61 and M6. Older brick terraces and semis around the town centre, with a lot of newer housing to the north, including the large Buckshaw Village development on a former industrial site. Many residents commute to Preston, Bolton and Manchester, so evening and weekend availability matters to customers."
+    },
+    {
+      "id": "leyland",
+      "name": "Leyland",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Farington", "Lostock Hall", "Bamber Bridge", "Longton", "Moss Side", "Earnshaw Bridge", "Buckshaw Village"],
+      "notes": "Town just south of Preston in South Ribble, known for its history of commercial vehicle manufacturing. Housing is largely post-war and later semis and detached homes, with newer estates on the edges and around Farington. Close to junctions on the M6 and M65, so tradespeople based here often cover Preston, Chorley and the villages of South Ribble too."
+    },
+    {
+      "id": "blackburn",
+      "name": "Blackburn",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Darwen", "Accrington", "Oswaldtwistle", "Rishton", "Wilpshire", "Feniscowles", "Mellor"],
+      "notes": "Former cotton mill town on the M65 with the West Pennine Moors to the south. A large share of its housing is dense Victorian stone and brick terraces, which brings steady demand for roofing, damp, rewiring and heating upgrades, with suburbs and villages such as Wilpshire and Mellor on the edges. Works as a hub for East Lancashire, alongside Darwen to the south."
+    },
+    {
+      "id": "burnley",
+      "name": "Burnley",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Padiham", "Nelson", "Brierfield", "Colne", "Worsthorne", "Hapton", "Cliviger"],
+      "notes": "Pennine town on the M65 and the Leeds and Liverpool Canal, with a textile heritage still visible in the Weavers' Triangle. Hilly, exposed to wet Pennine weather, and dominated by stone terraced housing, so roofs, gutters, pointing and damp are constant concerns. Customers here are often price-conscious and value tradespeople who turn up when they say they will."
+    },
+    {
+      "id": "lancaster",
+      "name": "Lancaster",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Morecambe", "Heysham", "Carnforth", "Galgate", "Caton", "Bolton-le-Sands", "Halton"],
+      "notes": "Historic city on the River Lune near the M6, with a castle, Georgian stone buildings and several conservation areas, so some work on older properties needs care with materials and permissions. Lancaster University and the University of Cumbria campus bring a large rental market. Many businesses here also cover Morecambe and the Lune Valley villages."
+    },
+    {
+      "id": "blackpool",
+      "name": "Blackpool",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Bispham", "Cleveleys", "Thornton", "Poulton-le-Fylde", "Lytham St Annes", "Fleetwood", "Marton"],
+      "notes": "Seaside resort on the Fylde coast at the end of the M55. Salt air and strong coastal winds are hard on roofs, windows, render and outdoor metalwork. Alongside residential terraces and semis, there are many guest houses, hotels and holiday lets whose owners need work done around the tourist season, often in the quieter winter months."
+    },
+    {
+      "id": "southport",
+      "name": "Southport",
+      "county": "Merseyside",
+      "tier": 1,
+      "nearby": ["Birkdale", "Ainsdale", "Churchtown", "Formby", "Banks", "Ormskirk", "Hesketh Bank"],
+      "notes": "Victorian seaside town on the Sefton coast, known for Lord Street and large period villas in Birkdale and Hesketh Park. Older properties with big roofs, bay windows and period features sit alongside mid-century bungalows popular with retirees. Coastal weather adds wear to exteriors. Many customers prefer an established, well-reviewed local firm."
+    },
+    {
+      "id": "bolton",
+      "name": "Bolton",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Horwich", "Westhoughton", "Farnworth", "Kearsley", "Little Lever", "Bromley Cross", "Egerton"],
+      "notes": "Large former mill town north-west of Manchester on the M61, with the West Pennine Moors and Winter Hill to the north. Housing mixes Victorian terraces near the centre, interwar semis, and newer estates around Horwich and the Middlebrook area. A big enough market that customers compare several quotes, so fast, clear replies make a difference."
+    },
+    {
+      "id": "wigan",
+      "name": "Wigan",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Standish", "Orrell", "Hindley", "Ashton-in-Makerfield", "Aspull", "Shevington", "Leigh"],
+      "notes": "Town with a coal mining and cotton heritage, on the Leeds and Liverpool Canal and close to the M6, M58 and M61. Terraced streets near the centre give way to semis and newer estates in areas such as Standish and Orrell. Firms based here often cover the whole borough, including Leigh, and into St Helens and Chorley."
+    },
+    {
+      "id": "st-helens",
+      "name": "St Helens",
+      "county": "Merseyside",
+      "tier": 1,
+      "nearby": ["Rainford", "Haydock", "Newton-le-Willows", "Eccleston", "Billinge", "Prescot", "Sutton"],
+      "notes": "Merseyside town with a long glassmaking history, between Liverpool and Wigan near the M6 and M62. Housing is a mix of terraces, post-war council-built homes now largely privately owned, and newer estates. Customers here often find trades through word of mouth and local Facebook groups."
+    },
+    {
+      "id": "warrington",
+      "name": "Warrington",
+      "county": "Cheshire",
+      "tier": 1,
+      "nearby": ["Great Sankey", "Penketh", "Stockton Heath", "Lymm", "Birchwood", "Culcheth", "Appleton"],
+      "notes": "Large town between Manchester and Liverpool where the M6, M62 and M56 meet. Much of the town expanded as a planned new town, so there are large estates of 1970s to 1990s homes, now reaching the age for new kitchens, bathrooms, windows, boilers and roofs. More affluent villages to the south, such as Stockton Heath, Appleton and Lymm, bring higher-value projects."
+    },
+    {
+      "id": "bury",
+      "name": "Bury",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Ramsbottom", "Tottington", "Radcliffe", "Whitefield", "Prestwich", "Summerseat", "Walshaw"],
+      "notes": "Market town north of Manchester on the M66 and M60, known for Bury Market and the East Lancashire Railway. Stone and brick terraces sit alongside sought-after suburbs such as Tottington and Ramsbottom to the north and Whitefield and Prestwich to the south, which bring demand for higher-end home improvements."
+    },
+    {
+      "id": "rochdale",
+      "name": "Rochdale",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Heywood", "Middleton", "Littleborough", "Milnrow", "Norden", "Wardle", "Castleton"],
+      "notes": "Town on the edge of the South Pennines by the M62, known as the birthplace of the modern co-operative movement. Lots of stone and brick terraced housing, with hillside villages such as Littleborough and Norden that take the brunt of Pennine weather. Wet conditions make roofing, guttering, damp and heating work a steady year-round need."
+    },
+    {
+      "id": "oldham",
+      "name": "Oldham",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Chadderton", "Royton", "Shaw", "Failsworth", "Lees", "Saddleworth", "Uppermill"],
+      "notes": "Former cotton-spinning town in the Pennine foothills north-east of Manchester, close to the M60 and M62. Dense terraced streets in the town sit alongside the stone-built Saddleworth villages, where older cottages and higher-value homes bring different kinds of work. Hilly roads and exposed spots mean weather-related repairs are common."
+    },
+    {
+      "id": "stockport",
+      "name": "Stockport",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Bramhall", "Cheadle", "Hazel Grove", "Marple", "Heaton Moor", "Reddish", "Romiley"],
+      "notes": "Large town south-east of Manchester on the M60, known for its railway viaduct over the River Mersey. Housing runs from Victorian terraces and large Edwardian semis in the Heatons to affluent suburbs such as Bramhall, Cheadle Hulme and Marple, which bring demand for extensions, kitchens and premium finishes."
+    },
+    {
+      "id": "salford",
+      "name": "Salford",
+      "county": "Greater Manchester",
+      "tier": 1,
+      "nearby": ["Eccles", "Swinton", "Walkden", "Worsley", "Pendleton", "Irlam", "Salford Quays"],
+      "notes": "City directly west of central Manchester, including MediaCityUK at Salford Quays. A big mix of high-density apartments near the Quays, older terraces, and suburban homes in Worsley, Swinton and Walkden. Many landlords and letting agents, so rental maintenance and compliance work is a large part of the market."
+    },
+    {
+      "id": "accrington",
+      "name": "Accrington",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Oswaldtwistle", "Clayton-le-Moors", "Great Harwood", "Rishton", "Church", "Baxenden", "Huncoat"],
+      "notes": "East Lancashire town in Hyndburn on the M65, historically known for its hard red Accrington bricks. Predominantly terraced housing on hilly streets, many of them over a century old, so roof, window, damp and heating work is in constant demand. Customers value straightforward pricing and local reputation."
+    },
+    {
+      "id": "morecambe",
+      "name": "Morecambe",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Heysham", "Lancaster", "Bare", "Torrisholme", "Bolton-le-Sands", "Carnforth", "Overton"],
+      "notes": "Seaside town on Morecambe Bay next to Lancaster, linked to the M6 by the Bay Gateway road. Coastal exposure from the bay is tough on exteriors. Housing includes Victorian and Edwardian terraces, large seafront properties, some converted to flats, and bungalows in Bare and Torrisholme."
+    },
+    {
+      "id": "ormskirk",
+      "name": "Ormskirk",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Aughton", "Burscough", "Skelmersdale", "Scarisbrick", "Lathom", "Rufford", "Halsall"],
+      "notes": "Market town in West Lancashire surrounded by flat, fertile farmland, home to Edge Hill University. A mix of period town-centre homes, student lets and larger detached houses in villages such as Aughton, Scarisbrick and Burscough. Rural properties bring work on outbuildings, drives, fencing and oil or LPG heating."
+    },
+    {
+      "id": "clitheroe",
+      "name": "Clitheroe",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Whalley", "Read", "Sabden", "Chatburn", "Waddington", "Longridge", "Barrow"],
+      "notes": "Market town in the Ribble Valley with a Norman castle, surrounded by countryside and the Forest of Bowland. Many stone-built cottages, farmhouses and higher-value homes in villages such as Whalley and Waddington, where customers expect quality work and care with traditional materials. Some rural homes are off the gas grid."
+    },
+    {
+      "id": "lytham-st-annes",
+      "name": "Lytham St Annes",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Ansdell", "Fairhaven", "Warton", "Freckleton", "Kirkham", "Blackpool", "Wrea Green"],
+      "notes": "Coastal town on the Fylde, south of Blackpool, known for its green, windmill and Royal Lytham golf course. Larger Victorian and Edwardian homes and a high proportion of affluent and retired homeowners, who often look for premium work and a reliable, well-reviewed firm. Exposed to coastal wind and salt air."
+    },
+    {
+      "id": "skelmersdale",
+      "name": "Skelmersdale",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Ormskirk", "Upholland", "Burscough", "Parbold", "Wigan", "Orrell", "Digmoor"],
+      "notes": "Planned new town in West Lancashire near the M58, built around separate residential districts with footpaths away from main roads. Much of the housing dates from the 1960s and 1970s, so a lot of homes need new windows, doors, kitchens, bathrooms, heating and roof work. Close to Wigan and Ormskirk for wider coverage."
+    },
+    {
+      "id": "darwen",
+      "name": "Darwen",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Blackburn", "Hoddlesden", "Belthorn", "Edgworth", "Tockholes", "Egerton", "Lower Darwen"],
+      "notes": "Town south of Blackburn in a valley of the West Pennine Moors, overlooked by Darwen Tower. Stone and brick terraces climb steep streets and take a lot of Pennine weather, which keeps roofing, damp and heating work steady. Close to the M65 for Blackburn and Bolton."
+    },
+    {
+      "id": "fleetwood",
+      "name": "Fleetwood",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Cleveleys", "Thornton", "Knott End", "Poulton-le-Fylde", "Bispham", "Rossall", "Preesall"],
+      "notes": "Port town at the northern tip of the Fylde coast, with a fishing heritage and a planned Victorian street layout. Very exposed to wind and salt from the sea and the Wyre estuary. Housing is mostly terraces and semis, with bungalows in Cleveleys and Thornton popular with retirees."
+    },
+    {
+      "id": "rawtenstall",
+      "name": "Rawtenstall",
+      "county": "Lancashire",
+      "tier": 1,
+      "nearby": ["Haslingden", "Bacup", "Waterfoot", "Helmshore", "Whitworth", "Edenfield", "Ramsbottom"],
+      "notes": "Main town of the Rossendale Valley, with steep hillsides, stone terraces and former mill buildings. Heavy rainfall and hillside locations make drainage, roofing, damp proofing and heating work common. Many local businesses also cover Haslingden, Bacup and down the valley towards Ramsbottom and Bury."
+    },
+    {
+      "id": "manchester",
+      "name": "Manchester",
+      "county": "Greater Manchester",
+      "tier": 2,
+      "nearby": ["Didsbury", "Chorlton", "Withington", "Levenshulme", "Prestwich", "Sale", "Stretford", "Ancoats"],
+      "notes": "The North West's largest city economy. City-centre apartments, Victorian terraces in areas such as Levenshulme and Withington, and large Edwardian houses in Didsbury and Chorlton. A crowded market where many firms compete for the same searches and ads, so speed of reply and clear positioning matter more than elsewhere."
+    },
+    {
+      "id": "liverpool",
+      "name": "Liverpool",
+      "county": "Merseyside",
+      "tier": 2,
+      "nearby": ["Wavertree", "Allerton", "Woolton", "Crosby", "West Derby", "Aigburth", "Walton", "Huyton"],
+      "notes": "Port city on the River Mersey with a large stock of Victorian terraces, grand period homes in areas such as Aigburth and Sefton Park, and suburban semis in Allerton and West Derby. Two universities create a big student rental market. Busy, competitive market for trades and local services."
+    },
+    {
+      "id": "chester",
+      "name": "Chester",
+      "county": "Cheshire",
+      "tier": 2,
+      "nearby": ["Hoole", "Upton", "Saltney", "Blacon", "Tarvin", "Ellesmere Port", "Christleton"],
+      "notes": "Walled Roman city with medieval Rows and many listed buildings, so work in the centre often involves conservation areas. Surrounding suburbs such as Hoole and Upton and nearby villages include many higher-value homes. Customers tend to expect a polished, professional service."
+    },
+    {
+      "id": "birkenhead",
+      "name": "Birkenhead",
+      "county": "Merseyside",
+      "tier": 2,
+      "nearby": ["Wallasey", "Bebington", "Prenton", "Oxton", "Heswall", "West Kirby", "Hoylake"],
+      "notes": "Largest town on the Wirral, across the Mersey from Liverpool. Victorian terraces and grand period houses in Oxton contrast with affluent west Wirral villages such as Heswall and West Kirby, where larger homes and coastal exposure bring higher-value exterior and renovation work."
+    },
+    {
+      "id": "macclesfield",
+      "name": "Macclesfield",
+      "county": "Cheshire",
+      "tier": 2,
+      "nearby": ["Prestbury", "Bollington", "Wilmslow", "Poynton", "Congleton", "Knutsford", "Alderley Edge"],
+      "notes": "Former silk town on the edge of the Peak District. Stone terraces and older mill cottages in the town, with some of the most affluent villages in the North West nearby, such as Prestbury, Alderley Edge and Wilmslow, where extensions, high-end kitchens and landscaping are in demand."
+    },
+    {
+      "id": "crewe",
+      "name": "Crewe",
+      "county": "Cheshire",
+      "tier": 2,
+      "nearby": ["Nantwich", "Sandbach", "Shavington", "Wistaston", "Haslington", "Willaston", "Alsager"],
+      "notes": "Railway town in south Cheshire and a major rail junction, with a history of locomotive building and car manufacturing. Victorian terraces near the centre, many post-war estates, and newer developments on the edges. Nearby Nantwich brings period properties and higher-value work."
+    },
+    {
+      "id": "kendal",
+      "name": "Kendal",
+      "county": "Cumbria",
+      "tier": 2,
+      "nearby": ["Windermere", "Burneside", "Staveley", "Milnthorpe", "Grange-over-Sands", "Sedbergh", "Oxenholme"],
+      "notes": "Market town at the southern gateway to the Lake District, built largely of local grey limestone. Many older stone properties and holiday lets in nearby Lakeland villages, some in the National Park where planning rules are strict. Wet weather and rural distances shape how local trades plan their work."
+    },
+    {
+      "id": "carlisle",
+      "name": "Carlisle",
+      "county": "Cumbria",
+      "tier": 2,
+      "nearby": ["Dalston", "Wetheral", "Brampton", "Longtown", "Stanwix", "Harraby", "Scotby"],
+      "notes": "Border city in north Cumbria with a castle and cathedral, and the main service centre for a large rural area. Red sandstone and brick terraces in the city, with farms and villages spread over a wide catchment, so many businesses cover long distances. The River Eden and its tributaries have caused significant flooding in the past."
+    },
+    {
+      "id": "barrow-in-furness",
+      "name": "Barrow-in-Furness",
+      "county": "Cumbria",
+      "tier": 2,
+      "nearby": ["Dalton-in-Furness", "Ulverston", "Walney Island", "Askam", "Roose", "Newbarns", "Rampside"],
+      "notes": "Shipbuilding town at the tip of the Furness peninsula, relatively isolated by road. Dense sandstone and brick terraced streets built for shipyard workers, plus coastal exposure on Walney Island. Customers tend to rely on a small number of trusted local firms."
+    },
+    {
+      "id": "leeds",
+      "name": "Leeds",
+      "county": "West Yorkshire",
+      "tier": 3,
+      "nearby": ["Headingley", "Horsforth", "Roundhay", "Morley", "Pudsey", "Garforth", "Chapel Allerton"],
+      "notes": "Major Yorkshire city with a large financial and professional services sector. Back-to-back and through terraces in areas such as Harehills and Headingley, big student areas, and affluent suburbs such as Roundhay and Horsforth. Very competitive for local search."
+    },
+    {
+      "id": "sheffield",
+      "name": "Sheffield",
+      "county": "South Yorkshire",
+      "tier": 3,
+      "nearby": ["Hillsborough", "Crookes", "Ecclesall", "Dore", "Walkley", "Nether Edge", "Stocksbridge"],
+      "notes": "City built on seven hills on the edge of the Peak District, with a steel-making heritage. Steep streets of stone and brick terraces, large Victorian villas in the south-west such as Nether Edge and Ecclesall, and a big student population. Hills and older housing shape a lot of local trade work."
+    },
+    {
+      "id": "birmingham",
+      "name": "Birmingham",
+      "county": "West Midlands",
+      "tier": 3,
+      "nearby": ["Solihull", "Sutton Coldfield", "Edgbaston", "Moseley", "Harborne", "Kings Heath", "Erdington"],
+      "notes": "The UK's second-largest city with a very large and varied housing stock: inner-city Victorian terraces, interwar semis across the suburbs, and higher-value areas such as Edgbaston, Harborne and Sutton Coldfield. Large market with heavy competition for trades."
+    },
+    {
+      "id": "newcastle",
+      "name": "Newcastle upon Tyne",
+      "county": "Tyne and Wear",
+      "tier": 3,
+      "nearby": ["Gateshead", "Jesmond", "Gosforth", "Heaton", "Whitley Bay", "Ponteland", "Wallsend"],
+      "notes": "Major city in the North East on the River Tyne. Distinctive Tyneside flats (terraced houses split into upper and lower flats), Victorian terraces in Heaton and Jesmond, and larger homes in Gosforth and Ponteland. Two universities create a strong rental market."
+    },
+    {
+      "id": "bristol",
+      "name": "Bristol",
+      "county": "Bristol",
+      "tier": 3,
+      "nearby": ["Clifton", "Redland", "Bishopston", "Keynsham", "Portishead", "Kingswood", "Filton"],
+      "notes": "Major South West city with Georgian terraces in Clifton, Victorian housing across Redland, Bishopston and Totterdown, and many hillside streets. High property values support premium renovation work. Busy, competitive market with high customer expectations."
+    },
+    {
+      "id": "nottingham",
+      "name": "Nottingham",
+      "county": "Nottinghamshire",
+      "tier": 3,
+      "nearby": ["Beeston", "West Bridgford", "Arnold", "Carlton", "Mapperley", "Hucknall", "Wollaton"],
+      "notes": "East Midlands city with two universities and a large student rental market. Victorian terraces in areas such as Sneinton and Forest Fields, and more affluent suburbs such as West Bridgford and Wollaton. Competitive local market for trades and home services."
+    },
+    {
+      "id": "glasgow",
+      "name": "Glasgow",
+      "county": "Glasgow City",
+      "tier": 3,
+      "nearby": ["Paisley", "Bearsden", "Milngavie", "East Kilbride", "Clarkston", "Rutherglen", "Giffnock"],
+      "notes": "Scotland's largest city, with a large stock of sandstone tenements that bring shared-repair and common-area work, alongside suburban homes in areas such as Bearsden and Giffnock. Wet west-coast weather is hard on roofs, stonework and windows."
+    },
+    {
+      "id": "cardiff",
+      "name": "Cardiff",
+      "county": "Cardiff",
+      "tier": 3,
+      "nearby": ["Penarth", "Llandaff", "Whitchurch", "Roath", "Canton", "Pontprennau", "Radyr"],
+      "notes": "Capital of Wales, with dense Victorian terraces in Roath, Canton and Cathays, many of them student lets, and larger homes in Llandaff, Radyr and Penarth. Wet weather drives roofing, damp and exterior work."
+    }
+  ]
+}

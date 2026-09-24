@@ -1,0 +1,79 @@
+{
+  "_readme": "Service posts pair one service with one audience (e.g. 'Meta ads for heating engineers'). Location posts pair a location with an audience and one of the locationAngles. Audiences with kind 'trade' are weighted first (the primary Meta ads target); 'local-business' audiences widen the net. webDesignPage links an audience to its /web-design/<slug> page for internal linking. excludePairs lists service:audience combinations that don't make sense.",
+  "services": [
+    {
+      "id": "lead-generation",
+      "name": "Lead generation",
+      "keyword": "lead generation for {audience}",
+      "summary": "The full Integrate system: Meta ads shown to people in the client's area, an instant lead form, an AI WhatsApp agent that replies straight away and qualifies the lead (budget, location, job type, timing), then books qualified jobs into the business's calendar.",
+      "relatedPaths": ["/contact", "/book"]
+    },
+    {
+      "id": "meta-ads",
+      "name": "Meta ads",
+      "keyword": "facebook ads for {audience}",
+      "summary": "Facebook and Instagram ads targeted at the client's service area, sending people to an instant lead form rather than a generic website, so enquiries arrive with the details needed to follow up.",
+      "relatedPaths": ["/contact", "/book"]
+    },
+    {
+      "id": "whatsapp-agent",
+      "name": "AI WhatsApp lead qualification",
+      "keyword": "ai whatsapp assistant for {audience}",
+      "summary": "An AI agent on WhatsApp that messages every new lead within moments, asks about budget, location, job type and timing, filters out poor fits, and books qualified jobs straight into the calendar, so the business owner isn't chasing enquiries from a van or a roof.",
+      "relatedPaths": ["/contact", "/book"]
+    },
+    {
+      "id": "website-agent",
+      "name": "AI website assistant",
+      "keyword": "ai chatbot for {audience}",
+      "summary": "A second AI agent on the business's own website that answers common questions, qualifies visitors the same way the WhatsApp agent does, and books them in, so website visits turn into enquiries outside working hours.",
+      "relatedPaths": ["/contact", "/web-design"]
+    },
+    {
+      "id": "websites",
+      "name": "Websites",
+      "keyword": "websites for {audience}",
+      "summary": "Premium, fast, mobile-first websites built to win enquiries: clear services and areas covered, real photos, reviews, and obvious ways to get in touch. Integrate builds these as a standalone service and as part of the lead generation system.",
+      "relatedPaths": ["/web-design", "/web-design/pricing", "/contact"]
+    },
+    {
+      "id": "automation",
+      "name": "AI automation",
+      "keyword": "automation for {audience}",
+      "summary": "Taking repetitive admin off the owner's plate with AI and automation: quote follow-ups, appointment reminders, review requests after a job, and passing information between the tools the business already uses.",
+      "relatedPaths": ["/contact", "/book"]
+    }
+  ],
+  "audiences": [
+    { "id": "roofers", "name": "roofers", "singular": "roofer", "trade": "roofing", "kind": "trade", "jobs": "roof repairs, re-roofs, flat roofs, guttering, chimney and leadwork, fascias and soffits" },
+    { "id": "plumbers", "name": "plumbers", "singular": "plumber", "trade": "plumbing", "kind": "trade", "jobs": "leaks, bathroom installs, radiators, emergency call-outs, water heaters", "webDesignPage": "plumbers" },
+    { "id": "heating-engineers", "name": "heating engineers", "singular": "heating engineer", "trade": "boiler and heating", "kind": "trade", "jobs": "boiler installs and repairs, servicing, central heating, heat pumps" },
+    { "id": "electricians", "name": "electricians", "singular": "electrician", "trade": "electrical", "kind": "trade", "jobs": "rewires, consumer units, EV chargers, EICRs for landlords, lighting, fault finding", "webDesignPage": "electricians" },
+    { "id": "joiners", "name": "joiners", "singular": "joiner", "trade": "joinery", "kind": "trade", "jobs": "doors, staircases, fitted furniture, skirting and architrave, timber repairs" },
+    { "id": "builders", "name": "builders", "singular": "builder", "trade": "building", "kind": "trade", "jobs": "extensions, renovations, structural alterations, garage conversions" },
+    { "id": "landscapers", "name": "landscapers", "singular": "landscaper", "trade": "landscaping", "kind": "trade", "jobs": "patios, garden design, turfing, decking, fencing, planting" },
+    { "id": "glaziers", "name": "window and door installers", "singular": "window and door installer", "trade": "window and door", "kind": "trade", "jobs": "double glazing, composite doors, bifolds, conservatories, repairs" },
+    { "id": "kitchen-fitters", "name": "kitchen fitters", "singular": "kitchen fitter", "trade": "kitchen fitting", "kind": "trade", "jobs": "full kitchen installs, worktops, refurbishments", "webDesignPage": "kitchens" },
+    { "id": "bathroom-fitters", "name": "bathroom fitters", "singular": "bathroom fitter", "trade": "bathroom fitting", "kind": "trade", "jobs": "full bathroom refits, wet rooms, accessible bathrooms, tiling" },
+    { "id": "plasterers", "name": "plasterers", "singular": "plasterer", "trade": "plastering", "kind": "trade", "jobs": "skimming, re-plastering, rendering, coving" },
+    { "id": "painters-decorators", "name": "painters and decorators", "singular": "painter and decorator", "trade": "painting and decorating", "kind": "trade", "jobs": "interior decorating, exterior painting, wallpapering, commercial work" },
+    { "id": "driveway-contractors", "name": "driveway and paving contractors", "singular": "driveway contractor", "trade": "driveway", "kind": "trade", "jobs": "block paving, resin drives, tarmac, patios, drainage" },
+    { "id": "loft-conversion", "name": "loft conversion specialists", "singular": "loft conversion specialist", "trade": "loft conversion", "kind": "trade", "jobs": "dormer and Velux conversions, loft boarding, stairs" },
+    { "id": "fencing", "name": "fencing contractors", "singular": "fencing contractor", "trade": "fencing", "kind": "trade", "jobs": "garden fencing, gates, storm damage repairs, commercial fencing" },
+    { "id": "tilers", "name": "tilers", "singular": "tiler", "trade": "tiling", "kind": "trade", "jobs": "bathroom and kitchen tiling, floor tiling, large format tiles" },
+    { "id": "cleaning-companies", "name": "cleaning companies", "singular": "cleaning company", "trade": "cleaning", "kind": "local-business", "jobs": "domestic cleaning, end of tenancy, office cleaning, carpet cleaning" },
+    { "id": "removal-firms", "name": "removal firms", "singular": "removal firm", "trade": "removals", "kind": "local-business", "jobs": "house moves, office moves, storage, packing" },
+    { "id": "garages", "name": "garages and mechanics", "singular": "garage", "trade": "car repair", "kind": "local-business", "jobs": "MOTs, servicing, repairs, diagnostics, tyres" },
+    { "id": "aesthetics-clinics", "name": "beauty and aesthetics clinics", "singular": "aesthetics clinic", "trade": "beauty and aesthetics", "kind": "local-business", "jobs": "treatments, consultations, courses of appointments" },
+    { "id": "dental-practices", "name": "dental practices", "singular": "dental practice", "trade": "dental", "kind": "local-business", "jobs": "new patient registrations, private treatments, cosmetic dentistry", "webDesignPage": "dental-practices" },
+    { "id": "accountants", "name": "accountants", "singular": "accountant", "trade": "accountancy", "kind": "local-business", "jobs": "self-assessment, bookkeeping, year-end accounts, small business clients", "webDesignPage": "accountants" }
+  ],
+  "locationAngles": [
+    { "id": "leads", "keyword": "{trade} leads in {location}", "angle": "How {audience} in {location} can get more of the right enquiries and turn them into booked jobs." },
+    { "id": "marketing", "keyword": "marketing for {audience} in {location}", "angle": "What actually works for marketing a {singular} business in {location}, given the local housing, geography and competition." },
+    { "id": "website", "keyword": "websites for {audience} in {location}", "angle": "What a {singular} in {location} needs from their website to win local work, and where most fall short." }
+  ],
+  "excludePairs": [
+    "whatsapp-agent:accountants"
+  ]
+}
