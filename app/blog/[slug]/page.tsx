@@ -24,14 +24,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
-  if (!post) return { title: "Not found — Integrate Blog" };
+  if (!post) return { title: "Not found | Integrate Blog" };
 
   const images = post.heroImage
     ? [{ url: post.heroImage, width: 1080, height: 1080, alt: post.heroImageAlt }]
     : undefined;
 
   return {
-    title: `${post.title} — Integrate Blog`,
+    title: `${post.title} | Integrate Blog`,
     description: post.description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
