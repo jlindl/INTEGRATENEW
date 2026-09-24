@@ -1,4 +1,24 @@
 {
   "_readme": "Every topic the engine has used or attempted. Written by the engine; do not edit by hand unless removing a bad entry. status 'generated' blocks the topic from being picked again; 'failed' entries are retried later, up to twice.",
-  "entries": []
+  "entries": [
+    {
+      "date": "2026-09-24",
+      "type": "location",
+      "key": "location:fleetwood:driveway-contractors",
+      "status": "generated",
+      "angle": "leads",
+      "slug": "how-driveway-contractors-get-more-driveway-leads-in-fleetwood",
+      "title": "How driveway contractors get more driveway leads in Fleetwood",
+      "targetKeyword": "driveway leads in fleetwood"
+    },
+    {
+      "date": "2026-09-24",
+      "type": "service",
+      "key": "service:websites:fencing",
+      "status": "generated",
+      "slug": "websites-for-fencing-contractors-that-win-more-enquiries",
+      "title": "Websites for fencing contractors that win more enquiries",
+      "targetKeyword": "websites for fencing contractors"
+    }
+  ]
 }
