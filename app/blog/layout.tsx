@@ -7,7 +7,7 @@ import { Footer } from "@/components/sections/Footer";
  * reads as part of Integrate. Nav is fixed, so pages add their own top padding.
  */
 export const metadata: Metadata = {
-  title: "Blog — Integrate",
+  title: "Blog | Integrate",
   description:
     "Practical notes on getting found, turning enquiries into booked work, and automating the admin, from the Integrate team.",
   alternates: { canonical: "/blog" },
