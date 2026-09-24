@@ -15,7 +15,7 @@ if (fs.existsSync(envFile)) process.loadEnvFile(envFile);
 
 export const config = {
   site: {
-    url: (process.env.SITE_URL || "https://integrate-tech.co.uk").replace(/\/$/, ""),
+    url: (process.env.SITE_URL || "https://www.integrate-tech.co.uk").replace(/\/$/, ""),
     contactPath: "/contact",
     author: "Integrate",
   },

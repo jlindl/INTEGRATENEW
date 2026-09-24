@@ -86,10 +86,10 @@ function linkList(pages: LinkTarget[], posts: ExistingPost[]): string {
   return lines.join("\n");
 }
 
+/** A heading pattern that reads correctly whether the keyword is singular or plural. */
 function headingExample(topic: Topic): string {
   const kw = topic.suggestedKeyword.replace(/\bai\b/g, "AI");
-  const example = topic.type === "location" ? `What ${kw} really depends on` : `What good ${kw} looks like`;
-  return example.charAt(0).toUpperCase() + example.slice(1);
+  return `${kw.charAt(0).toUpperCase()}${kw.slice(1)}: what makes the difference`;
 }
 
 export function userPrompt(topic: Topic, pages: LinkTarget[], posts: ExistingPost[]): string {
@@ -127,7 +127,7 @@ Explain the problem this service solves for ${a.name} specifically, how it works
 
 Length: ${range.minWords} to ${range.maxWords} words in the body. Aim for about ${targetWords(range)} words; drafts tend to run long.
 
-Keyword heading: one "## " heading must contain your target keyword word for word, for example "## ${headingExample(topic)}". Checked by code; this is the check drafts most often fail.
+Keyword heading: one "## " heading must contain your target keyword word for word, for example "## ${headingExample(topic)}". Write your own heading rather than copying the example, and make sure it reads as correct English (watch singular and plural verbs). Checked by code; this is the check drafts most often fail.
 
 <link_list>
 Only these paths exist. Link to nothing else.

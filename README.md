@@ -47,10 +47,19 @@ used to build the sections is in [spec/DESIGN.md](spec/DESIGN.md).
 ## Blog (`/blog`)
 
 Light-theme blog that reuses the main Nav + Footer. Index at `app/blog/page.tsx`
-(featured post + grid); posts served by `app/blog/[slug]/page.tsx` from
-[lib/blogData.ts](lib/blogData.ts) (`generateStaticParams`, prerendered). Adding
-a post is a content task: append a typed `Post`. Ships with **sample posts**
-(placeholder copy, flagged with an on-page note) for Jack to replace.
+(featured post + grid); posts served by `app/blog/[slug]/page.tsx` (prerendered).
+
+- **Posts are MDX files** in `content/blog/<slug>.mdx`, loaded and validated by
+  [lib/blog.ts](lib/blog.ts). Every post gets a closing CTA to `/contact`,
+  related posts, BlogPosting/Service JSON-LD, a canonical URL and OG tags.
+- **The SEO engine writes them.** [seo-engine/](seo-engine/README.md) generates
+  two articles a day on GitHub Actions and opens a review PR
+  (`seo/pending-posts`); merging it publishes the posts. See its README for
+  setup, commands and how to add places and services.
+- `app/sitemap.ts` and `app/robots.ts` generate `/sitemap.xml` and
+  `/robots.txt`, including every post automatically.
+- Site URL for canonicals/sitemap: `lib/site.ts` (`SITE_URL`, defaults to
+  `https://www.integrate-tech.co.uk`).
 
 ## Integrate Web Design — dark portfolio hub (`/web-design`)
 
@@ -117,9 +126,6 @@ industries as data + real screenshots.
       sections (`/#services`, `/#case-studies`, `/#process`); Blog is a real
       route. Point About/Systems/Process at dedicated pages if/when they exist
       (`components/sections/Nav.tsx`).
-- [ ] **Blog posts** — `lib/blogData.ts` ships sample posts with placeholder
-      copy (flagged by an on-page note). Replace with real articles before
-      launch; add more by appending `Post` objects.
 - [ ] **Web Design testimonials** — `components/web-design/Testimonials.tsx`
       ships illustrative placeholder quotes (flagged by an on-page note). Swap
       in real, attributable client testimonials before launch.
