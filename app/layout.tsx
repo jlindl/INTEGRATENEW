@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
@@ -58,6 +59,8 @@ export default function RootLayout({
         {children}
         {/* Film grain over everything — gives the light theme physical texture */}
         <div className="grain" aria-hidden="true" />
+        {/* Vercel Web Analytics: cookieless page-view counts (see the Cookie Policy). */}
+        <Analytics />
       </body>
     </html>
   );

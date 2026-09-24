@@ -348,7 +348,7 @@ const cookies: LegalDoc = {
           "Functional cookies — remember choices you make to give you a better, more personalised experience.",
         ]),
         p(
-          "[Confirm the specific cookies and providers you use before launch — for example your analytics platform — and list them here, along with their duration and purpose.]",
+          "Analytics: we use Vercel Web Analytics to understand how the site is used, for example which pages are visited and how visitors found us. It does not use cookies. Visitors are counted using a hash of the incoming request, which is discarded after 24 hours, and page views are recorded anonymously and reported only as aggregated statistics, not linked to any individual or IP address. We do not currently use any analytics or advertising cookies.",
         ),
       ],
     },

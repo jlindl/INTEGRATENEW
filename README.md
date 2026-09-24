@@ -12,6 +12,8 @@ Fraunces display type, and a custom 3D "automation lattice" hero.
   (shared vocabulary in [lib/motion.ts](lib/motion.ts))
 - **React Three Fiber + drei** — hero 3D object, lazy-loaded with a static SVG
   fallback for reduced motion / low-end hardware / no WebGL / small viewports
+- **Vercel Web Analytics** — cookieless page-view analytics via `<Analytics />`
+  in [app/layout.tsx](app/layout.tsx); view it in the Vercel dashboard
 
 ## Run
 
