@@ -1,8 +1,8 @@
 /**
  * ContactBand — the closing "Want this for your business?" beat. Shared by the
  * hub (as the #contact section) and every niche detail page. The primary action
- * routes back into the main Integrate site's book-a-call flow, keeping the two
- * experiences one connected building.
+ * routes back to the main Integrate site's /contact page to book a call,
+ * keeping the two experiences one connected building.
  */
 import { Reveal } from "@/components/ui/Reveal";
 import { LogoMark } from "@/components/ui/LogoMark";
@@ -48,7 +48,7 @@ export function ContactBand({ nicheName }: { nicheName?: string }) {
 
           <Reveal delay={0.2} className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <MagneticLink
-              href="/#book-call"
+              href="/contact"
               className="group inline-flex items-center gap-2.5 rounded-full bg-halo px-8 py-4 text-base font-semibold text-carbon transition-colors duration-300 hover:bg-ivory"
             >
               Book a strategy call

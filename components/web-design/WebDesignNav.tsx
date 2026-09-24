@@ -90,7 +90,7 @@ export function WebDesignNav() {
 
             {/* Secondary here — the room's job is browsing, not booking. */}
             <MagneticLink
-              href="/#book-call"
+              href="/contact"
               className="hidden rounded-full border border-graphite-2 px-5 py-2.5 text-[0.85rem] font-medium text-ivory transition-colors duration-300 hover:border-mist md:inline-block"
             >
               Book a call
@@ -151,7 +151,7 @@ export function WebDesignNav() {
               ))}
               <li className="pt-2">
                 <Link
-                  href="/#book-call"
+                  href="/contact"
                   onClick={() => setOpen(false)}
                   className="block rounded-full border border-graphite-2 px-5 py-3 text-center font-medium text-ivory"
                 >

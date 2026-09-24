@@ -44,7 +44,7 @@ type Lead = {
   vision?: string;
   timeline?: string;
   budget?: string;
-  // Tags the calling form wants on the contact (e.g. ["webprospect"]).
+  // Tags the calling form wants on the contact, replacing the default.
   tags?: string[];
 };
 
@@ -99,8 +99,8 @@ async function forwardToWebhook(webhookUrl: string, lead: Lead) {
 
 async function upsertContact(token: string, locationId: string, lead: Lead) {
   const [firstName, ...rest] = lead.name.trim().split(/\s+/);
-  // Forms that name their own tags (e.g. the contact page → "webprospect")
-  // replace the default; otherwise this is a booking enquiry.
+  // Forms that name their own tags replace the default; otherwise this is a
+  // booking enquiry.
   const defaults = ["book-a-call"];
   if (process.env.GHL_BOOKING_TAG) defaults.push(process.env.GHL_BOOKING_TAG);
 

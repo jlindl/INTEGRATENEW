@@ -10,7 +10,7 @@ import { Footer } from "@/components/sections/Footer";
 export const metadata: Metadata = {
   title: "Contact — Integrate",
   description:
-    "Talk to Integrate about your project. Email sales@integrate.co.uk, message us on WhatsApp, or send an enquiry through the form.",
+    "Book a call with Integrate: leave your details and we'll call you back within one business day. Or email sales@integrate.co.uk or message us on WhatsApp.",
 };
 
 export default function ContactLayout({
