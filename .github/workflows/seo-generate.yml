@@ -1,7 +1,6 @@
 name: SEO generate
 
-# Writes the day's two blog posts (plus LinkedIn captions when they're switched
-# on in seo-engine/config.ts; they're paused until LinkedIn API access).
+# Writes the day's two blog posts. Articles only: nothing is posted to social media.
 #
 # GitHub cron runs in UTC: 05:00 UTC is 06:00 UK in summer (BST) and 05:00 UK
 # in winter (GMT), so it's early morning either way. Re-running on the same
@@ -91,8 +90,6 @@ jobs:
         id: commit
         run: |
           git add content/blog seo-engine/data/ledger.json
-          # Caption files only exist while LinkedIn captions are switched on.
-          if [ -d seo-engine/linkedin ]; then git add seo-engine/linkedin; fi
           if git diff --cached --quiet; then
             echo "Nothing new to commit."
             exit 0

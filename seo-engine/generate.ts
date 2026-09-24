@@ -11,8 +11,8 @@
  *
  * Each post is generated, run through the quality gate, and retried once with
  * the failure reasons if it fails. A post that fails twice is skipped, logged
- * in the ledger and reported in a GitHub issue. When config.linkedin.enabled
- * is on, posts that pass also get a LinkedIn caption (see lib/linkedin.ts).
+ * in the ledger and reported in a GitHub issue. Articles only: nothing is
+ * posted to social media.
  */
 import fs from "node:fs";
 import os from "node:os";
@@ -24,7 +24,6 @@ import { addUsage, costUsd, emptyUsage, generateArticle, GenerationError, type A
 import { loadLedger, loadLocations, loadServiceData, saveLedger, type LedgerEntry } from "./lib/data";
 import { runGate, type GateResult } from "./lib/gate";
 import { openIssue } from "./lib/github";
-import { buildLinkedInState, writeLinkedInState } from "./lib/linkedin";
 import { buildPostFile } from "./lib/post-file";
 import { retryPrompt, userPrompt } from "./lib/prompts";
 import { loadExistingPosts, sitePages, validPaths, type ExistingPost } from "./lib/site";
@@ -41,8 +40,7 @@ type PostResult = {
   file?: string;
   /** One entry per attempt; rejected drafts are kept so failures can be inspected in the run log. */
   attempts: { failures: string[]; stats?: GateResult["stats"]; rejectedDraft?: Article }[];
-  linkedin?: { file: string; status: string; problems: string[] };
-  /** Claude tokens for the article and the LinkedIn caption. */
+  /** Claude tokens for the article, including retries. */
   usage: Usage;
   costUsd: number;
   error?: string;
@@ -173,10 +171,7 @@ async function main() {
   const outDir = dryRun ? path.join(os.tmpdir(), "seo-engine", date) : config.paths.blog;
   fs.mkdirSync(outDir, { recursive: true });
 
-  console.log(
-    `seo:generate ${date}${dryRun ? " (dry run)" : ""}, mode ${config.publishMode}, model ${config.model.id}, ` +
-      `LinkedIn captions ${config.linkedin.enabled ? "on" : "off"}`,
-  );
+  console.log(`seo:generate ${date}${dryRun ? " (dry run)" : ""}, mode ${config.publishMode}, model ${config.model.id}`);
   if (topics.length === 0) console.log("Nothing to generate.");
 
   const takenSlugs = new Set([
@@ -195,31 +190,6 @@ async function main() {
       fs.writeFileSync(file, buildPostFile(article, topic, date));
       result.file = path.relative(config.paths.root, file);
       console.log(`  wrote ${result.file}`);
-
-      // LinkedIn captions are paused until LinkedIn grants API access (config.linkedin.enabled).
-      if (config.linkedin.enabled) {
-        const linkedin = await buildLinkedInState({
-          slug: article.slug,
-          title: article.title,
-          excerpt: article.excerpt,
-          targetKeyword: article.targetKeyword,
-          body: article.body,
-          place: topic.type === "location" ? `${topic.location.name}, ${topic.location.county}` : undefined,
-        });
-        result.usage = addUsage(result.usage, linkedin.usage);
-        const linkedinFile = writeLinkedInState(linkedin.state, dryRun ? path.join(outDir, "linkedin") : config.paths.linkedin);
-        result.linkedin = { file: path.relative(config.paths.root, linkedinFile), status: linkedin.state.status, problems: linkedin.problems };
-        console.log(`  wrote ${result.linkedin.file}`);
-
-        if (linkedin.problems.length && !dryRun) {
-          await openIssue(
-            `SEO engine: LinkedIn caption failed for ${article.slug}`,
-            `The post **${article.title}** was generated, but its LinkedIn caption failed the checks twice:\n\n` +
-              `${linkedin.problems.map((p) => `- ${p}`).join("\n")}\n\n` +
-              `To retry: \`npm run seo:caption -- ${article.slug}\``,
-          );
-        }
-      }
 
       // Later posts in this run must not duplicate this one, and may link to it.
       existing.push({ slug: article.slug, title: article.title, body: article.body, type: topic.type });

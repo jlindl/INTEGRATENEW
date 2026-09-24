@@ -6,7 +6,7 @@ export const SITE_URL = (process.env.SITE_URL || "https://integrate-tech.co.uk")
 
 export const SITE_NAME = "Integrate";
 
-/** The one page every blog post and social post must point to. */
+/** The one page every blog post must point to. */
 export const CONTACT_PATH = "/contact";
 
 /** Absolute URL for a root-relative path. */

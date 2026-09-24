@@ -8,9 +8,9 @@ Every post goes through code-based checks before it's saved, and every one links
 
 It runs itself on GitHub Actions. Each morning it writes the posts and adds them to a pull request for you to review. When you merge, the posts go live on the site.
 
-> **LinkedIn is paused.** The engine can also write a LinkedIn caption for each post, and posting to the company page is planned. Both are switched off until LinkedIn grants API access. See [LinkedIn (paused)](#linkedin-paused).
+It publishes articles only; nothing is posted to social media. See [Social media (later)](#social-media-later).
 
-**Contents:** [How a post is made](#how-a-post-is-made) · [The daily schedule](#the-daily-schedule-github-actions) · [Setup checklist](#setup-checklist) · [Running it locally](#running-it-locally) · [Adding places and services](#adding-places-and-services) · [LinkedIn (paused)](#linkedin-paused) · [Secrets](#secrets)
+**Contents:** [How a post is made](#how-a-post-is-made) · [The daily schedule](#the-daily-schedule-github-actions) · [Setup checklist](#setup-checklist) · [Running it locally](#running-it-locally) · [Adding places and services](#adding-places-and-services) · [Social media (later)](#social-media-later) · [Secrets](#secrets)
 
 ## How a post is made
 
@@ -116,32 +116,14 @@ Order of picking:
 - Within a round, the least-used place and audience go first.
 - Ties are broken by the date, so re-running on the same day picks the same topics.
 
-## LinkedIn (paused)
+## Social media (later)
 
-The plan is to post each article to Integrate's LinkedIn company page directly through LinkedIn's own API, which is free. It's paused until LinkedIn grants access.
+The engine publishes articles only. Posting each article to Integrate's LinkedIn company page is planned, directly through LinkedIn's own API (free, unlike aggregator services), once LinkedIn grants access. Earlier caption and posting code is in git history for reference: commit `34be7ab` has the Ayrshare version, and commit `dd613bc` has the LinkedIn caption writer.
 
-**What's already built and working (switched off):** [lib/linkedin.ts](lib/linkedin.ts) writes a LinkedIn caption for each post with Claude. Code checks it:
-- 150 to 250 words
-- a hook of at most 150 characters
-- 3 to 5 hashtags
-- no dashes or banned phrases
-- two UTM-tagged links, the article first and the contact form near the end
-
-Setting `linkedin.enabled` to `true` in [config.ts](config.ts) turns captions on. They're then saved to `seo-engine/linkedin/<slug>.json` and shown in the review PR. `npm run seo:caption -- <slug>` writes one by hand at any time.
-
-**What's still to build once access is granted:** posting to the page through LinkedIn's Posts API. The design:
-- post at 10:30 (location) and 13:30 (service) UK time
-- only once the article is live
-- never twice, by checking the page's recent posts before sending
-- with a one-command LinkedIn login that renews itself where LinkedIn allows
-
-An earlier Ayrshare-based version is in git history (commit `34be7ab`) for reference.
-
-**Getting access (do this now, because LinkedIn's review takes about 1 to 2 weeks):**
-1. At [linkedin.com/developers](https://www.linkedin.com/developers/apps), create an app. Associate it with the **Integrate company page** and upload a logo.
-2. Have a page admin verify the app. The portal generates a verification link for them.
-3. On the app's **Products** tab, request the **Community Management API**. It's only open to registered companies; Integrate AI Solutions Limited qualifies. Describe the use as "publishing our own blog posts to our own company page". The Community Management API must be the only product on a new app.
-4. When it's approved, tell Claude Code, and it will build the posting step. You'll need the app's client ID and secret, and the page's numeric ID from the admin URL (`linkedin.com/company/<number>/admin/`).
+To get access (LinkedIn's review takes about 1 to 2 weeks):
+1. At [linkedin.com/developers](https://www.linkedin.com/developers/apps), create an app associated with the **Integrate company page**.
+2. Have a page admin verify it.
+3. On the app's **Products** tab, request the **Community Management API**. Integrate AI Solutions Limited qualifies as a registered company.
 
 ## Secrets
 

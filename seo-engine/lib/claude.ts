@@ -1,6 +1,6 @@
 /**
  * Claude calls via the Anthropic SDK, with structured JSON output validated
- * against a Zod schema. Used for articles and for social captions.
+ * against a Zod schema.
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";

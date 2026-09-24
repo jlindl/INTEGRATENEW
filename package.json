@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "seo:generate": "tsx seo-engine/generate.ts",
-    "seo:check": "tsx seo-engine/check.ts",
-    "seo:caption": "tsx seo-engine/caption.ts"
+    "seo:check": "tsx seo-engine/check.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

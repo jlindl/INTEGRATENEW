@@ -1,7 +1,7 @@
 /**
  * Prints the pull request description for the pending-posts PR: every post
- * added on this branch (compared with main), plus its LinkedIn caption when
- * captions are on, so the whole day can be reviewed from the PR page.
+ * added on this branch (compared with main), so the whole batch can be
+ * reviewed from the PR page.
  *
  *   npx tsx seo-engine/pr-body.ts [--base origin/main] [--log seo-engine/logs/generate-<date>.json]
  */
@@ -12,7 +12,6 @@ import { parseArgs } from "node:util";
 import matter from "gray-matter";
 import { countWords } from "../lib/blog";
 import { config } from "./config";
-import { readLinkedInState } from "./lib/linkedin";
 
 const { values: args } = parseArgs({
   options: { base: { type: "string", default: "origin/main" }, log: { type: "string" } },
@@ -26,17 +25,16 @@ const added = execFileSync("git", ["diff", "--name-only", "--diff-filter=A", `${
 const posts = added
   .map((file) => {
     const { data, content } = matter(fs.readFileSync(path.join(config.paths.root, file), "utf8"));
-    return { file, data, words: countWords(content), linkedin: readLinkedInState(path.basename(file, ".mdx")) };
+    return { file, data, words: countWords(content) };
   })
   .sort((a, b) => String(a.data.date).localeCompare(String(b.data.date)) || String(a.data.type).localeCompare(String(b.data.type)));
 
 const out: string[] = [];
 out.push(`## ${posts.length} new blog post${posts.length === 1 ? "" : "s"} from the SEO engine`, "");
-const withCaptions = config.linkedin.enabled;
 out.push(
   "Merging publishes these on the site.",
   "",
-  `To drop a post, delete its \`.mdx\` file${withCaptions ? " and its `seo-engine/linkedin/` file" : ""} from this branch before merging. ` +
+  "To drop a post, delete its `.mdx` file from this branch before merging. " +
     "To change wording, edit the files here. The Vercel preview deployment on this PR shows the posts as they'll appear.",
   "",
 );
@@ -50,14 +48,10 @@ posts.forEach((p, i) => {
     `- Keyword: \`${d.targetKeyword}\` · ${p.words.toLocaleString("en-GB")} words`,
     `- Meta description (${String(d.description).length} chars): ${d.description}`,
     `- File: \`${p.file}\` · page: \`/blog/${d.slug}\``,
+    "",
+    `> ${d.excerpt}`,
+    "",
   );
-  const cap = p.linkedin;
-  if (withCaptions && cap?.caption) {
-    out.push("", "<details><summary>LinkedIn caption</summary>", "", ...cap.caption.split("\n").map((l) => (l ? `> ${l}` : ">")), "", "</details>");
-  } else if (withCaptions) {
-    out.push(`- ⚠️ No LinkedIn caption (${cap?.error ?? "missing"}). After merging, run \`npm run seo:caption -- ${d.slug}\`.`);
-  }
-  out.push("");
 });
 
 if (args.log && fs.existsSync(args.log)) {

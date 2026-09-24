@@ -1,7 +1,4 @@
-/**
- * Turns a generated article into an MDX file in the site's post format.
- * The LinkedIn caption and publish status live in seo-engine/linkedin/, not here.
- */
+/** Turns a generated article into an MDX file in the site's post format. */
 import matter from "gray-matter";
 import { config } from "../config";
 import type { Article } from "./claude";

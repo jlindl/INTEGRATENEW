@@ -1,7 +1,7 @@
 /**
  * SEO engine configuration. Every tunable (model, word ranges, thresholds,
- * banned phrases, LinkedIn caption rules, schedule) lives here so behaviour can be changed
- * without touching engine code.
+ * banned phrases, publish mode) lives here so behaviour can be changed without
+ * touching engine code.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -27,11 +27,9 @@ export const config = {
     ledger: path.join(ROOT, "seo-engine", "data", "ledger.json"),
     blog: path.join(ROOT, "content", "blog"),
     logs: path.join(ROOT, "seo-engine", "logs"),
-    /** One JSON file per post: the LinkedIn caption and its publish status. */
-    linkedin: path.join(ROOT, "seo-engine", "linkedin"),
   },
 
-  /** Claude settings for article and caption generation. */
+  /** Claude settings for article generation. */
   model: {
     id: "claude-sonnet-5",
     effort: "high" as const,
@@ -153,25 +151,6 @@ export const config = {
 
   /** Publishing mode for the scheduled job: "pr" opens a pull request, "auto" commits to main. */
   publishMode: (process.env.PUBLISH_MODE === "auto" ? "auto" : "pr") as "pr" | "auto",
-
-  /** LinkedIn company page captions (the only social channel). */
-  linkedin: {
-    /**
-     * Off until LinkedIn grants API access (see "LinkedIn (paused)" in the
-     * README). While off, no captions are written and nothing is posted.
-     */
-    enabled: false as boolean,
-    /** Word range for the caption text (not counting the link or hashtags). */
-    minWords: 150,
-    maxWords: 250,
-    maxHookChars: 150,
-    minHashtags: 3,
-    maxHashtags: 5,
-    /** LinkedIn's limit for the whole post, links and hashtags included. */
-    maxChars: 3000,
-    /** UTM tags on both links; utm_source=linkedin and utm_content=<slug> are added in code. */
-    utm: { medium: "social", campaign: "seo-engine" },
-  },
 
   /** GitHub issue settings for failures. */
   issues: { label: "seo-engine" },
