@@ -1,6 +1,6 @@
 # SEO engine
 
-Writes two blog posts a day for integrate-tech.co.uk:
+Writes two blog posts a day for www.integrate-tech.co.uk:
 - one about a place, for example "roofing leads in Chorley"
 - one about a service, for example "Meta ads for heating engineers"
 
@@ -64,7 +64,7 @@ All settings are in [config.ts](config.ts), including the model, word ranges, th
 
 1. **Anthropic:** create an API key at console.anthropic.com and add credit under Billing.
 2. **GitHub repository settings:**
-   - **Secrets and variables → Actions → Secrets:** add `ANTHROPIC_API_KEY`. `SITE_URL` is optional and defaults to `https://integrate-tech.co.uk`.
+   - **Secrets and variables → Actions → Secrets:** add `ANTHROPIC_API_KEY`. `SITE_URL` is optional and defaults to `https://www.integrate-tech.co.uk`.
    - **Secrets and variables → Actions → Variables:** optionally add `PUBLISH_MODE` = `pr` or `auto`. Unset means `pr`.
    - **Actions → General → Workflow permissions:** choose "Read and write permissions" and tick "Allow GitHub Actions to create and approve pull requests".
    - Optional: **General → Pull Requests →** "Automatically delete head branches".
@@ -130,6 +130,6 @@ To get access (LinkedIn's review takes about 1 to 2 weeks):
 | Secret | Used for |
 |---|---|
 | `ANTHROPIC_API_KEY` | Writing posts |
-| `SITE_URL` | Absolute links. Optional; defaults to `https://integrate-tech.co.uk`. |
+| `SITE_URL` | Absolute links. Optional; defaults to `https://www.integrate-tech.co.uk`. |
 
 `GITHUB_TOKEN` is provided by Actions automatically and is used for commits, the review PR and issues.

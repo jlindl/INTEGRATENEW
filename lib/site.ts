@@ -2,7 +2,7 @@
  * Site-wide constants shared by metadata, the sitemap, JSON-LD and the SEO
  * engine. SITE_URL can be overridden per environment (e.g. preview builds).
  */
-export const SITE_URL = (process.env.SITE_URL || "https://integrate-tech.co.uk").replace(/\/$/, "");
+export const SITE_URL = (process.env.SITE_URL || "https://www.integrate-tech.co.uk").replace(/\/$/, "");
 
 export const SITE_NAME = "Integrate";
 
