@@ -19,6 +19,25 @@
       "slug": "websites-for-fencing-contractors-that-win-more-enquiries",
       "title": "Websites for fencing contractors that win more enquiries",
       "targetKeyword": "websites for fencing contractors"
+    },
+    {
+      "date": "2026-09-25",
+      "type": "location",
+      "key": "location:bolton:roofers",
+      "status": "generated",
+      "angle": "website",
+      "slug": "websites-for-roofers-in-bolton-that-win-more-local-work",
+      "title": "Websites for roofers in Bolton that win more local work",
+      "targetKeyword": "websites for roofers in Bolton"
+    },
+    {
+      "date": "2026-09-25",
+      "type": "service",
+      "key": "service:website-agent:plasterers",
+      "status": "generated",
+      "slug": "ai-chatbot-for-plasterers-that-books-jobs-while-you-sleep",
+      "title": "AI chatbot for plasterers that books jobs while you sleep",
+      "targetKeyword": "ai chatbot for plasterers"
     }
   ]
 }
