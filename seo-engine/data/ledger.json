@@ -38,6 +38,25 @@
       "slug": "ai-chatbot-for-plasterers-that-books-jobs-while-you-sleep",
       "title": "AI chatbot for plasterers that books jobs while you sleep",
       "targetKeyword": "ai chatbot for plasterers"
+    },
+    {
+      "date": "2026-09-26",
+      "type": "location",
+      "key": "location:stockport:plumbers",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-plumbers-in-stockport-that-actually-gets-calls",
+      "title": "Marketing for plumbers in Stockport that actually gets calls",
+      "targetKeyword": "marketing for plumbers in stockport"
+    },
+    {
+      "date": "2026-09-26",
+      "type": "service",
+      "key": "service:whatsapp-agent:joiners",
+      "status": "generated",
+      "slug": "ai-whatsapp-assistant-for-joiners",
+      "title": "An AI WhatsApp assistant for joiners that qualifies every lead",
+      "targetKeyword": "ai whatsapp assistant for joiners"
     }
   ]
 }
