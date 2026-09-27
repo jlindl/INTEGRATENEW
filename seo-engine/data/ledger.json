@@ -57,6 +57,25 @@
       "slug": "ai-whatsapp-assistant-for-joiners",
       "title": "An AI WhatsApp assistant for joiners that qualifies every lead",
       "targetKeyword": "ai whatsapp assistant for joiners"
+    },
+    {
+      "date": "2026-09-27",
+      "type": "location",
+      "key": "location:blackpool:builders",
+      "status": "generated",
+      "angle": "website",
+      "slug": "websites-for-builders-in-blackpool-that-win-local-work",
+      "title": "Websites for builders in Blackpool that win local work",
+      "targetKeyword": "websites for builders in Blackpool"
+    },
+    {
+      "date": "2026-09-27",
+      "type": "service",
+      "key": "service:automation:bathroom-fitters",
+      "status": "generated",
+      "slug": "automation-for-bathroom-fitters-that-chases-quotes-for-you",
+      "title": "Automation for bathroom fitters that chases quotes for you",
+      "targetKeyword": "automation for bathroom fitters"
     }
   ]
 }
