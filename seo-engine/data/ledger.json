@@ -76,6 +76,25 @@
       "slug": "automation-for-bathroom-fitters-that-chases-quotes-for-you",
       "title": "Automation for bathroom fitters that chases quotes for you",
       "targetKeyword": "automation for bathroom fitters"
+    },
+    {
+      "date": "2026-09-28",
+      "type": "location",
+      "key": "location:oldham:landscapers",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-landscapers-in-oldham-that-actually-works",
+      "title": "Marketing for landscapers in Oldham that actually works",
+      "targetKeyword": "marketing for landscapers in Oldham"
+    },
+    {
+      "date": "2026-09-28",
+      "type": "service",
+      "key": "service:lead-generation:kitchen-fitters",
+      "status": "generated",
+      "slug": "lead-generation-for-kitchen-fitters",
+      "title": "Lead generation for kitchen fitters: a practical guide",
+      "targetKeyword": "lead generation for kitchen fitters"
     }
   ]
 }
