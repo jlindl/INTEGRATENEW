@@ -95,6 +95,25 @@
       "slug": "lead-generation-for-kitchen-fitters",
       "title": "Lead generation for kitchen fitters: a practical guide",
       "targetKeyword": "lead generation for kitchen fitters"
+    },
+    {
+      "date": "2026-09-29",
+      "type": "location",
+      "key": "location:warrington:heating-engineers",
+      "status": "generated",
+      "angle": "leads",
+      "slug": "how-to-get-more-boiler-and-heating-leads-in-warrington",
+      "title": "How to get more boiler and heating leads in Warrington",
+      "targetKeyword": "boiler and heating leads in Warrington"
+    },
+    {
+      "date": "2026-09-29",
+      "type": "service",
+      "key": "service:meta-ads:loft-conversion",
+      "status": "generated",
+      "slug": "facebook-ads-for-loft-conversion-specialists-that-get-real-enquiries",
+      "title": "Facebook ads for loft conversion specialists that get real enquiries",
+      "targetKeyword": "facebook ads for loft conversion specialists"
     }
   ]
 }
