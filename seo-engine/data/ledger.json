@@ -114,6 +114,25 @@
       "slug": "facebook-ads-for-loft-conversion-specialists-that-get-real-enquiries",
       "title": "Facebook ads for loft conversion specialists that get real enquiries",
       "targetKeyword": "facebook ads for loft conversion specialists"
+    },
+    {
+      "date": "2026-09-30",
+      "type": "location",
+      "key": "location:st-helens:fencing",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-fencing-contractors-in-st-helens",
+      "title": "Marketing for fencing contractors in St Helens",
+      "targetKeyword": "marketing for fencing contractors in St Helens"
+    },
+    {
+      "date": "2026-09-30",
+      "type": "service",
+      "key": "service:lead-generation:glaziers",
+      "status": "generated",
+      "slug": "lead-generation-for-window-and-door-installers-that-works",
+      "title": "Lead generation for window and door installers that works",
+      "targetKeyword": "lead generation for window and door installers"
     }
   ]
 }
