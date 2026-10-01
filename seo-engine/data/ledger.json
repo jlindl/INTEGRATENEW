@@ -133,6 +133,25 @@
       "slug": "lead-generation-for-window-and-door-installers-that-works",
       "title": "Lead generation for window and door installers that works",
       "targetKeyword": "lead generation for window and door installers"
+    },
+    {
+      "date": "2026-10-01",
+      "type": "location",
+      "key": "location:darwen:painters-decorators",
+      "status": "generated",
+      "angle": "leads",
+      "slug": "how-to-get-more-painting-and-decorating-leads-in-darwen",
+      "title": "How to get more painting and decorating leads in Darwen",
+      "targetKeyword": "painting and decorating leads in Darwen"
+    },
+    {
+      "date": "2026-10-01",
+      "type": "service",
+      "key": "service:website-agent:electricians",
+      "status": "generated",
+      "slug": "ai-chatbot-for-electricians",
+      "title": "AI chatbot for electricians: turn website visits into booked jobs",
+      "targetKeyword": "ai chatbot for electricians"
     }
   ]
 }
