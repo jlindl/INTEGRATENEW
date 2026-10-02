@@ -152,6 +152,25 @@
       "slug": "ai-chatbot-for-electricians",
       "title": "AI chatbot for electricians: turn website visits into booked jobs",
       "targetKeyword": "ai chatbot for electricians"
+    },
+    {
+      "date": "2026-10-02",
+      "type": "location",
+      "key": "location:bury:plasterers",
+      "status": "generated",
+      "angle": "website",
+      "slug": "websites-for-plasterers-in-bury-that-win-more-local-work",
+      "title": "Websites for plasterers in Bury that win more local work",
+      "targetKeyword": "websites for plasterers in bury"
+    },
+    {
+      "date": "2026-10-02",
+      "type": "service",
+      "key": "service:whatsapp-agent:painters-decorators",
+      "status": "generated",
+      "slug": "ai-whatsapp-assistant-for-painters-and-decorators",
+      "title": "AI WhatsApp assistant for painters and decorators",
+      "targetKeyword": "ai whatsapp assistant for painters and decorators"
     }
   ]
 }
