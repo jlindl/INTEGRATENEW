@@ -171,6 +171,25 @@
       "slug": "ai-whatsapp-assistant-for-painters-and-decorators",
       "title": "AI WhatsApp assistant for painters and decorators",
       "targetKeyword": "ai whatsapp assistant for painters and decorators"
+    },
+    {
+      "date": "2026-10-03",
+      "type": "location",
+      "key": "location:rochdale:bathroom-fitters",
+      "status": "generated",
+      "angle": "website",
+      "slug": "websites-for-bathroom-fitters-in-rochdale",
+      "title": "Websites for bathroom fitters in Rochdale that win local work",
+      "targetKeyword": "websites for bathroom fitters in Rochdale"
+    },
+    {
+      "date": "2026-10-03",
+      "type": "service",
+      "key": "service:automation:heating-engineers",
+      "status": "generated",
+      "slug": "automation-for-heating-engineers-a-practical-guide",
+      "title": "Automation for heating engineers: a practical guide",
+      "targetKeyword": "automation for heating engineers"
     }
   ]
 }
