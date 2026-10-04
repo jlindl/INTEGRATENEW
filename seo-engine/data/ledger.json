@@ -190,6 +190,25 @@
       "slug": "automation-for-heating-engineers-a-practical-guide",
       "title": "Automation for heating engineers: a practical guide",
       "targetKeyword": "automation for heating engineers"
+    },
+    {
+      "date": "2026-10-04",
+      "type": "location",
+      "key": "location:morecambe:glaziers",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-window-and-door-installers-in-morecambe",
+      "title": "Marketing for window and door installers in Morecambe",
+      "targetKeyword": "marketing for window and door installers in Morecambe"
+    },
+    {
+      "date": "2026-10-04",
+      "type": "service",
+      "key": "service:meta-ads:plumbers",
+      "status": "generated",
+      "slug": "facebook-ads-for-plumbers-that-bring-in-better-enquiries",
+      "title": "Facebook ads for plumbers that bring in better enquiries",
+      "targetKeyword": "facebook ads for plumbers"
     }
   ]
 }
