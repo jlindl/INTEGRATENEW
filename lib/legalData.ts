@@ -326,7 +326,7 @@ const cookies: LegalDoc = {
   title: "Cookie Policy",
   summary:
     "How Integrate AI Solutions Limited uses cookies and similar technologies, and how you can control them.",
-  updated: "18 July 2026",
+  updated: "5 October 2026",
   intro:
     "This Cookie Policy explains what cookies are, how we use them on our website, and how you can manage your preferences.",
   sections: [
@@ -349,6 +349,9 @@ const cookies: LegalDoc = {
         ]),
         p(
           "Analytics: we use Vercel Web Analytics to understand how the site is used, for example which pages are visited and how visitors found us. It does not use cookies. Visitors are counted using a hash of the incoming request, which is discarded after 24 hours, and page views are recorded anonymously and reported only as aggregated statistics, not linked to any individual or IP address. We do not currently use any analytics or advertising cookies.",
+        ),
+        p(
+          "We also use Integrate Analytics, our own analytics tool, to see which pages are visited, how visitors found us, and when someone taps a phone, email or WhatsApp link or submits a form. It does not use cookies or store anything on your device. Visitors are counted using an anonymous code created from the incoming request that changes every day, IP addresses are not stored, and the contents of forms are never collected.",
         ),
       ],
     },

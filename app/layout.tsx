@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
@@ -61,6 +62,12 @@ export default function RootLayout({
         <div className="grain" aria-hidden="true" />
         {/* Vercel Web Analytics: cookieless page-view counts (see the Cookie Policy). */}
         <Analytics />
+        {/* Integrate Analytics: our own cookieless dashboard, incl. call/form/WhatsApp enquiries (see the Cookie Policy). */}
+        <Script
+          src="https://integrate-analytics.vercel.app/t.js"
+          data-site="892b3a06-e0c2-4688-9e5b-9f037534165e"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
