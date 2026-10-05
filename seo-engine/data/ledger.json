@@ -209,6 +209,25 @@
       "slug": "facebook-ads-for-plumbers-that-bring-in-better-enquiries",
       "title": "Facebook ads for plumbers that bring in better enquiries",
       "targetKeyword": "facebook ads for plumbers"
+    },
+    {
+      "date": "2026-10-05",
+      "type": "location",
+      "key": "location:southport:electricians",
+      "status": "generated",
+      "angle": "leads",
+      "slug": "electrical-leads-in-southport",
+      "title": "Electrical leads in Southport: how to win more local jobs",
+      "targetKeyword": "electrical leads in Southport"
+    },
+    {
+      "date": "2026-10-05",
+      "type": "service",
+      "key": "service:websites:roofers",
+      "status": "generated",
+      "slug": "websites-for-roofers-that-win-more-enquiries",
+      "title": "Websites for roofers that win more enquiries",
+      "targetKeyword": "websites for roofers"
     }
   ]
 }
