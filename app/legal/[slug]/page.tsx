@@ -18,10 +18,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const doc = getLegalDoc(slug);
-  if (!doc) return { title: "Not found — Integrate" };
+  if (!doc) return { title: "Not found | Integrate" };
   return {
-    title: `${doc.title} — Integrate`,
+    title: `${doc.title} | Integrate`,
     description: doc.summary,
+    alternates: { canonical: `/legal/${doc.slug}` },
   };
 }
 

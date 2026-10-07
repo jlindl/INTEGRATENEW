@@ -5,6 +5,8 @@ import { NicheDetailContent } from "@/components/web-design/NicheDetailContent";
 import { NichePager } from "@/components/web-design/NichePager";
 import { ContactBand } from "@/components/web-design/ContactBand";
 import { allSlugs, getNiche } from "@/lib/webDesignData";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { webDesignServiceGraph } from "@/lib/schema";
 
 /**
  * The niche detail template. One dynamic route serves every case study — adding
@@ -30,8 +32,10 @@ export async function generateMetadata({
   if (!niche) return { title: "Not found | Integrate Web Design" };
 
   return {
-    title: `${niche.forLabel} | Integrate Web Design`,
+    // Keyword-first title, e.g. "Web design for plumbers | Integrate".
+    title: `Web design for ${niche.name.toLowerCase()} | Integrate`,
     description: niche.positioning,
+    alternates: { canonical: `/web-design/${niche.slug}` },
   };
 }
 
@@ -46,6 +50,13 @@ export default async function NicheDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={webDesignServiceGraph({
+          slug: niche.slug,
+          name: `Web design for ${niche.name.toLowerCase()}`,
+          description: niche.positioning,
+        })}
+      />
       <NicheDetailHero niche={niche} />
       <NicheDetailContent niche={niche} />
       <NichePager slug={niche.slug} />

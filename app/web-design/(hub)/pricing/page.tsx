@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: "Pricing | Integrate Web Design",
   description:
     "Websites from a £200 build fee plus £30/month. Hosting and up to 30 minutes of edits included. Apps, portals and integrated systems are quoted per project.",
+  alternates: { canonical: "/web-design/pricing" },
 };
 
 function Check() {

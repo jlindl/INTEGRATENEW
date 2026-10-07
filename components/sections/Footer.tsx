@@ -7,6 +7,7 @@
 
 import { LogoMark } from "@/components/ui/LogoMark";
 import { LEGAL_DOCS } from "@/lib/legalData";
+import { CookieSettingsLink } from "@/components/analytics/CookieBanner";
 
 type LinkItem = { label: string; href: string };
 
@@ -109,6 +110,7 @@ export function Footer() {
                   {doc.label}
                 </a>
               ))}
+              <CookieSettingsLink className="inline-block py-3 text-left text-[0.75rem] text-ink-3 transition-colors duration-300 hover:text-ink sm:py-0" />
             </nav>
           </div>
           <p className="hairline flex w-fit items-center gap-2.5 rounded-full bg-card px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-2">

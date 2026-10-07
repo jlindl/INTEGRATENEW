@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { Nav } from "@/components/sections/Nav";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationGraph } from "@/lib/schema";
 import { Hero } from "@/components/sections/Hero";
 import { ServiceMarquee } from "@/components/sections/ServiceMarquee";
 import { Services } from "@/components/sections/Services";
@@ -12,6 +15,10 @@ import { Process } from "@/components/sections/Process";
 import { ClosingCTA } from "@/components/sections/ClosingCTA";
 import { Footer } from "@/components/sections/Footer";
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 /**
  * The homepage is a sequence of "beats" — each section component owns its own
  * scroll choreography; this file only sets the running order.
@@ -19,6 +26,7 @@ import { Footer } from "@/components/sections/Footer";
 export default function Home() {
   return (
     <>
+      <JsonLd data={organizationGraph()} />
       <Nav />
       <main id="main">
         <Hero />

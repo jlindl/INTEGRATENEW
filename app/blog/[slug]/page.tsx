@@ -31,7 +31,8 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: `${post.title} | Integrate Blog`,
+    // Google shows roughly 60 characters: only add the brand when it still fits.
+    title: { absolute: post.title.length <= 47 ? `${post.title} | Integrate` : post.title },
     description: post.description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {

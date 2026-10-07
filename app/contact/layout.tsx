@@ -8,9 +8,10 @@ import { Footer } from "@/components/sections/Footer";
  * padding.
  */
 export const metadata: Metadata = {
-  title: "Contact — Integrate",
+  title: "Contact Integrate | Book a call",
   description:
     "Book a call with Integrate: leave your details and we'll call you back within one business day. Or email sales@integrate.co.uk or message us on WhatsApp.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactLayout({

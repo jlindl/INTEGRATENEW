@@ -8,9 +8,10 @@ import { Footer } from "@/components/sections/Footer";
  * own top padding.
  */
 export const metadata: Metadata = {
-  title: "Testimonials — Integrate",
+  title: "Client testimonials | Integrate",
   description:
     "The brands we've worked with, and what they had to say. Client stories from the teams whose systems and sites Integrate designed, built, and maintains.",
+  alternates: { canonical: "/testimonials" },
 };
 
 export default function TestimonialsLayout({

@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { CookieBanner } from "@/components/analytics/CookieBanner";
+import { ContactClickTracker } from "@/components/analytics/ContactClickTracker";
 import { SITE_URL } from "@/lib/site";
 
 /* Editorial display face — variable, with optical sizing (opsz/SOFT/WONK) */
@@ -37,9 +40,9 @@ const plexMono = localFont({
 export const metadata: Metadata = {
   // Resolves relative OG images and canonicals to absolute URLs.
   metadataBase: new URL(SITE_URL),
-  title: "Integrate — The strategic AI partner for high-growth B2B",
+  title: "Integrate | The strategic AI partner for high-growth B2B",
   description:
-    "We design, deploy, and manage bespoke AI systems — automating revenue operations so your team can focus on what only humans can do.",
+    "We design, deploy, and manage bespoke AI systems that automate revenue operations, so your team can focus on what only humans can do.",
 };
 
 export default function RootLayout({
@@ -47,7 +50,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang="en-GB"
       className={`${fraunces.variable} ${instrument.variable} ${plexMono.variable}`}
     >
       <body>
@@ -68,6 +71,10 @@ export default function RootLayout({
           data-site="892b3a06-e0c2-4688-9e5b-9f037534165e"
           strategy="afterInteractive"
         />
+        {/* Google Analytics 4: Consent Mode v2, cookies only after "Accept" in the banner. */}
+        <GoogleAnalytics />
+        <ContactClickTracker />
+        <CookieBanner />
       </body>
     </html>
   );

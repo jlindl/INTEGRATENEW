@@ -7,10 +7,11 @@ import type { Metadata } from "next";
  * logo returns to the homepage for anyone who wants the full site.
  */
 export const metadata: Metadata = {
-  title: "Links — Integrate",
+  title: "Links | Integrate",
   description:
     "Book a call with Integrate, or follow us on Instagram, TikTok and LinkedIn.",
   robots: { index: true, follow: true },
+  alternates: { canonical: "/links" },
 };
 
 export default function LinksLayout({

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { PortfolioHero } from "@/components/web-design/hero/PortfolioHero";
 import { PortfolioShowcase } from "@/components/web-design/gallery/PortfolioShowcase";
 import { AnyNiche } from "@/components/web-design/AnyNiche";
@@ -6,6 +7,10 @@ import { MobileShowcase } from "@/components/web-design/MobileShowcase";
 import { Testimonials } from "@/components/web-design/Testimonials";
 import { StudioNote } from "@/components/web-design/StudioNote";
 import { ContactBand } from "@/components/web-design/ContactBand";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/web-design" },
+};
 
 /**
  * The portfolio hub. Nav + footer live in the segment layout; this file sets

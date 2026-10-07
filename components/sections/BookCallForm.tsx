@@ -14,6 +14,7 @@
  * homepage closing section, with a honeypot for spam.
  */
 import { useState, type FormEvent, type ReactNode } from "react";
+import { track } from "@/lib/gtag";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -135,6 +136,7 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
+      track("generate_lead", { form: "book_call", source });
       setStatus("success");
     } catch (err) {
       setStatus("error");
