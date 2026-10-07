@@ -5,6 +5,7 @@
 import { getAllPosts } from "../../lib/blog";
 import { allLegalSlugs } from "../../lib/legalData";
 import { NICHES } from "../../lib/webDesignData";
+import { SERVICE_HUBS } from "../../lib/serviceHubs";
 import { config } from "../config";
 
 export type ExistingPost = {
@@ -28,6 +29,8 @@ export function sitePages(): LinkTarget[] {
     { path: "/web-design", label: "Integrate Web Design: websites and apps" },
     { path: "/web-design/pricing", label: "Web design pricing" },
     ...NICHES.map((n) => ({ path: `/web-design/${n.slug}`, label: `Web design for ${n.name.toLowerCase()}` })),
+    { path: "/services", label: "All Integrate services" },
+    ...SERVICE_HUBS.map((h) => ({ path: `/services/${h.id}`, label: `Service guide: ${h.name.toLowerCase()} (link here when the article is about this service)` })),
     { path: "/testimonials", label: "Client testimonials" },
     { path: "/blog", label: "Blog index" },
   ];

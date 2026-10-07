@@ -8,6 +8,7 @@ import { ContactCta } from "@/components/blog/ContactCta";
 import { PostBody } from "@/components/blog/mdx";
 import { PostJsonLd } from "@/components/blog/PostJsonLd";
 import { allPostSlugs, getPost, getRelatedPosts } from "@/lib/blog";
+import { hubForService, getHub } from "@/lib/serviceHubs";
 
 type Params = { slug: string };
 
@@ -65,6 +66,7 @@ export default async function BlogPost({
   const post = getPost(slug);
   if (!post) notFound();
   const related = getRelatedPosts(post);
+  const hub = hubForService(post.service) ?? (post.type === "location" ? getHub("lead-generation") : undefined);
 
   return (
     <article className="relative overflow-hidden pt-32 pb-28 md:pt-40 md:pb-36">
@@ -117,6 +119,17 @@ export default async function BlogPost({
           <Reveal delay={0.16} className="mt-4">
             <PostBody source={post.body} />
           </Reveal>
+
+          {/* Up-link to the service hub this post belongs to */}
+          {hub && (
+            <p className="mt-10 rounded-2xl bg-card p-6 hairline leading-relaxed text-ink-2">
+              Part of our guide to{" "}
+              <Link href={`/services/${hub.id}`} className="font-medium text-ink underline decoration-accent/60 underline-offset-4 hover:text-accent">
+                {hub.name.toLowerCase()}
+              </Link>
+              : how it works, what good looks like, and every related guide in one place.
+            </p>
+          )}
 
           {/* Closing CTA: always rendered, independent of the post body */}
           <ContactCta variant="closing" />

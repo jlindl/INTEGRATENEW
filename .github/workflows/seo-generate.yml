@@ -1,6 +1,10 @@
 name: SEO generate
 
-# Writes the day's two blog posts. Articles only: nothing is posted to social media.
+# Writes three blog posts a week: a service article on Monday and Friday, a
+# location article on Wednesday. Quality over volume: Google ignores large
+# batches of similar pages, so every post must earn its place. Articles only:
+# nothing is posted to social media. Run it by hand (workflow_dispatch) for
+# extra posts.
 #
 # GitHub cron runs in UTC: 05:00 UTC is 06:00 UK in summer (BST) and 05:00 UK
 # in winter (GMT), so it's early morning either way. Re-running on the same
@@ -15,7 +19,9 @@ name: SEO generate
 
 on:
   schedule:
-    - cron: "0 5 * * *"
+    - cron: "0 5 * * 1" # Monday: service article
+    - cron: "0 5 * * 3" # Wednesday: location article
+    - cron: "0 5 * * 5" # Friday: service article
   workflow_dispatch:
     inputs:
       only:
@@ -46,7 +52,7 @@ jobs:
       PUBLISH_MODE: ${{ vars.PUBLISH_MODE || 'pr' }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ONLY: ${{ inputs.only || 'both' }}
+      ONLY: ${{ inputs.only || (github.event.schedule == '0 5 * * 3' && 'location') || (github.event_name == 'schedule' && 'service') || 'both' }}
     steps:
       - uses: actions/checkout@v7
         with:

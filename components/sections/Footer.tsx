@@ -16,6 +16,7 @@ const PLATFORM_LINKS: LinkItem[] = [
   { label: "Our Systems", href: "/#case-studies" },
   { label: "Our Process", href: "/#process" },
   { label: "About Us", href: "/#services" },
+  { label: "Services", href: "/services" },
   { label: "Testimonials", href: "/testimonials" },
   { label: "Blog", href: "/blog" },
 ];
