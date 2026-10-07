@@ -247,6 +247,25 @@
       "slug": "lead-generation-for-driveway-and-paving-contractors-that-works",
       "title": "Lead generation for driveway and paving contractors that works",
       "targetKeyword": "lead generation for driveway and paving contractors"
+    },
+    {
+      "date": "2026-10-07",
+      "type": "location",
+      "key": "location:chorley:loft-conversion",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-loft-conversion-specialists-in-chorley",
+      "title": "Marketing for loft conversion specialists in Chorley",
+      "targetKeyword": "marketing for loft conversion specialists in Chorley"
+    },
+    {
+      "date": "2026-10-07",
+      "type": "service",
+      "key": "service:whatsapp-agent:tilers",
+      "status": "generated",
+      "slug": "ai-whatsapp-assistant-for-tilers-how-it-qualifies-leads",
+      "title": "AI WhatsApp assistant for tilers: how it qualifies leads",
+      "targetKeyword": "ai whatsapp assistant for tilers"
     }
   ]
 }
