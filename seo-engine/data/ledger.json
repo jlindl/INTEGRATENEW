@@ -266,6 +266,15 @@
       "slug": "ai-whatsapp-assistant-for-tilers-how-it-qualifies-leads",
       "title": "AI WhatsApp assistant for tilers: how it qualifies leads",
       "targetKeyword": "ai whatsapp assistant for tilers"
+    },
+    {
+      "date": "2026-10-09",
+      "type": "service",
+      "key": "service:website-agent:builders",
+      "status": "generated",
+      "slug": "ai-chatbot-for-builders-that-turns-visits-into-booked-jobs",
+      "title": "AI chatbot for builders that turns visits into booked jobs",
+      "targetKeyword": "ai chatbot for builders"
     }
   ]
 }
