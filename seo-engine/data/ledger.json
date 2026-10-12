@@ -275,6 +275,15 @@
       "slug": "ai-chatbot-for-builders-that-turns-visits-into-booked-jobs",
       "title": "AI chatbot for builders that turns visits into booked jobs",
       "targetKeyword": "ai chatbot for builders"
+    },
+    {
+      "date": "2026-10-12",
+      "type": "service",
+      "key": "service:meta-ads:landscapers",
+      "status": "generated",
+      "slug": "facebook-ads-for-landscapers-how-to-get-better-enquiries",
+      "title": "Facebook ads for landscapers: how to get better enquiries",
+      "targetKeyword": "facebook ads for landscapers"
     }
   ]
 }
