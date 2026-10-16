@@ -294,6 +294,15 @@
       "slug": "kitchen-fitting-leads-in-accrington",
       "title": "Kitchen fitting leads in Accrington: a practical guide",
       "targetKeyword": "kitchen fitting leads in Accrington"
+    },
+    {
+      "date": "2026-10-16",
+      "type": "service",
+      "key": "service:automation:builders",
+      "status": "generated",
+      "slug": "automation-for-builders-that-takes-the-admin-off-your-plate",
+      "title": "Automation for builders that takes the admin off your plate",
+      "targetKeyword": "automation for builders"
     }
   ]
 }
