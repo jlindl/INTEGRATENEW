@@ -21,11 +21,24 @@ const PLATFORM_LINKS: LinkItem[] = [
   { label: "Blog", href: "/blog" },
 ];
 
+/* Sitewide links to every service hub so Google can discover and pass
+   authority to them from all pages (blog posts included). Keep in sync with
+   SERVICE_HUBS in lib/serviceHubs.ts. */
+const SERVICE_LINKS: LinkItem[] = [
+  { label: "Lead Generation", href: "/services/lead-generation" },
+  { label: "Facebook Ads", href: "/services/facebook-ads" },
+  { label: "AI WhatsApp Assistant", href: "/services/ai-whatsapp-assistant" },
+  { label: "AI Website Chatbot", href: "/services/ai-chatbot" },
+  { label: "Websites for Trades", href: "/services/websites-for-trades" },
+  { label: "AI Automation", href: "/services/ai-automation" },
+  { label: "Web Design Pricing", href: "/web-design/pricing" },
+];
+
 const CONNECT_LINKS: LinkItem[] = [
   { label: "Contact Us", href: "/contact" },
   { label: "WhatsApp Us", href: "https://wa.me/447765977085" },
   { label: "Email Sales", href: "mailto:sales@integrate.co.uk" },
-  { label: "Book Strategy", href: "/contact" },
+  { label: "Book Strategy", href: "/book" },
 ];
 
 /* Same animated left-origin accent underline as the nav links. External links
@@ -75,7 +88,7 @@ export function Footer() {
         {/* Top area — brand + sitemap */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-12">
           {/* Brand column */}
-          <div className="sm:col-span-2 lg:col-span-6">
+          <div className="sm:col-span-2 lg:col-span-3">
             {/* Chevron mark — same glyph as the nav. */}
             <div className="flex items-center gap-2.5">
               <LogoMark className="h-[21px] w-[21px]" />
@@ -91,6 +104,7 @@ export function Footer() {
           </div>
 
           <LinkColumn title="Platform" links={PLATFORM_LINKS} />
+          <LinkColumn title="Services" links={SERVICE_LINKS} />
           <LinkColumn title="Connect" links={CONNECT_LINKS} />
         </div>
 
