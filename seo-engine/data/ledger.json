@@ -303,6 +303,15 @@
       "slug": "automation-for-builders-that-takes-the-admin-off-your-plate",
       "title": "Automation for builders that takes the admin off your plate",
       "targetKeyword": "automation for builders"
+    },
+    {
+      "date": "2026-10-19",
+      "type": "service",
+      "key": "service:websites:electricians",
+      "status": "generated",
+      "slug": "websites-for-electricians-that-win-more-enquiries",
+      "title": "Websites for electricians that win more enquiries",
+      "targetKeyword": "websites for electricians"
     }
   ]
 }
