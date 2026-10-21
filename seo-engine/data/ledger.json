@@ -312,6 +312,16 @@
       "slug": "websites-for-electricians-that-win-more-enquiries",
       "title": "Websites for electricians that win more enquiries",
       "targetKeyword": "websites for electricians"
+    },
+    {
+      "date": "2026-10-21",
+      "type": "location",
+      "key": "location:salford:tilers",
+      "status": "generated",
+      "angle": "website",
+      "slug": "websites-for-tilers-in-salford",
+      "title": "Websites for tilers in Salford that win more local work",
+      "targetKeyword": "websites for tilers in Salford"
     }
   ]
 }
