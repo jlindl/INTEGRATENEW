@@ -331,6 +331,15 @@
       "slug": "ai-whatsapp-assistant-for-plasterers-that-never-misses-a-lead",
       "title": "An AI WhatsApp assistant for plasterers that never misses a lead",
       "targetKeyword": "ai whatsapp assistant for plasterers"
+    },
+    {
+      "date": "2026-10-26",
+      "type": "service",
+      "key": "service:automation:landscapers",
+      "status": "generated",
+      "slug": "automation-for-landscapers-that-chases-quotes-while-you-work",
+      "title": "Automation for landscapers that chases quotes while you work",
+      "targetKeyword": "automation for landscapers"
     }
   ]
 }
