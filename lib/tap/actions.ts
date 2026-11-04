@@ -23,6 +23,12 @@ function keep(fd: FormData, error: string): FormState {
 const MAX_FAILED_CLAIMS = 10;
 const MAX_LOGO_CHARS = 300_000;
 
+/** UK-friendly phone check: 10 to 15 digits once spaces and + are removed. */
+function cleanPhone(raw: string): string | null {
+  const v = raw.replace(/[\s()-]/g, "");
+  return /^\+?\d{10,15}$/.test(v) ? v : null;
+}
+
 function str(fd: FormData, key: string, max = 200): string {
   return String(fd.get(key) ?? "").trim().slice(0, max);
 }
@@ -73,9 +79,14 @@ export async function claimPlate(_: FormState, fd: FormData): Promise<FormState>
     const email = str(fd, "email", 120).toLowerCase();
     const password = String(fd.get("password") ?? "");
     const googleRaw = str(fd, "googleUrl", 500);
+    const contactName = str(fd, "contactName", 80);
+    const phone = cleanPhone(str(fd, "phone", 30));
+    const marketingConsent = fd.get("marketingConsent") === "on";
 
     if (name.length < 2) return keep(fd, "Enter your business name.");
+    if (contactName.length < 2) return keep(fd, "Enter your name.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return keep(fd, "Enter a valid email address.");
+    if (!phone) return keep(fd, "Enter a valid phone number, e.g. 07700 900123.");
     if (password.length < 8) return keep(fd, "Choose a password of at least 8 characters.");
     if (await store.getBusinessByEmail(email)) {
       return keep(fd, "There's already an account with that email. Log in first, then add this plate.");
@@ -96,6 +107,10 @@ export async function claimPlate(_: FormState, fd: FormData): Promise<FormState>
       tagline: "",
       email,
       passwordHash: await hashPassword(password),
+      contactName,
+      phone,
+      marketingConsent,
+      consentAt: now,
       logo: null,
       // With only a review link, sending taps straight to it is the most useful default.
       mode: links.length ? "redirect" : "page",
@@ -147,6 +162,12 @@ export async function saveBusiness(_: FormState, fd: FormData): Promise<FormStat
   const name = str(fd, "name", 80);
   if (name.length < 2) return { error: "Business name is too short." };
   const tagline = str(fd, "tagline", 140);
+  const contactName = str(fd, "contactName", 80);
+  if (contactName.length < 2) return { error: "Enter a contact name." };
+  const phone = cleanPhone(str(fd, "phone", 30));
+  if (!phone) return { error: "Enter a valid phone number, e.g. 07700 900123." };
+  const marketingConsent = fd.get("marketingConsent") === "on";
+  const consentAt = marketingConsent === Boolean(b.marketingConsent) ? b.consentAt ?? null : new Date().toISOString();
   const mode: TapMode = fd.get("mode") === "redirect" ? "redirect" : "page";
 
   let rawLinks: { id?: string; kind?: string; label?: string; url?: string }[];
@@ -189,7 +210,7 @@ export async function saveBusiness(_: FormState, fd: FormData): Promise<FormStat
     logo = logoField;
   }
 
-  await getStore().updateBusiness(b.id, { name, tagline, mode, redirectLinkId, links, logo });
+  await getStore().updateBusiness(b.id, { name, tagline, contactName, phone, marketingConsent, consentAt, mode, redirectLinkId, links, logo });
   revalidatePath(`/b/${b.slug}`);
   revalidatePath("/tap/dashboard");
   return { ok: "Saved. Your plates now use these settings." };

@@ -9,7 +9,9 @@ Customers set up and manage their own plates from any phone, with no app.
 2. **An insert card in the box** carries the plate code, a secret setup code and a QR code
    (the `setup_url` column in the CSV), so only the buyer can claim the plate.
 3. **First tap** on an unclaimed plate opens `/tap/setup/CODE`. The customer enters the setup code,
-   business name, Google review link, email and password.
+   business name, Google review link, their name, email, phone and password, plus an optional
+   (unticked) marketing consent box. They can change these or withdraw consent from the dashboard;
+   the time of the last change is stored. `/tap/admin` → Customers CSV exports them all.
 4. **Every tap after that** goes wherever the business chose in `/tap/dashboard`:
    - straight to one link (default when they only add a review link), or
    - their hosted page `/b/SLUG` (logo, short line, review button first, then socials).
@@ -26,7 +28,7 @@ Customers set up and manage their own plates from any phone, with no app.
 | `/b/[slug]` | anyone | Hosted business page |
 | `/tap/admin` | Integrate | Make batches, search, disable/enable, release, unlock claims, CSV |
 | `/tap/admin/encode` | Integrate | Android Chrome writer: write + lock + record chip serial; "check a plate" mode |
-| `/tap/admin/export` | Integrate | CSV for printing insert cards. Secret: contains setup codes. |
+| `/tap/admin/export` | Integrate | Plates CSV for printing insert cards (secret: contains setup codes). `?type=customers` exports contacts; only market to `marketing_consent = yes`. |
 
 All `/tap`, `/t`, `/b` routes are `noindex` and disallowed in robots.txt.
 

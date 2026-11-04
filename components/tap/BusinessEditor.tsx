@@ -43,6 +43,9 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
   // Controlled so a failed save never resets what was typed.
   const [name, setName] = useState(business.name);
   const [tagline, setTagline] = useState(business.tagline);
+  const [contactName, setContactName] = useState(business.contactName ?? "");
+  const [phone, setPhone] = useState(business.phone ?? "");
+  const [consent, setConsent] = useState(Boolean(business.marketingConsent));
   const fileRef = useRef<HTMLInputElement>(null);
 
   const update = (id: string, patch: Partial<Draft>) =>
@@ -208,6 +211,22 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Contact */}
+      <section className="space-y-4">
+        <h2 className="text-[1.05rem] font-medium text-ink">Your details</h2>
+        <p className="-mt-2 text-[0.84rem] text-ink-3">Only Integrate sees these. Login email: {business.email}</p>
+        <Field label="Contact name">
+          <input name="contactName" value={contactName} onChange={(e) => setContactName(e.target.value)} required maxLength={80} autoComplete="name" className={inputClass} />
+        </Field>
+        <Field label="Phone number">
+          <input name="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required autoComplete="tel" className={inputClass} />
+        </Field>
+        <label className="flex items-start gap-3 text-[0.88rem] leading-relaxed text-ink-2">
+          <input type="checkbox" name="marketingConsent" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-4 w-4 shrink-0" />
+          <span>Integrate can email, call or text me tips and offers. Untick to opt out.</span>
+        </label>
       </section>
 
       <div className="sticky bottom-4 z-10 space-y-3">

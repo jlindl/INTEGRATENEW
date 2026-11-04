@@ -73,6 +73,13 @@ export type Business = {
   tagline: string;
   email: string;
   passwordHash: string;
+  /** Person who set the plate up. */
+  contactName: string;
+  phone: string;
+  /** Opted in to Integrate marketing (unticked by default, UK GDPR/PECR). */
+  marketingConsent: boolean;
+  /** When consent was last given or withdrawn, for the audit trail. */
+  consentAt: string | null;
   /** Small square logo as a data URL (resized in the browser). */
   logo: string | null;
   mode: TapMode;

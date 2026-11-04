@@ -94,13 +94,27 @@ export function ClaimForm({
           >
             <input name="googleUrl" inputMode="url" defaultValue={state.values?.googleUrl} placeholder="https://g.page/r/…/review" className={inputClass} />
           </Field>
+          <Field label="Your name">
+            <input name="contactName" required maxLength={80} autoComplete="name" defaultValue={state.values?.contactName} className={inputClass} />
+          </Field>
           <Field label="Email" hint="You'll use this to log in and change your plate.">
             <input name="email" type="email" required autoComplete="email" defaultValue={state.values?.email} className={inputClass} />
+          </Field>
+          <Field label="Phone number">
+            <input name="phone" type="tel" required autoComplete="tel" placeholder="07700 900123" defaultValue={state.values?.phone} className={inputClass} />
           </Field>
           <Field label="Create a password" hint="At least 8 characters.">
             <input name="password" type="password" required minLength={8} autoComplete="new-password" className={inputClass} />
           </Field>
           <input type="hidden" name="label" value="Plate 1" />
+          <label className="flex items-start gap-3 rounded-xl border border-line bg-paper-2/40 p-4 text-[0.88rem] leading-relaxed text-ink-2">
+            <input type="checkbox" name="marketingConsent" defaultChecked={state.values?.marketingConsent === "on"} className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-ink)]" />
+            <span>
+              Yes, Integrate can email, call or text me tips and offers to help my business get more reviews and
+              customers. I can opt out any time. See our{" "}
+              <a href="/legal/privacy" target="_blank" className="underline">privacy policy</a>.
+            </span>
+          </label>
         </>
       )}
 

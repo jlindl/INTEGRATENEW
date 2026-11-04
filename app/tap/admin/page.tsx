@@ -31,7 +31,9 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       (!needle ||
         p.code.toLowerCase().includes(needle) ||
         (p.businessId && byId.get(p.businessId)?.name.toLowerCase().includes(needle)) ||
-        (p.businessId && byId.get(p.businessId)?.email.includes(needle))),
+        (p.businessId && byId.get(p.businessId)?.email.includes(needle)) ||
+        (p.businessId && (byId.get(p.businessId)?.contactName ?? "").toLowerCase().includes(needle)) ||
+        (p.businessId && (byId.get(p.businessId)?.phone ?? "").includes(needle.replace(/\s/g, "")))),
   );
   const count = (s: PlateStatus) => all.filter((p) => p.status === s).length;
   const exportHref = `/tap/admin/export${batch ? `?batch=${encodeURIComponent(batch)}` : ""}`;
@@ -67,7 +69,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       </Card>
 
       <form className="mt-6 grid gap-3 sm:grid-cols-[1fr_12rem_10rem_auto]">
-        <input name="q" defaultValue={q} placeholder="Search code, business or email" className={inputClass} />
+        <input name="q" defaultValue={q} placeholder="Search code, business, name, email or phone" className={inputClass} />
         <select name="batch" defaultValue={batch} className={inputClass}>
           <option value="">All batches</option>
           {batches.map((b) => <option key={b}>{b}</option>)}
@@ -81,7 +83,10 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
 
       <div className="mt-3 flex justify-between text-[0.82rem] text-ink-3">
         <span>{plates.length} plates</span>
-        <a href={exportHref} className="underline hover:text-ink">Download CSV{batch ? ` for ${batch}` : ""}</a>
+        <span className="flex gap-4">
+          <a href="/tap/admin/export?type=customers" className="underline hover:text-ink">Customers CSV</a>
+          <a href={exportHref} className="underline hover:text-ink">Plates CSV{batch ? ` for ${batch}` : ""}</a>
+        </span>
       </div>
 
       <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card shadow-lift">
@@ -105,7 +110,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                   <td className="px-4 py-2.5 text-ink-2">{p.batch}</td>
                   <td className="px-4 py-2.5">
                     {b ? <a className="underline" href={`/b/${b.slug}`} target="_blank">{b.name}</a> : <span className="text-ink-3">–</span>}
-                    {b && <span className="block text-[0.74rem] text-ink-3">{b.email}</span>}
+                    {b && (
+                      <span className="block text-[0.74rem] text-ink-3">
+                        {b.contactName} · {b.email} · {b.phone}
+                        {b.marketingConsent && <span className="ml-1 rounded-full bg-[#edf7f0] px-1.5 text-[#22603a]">marketing ok</span>}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-2.5">{p.taps}</td>
                   <td className="px-4 py-2.5 font-mono text-[0.72rem] text-ink-3">{p.serial ? `${p.serial}${p.locked ? " 🔒" : ""}` : "–"}</td>
