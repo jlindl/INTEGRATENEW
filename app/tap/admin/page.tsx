@@ -1,0 +1,133 @@
+import { redirect } from "next/navigation";
+import { GenerateForm } from "@/components/tap/forms";
+import { Card, PageTitle, TapShell, inputClass, secondaryButton } from "@/components/tap/ui";
+import { adminLogoutAction, plateAction } from "@/lib/tap/admin-actions";
+import { isAdmin } from "@/lib/tap/auth";
+import { getStore } from "@/lib/tap/store";
+import type { PlateStatus } from "@/lib/tap/types";
+
+export const dynamic = "force-dynamic";
+
+const STATUSES: PlateStatus[] = ["unencoded", "ready", "claimed", "disabled"];
+const STATUS_STYLE: Record<PlateStatus, string> = {
+  unencoded: "bg-paper-3 text-ink-2",
+  ready: "bg-[#e8eefb] text-[#2b4a8a]",
+  claimed: "bg-[#edf7f0] text-[#22603a]",
+  disabled: "bg-[#fbeeec] text-[#8a2e22]",
+};
+
+export default async function Admin({ searchParams }: { searchParams: Promise<{ batch?: string; status?: string; q?: string }> }) {
+  if (!(await isAdmin())) redirect("/tap/admin/login");
+  const { batch = "", status = "", q = "" } = await searchParams;
+  const store = getStore();
+  const [all, businesses] = await Promise.all([store.listPlates(), store.listBusinesses()]);
+  const byId = new Map(businesses.map((b) => [b.id, b]));
+  const batches = [...new Set(all.map((p) => p.batch))];
+  const needle = q.trim().toLowerCase();
+  const plates = all.filter(
+    (p) =>
+      (!batch || p.batch === batch) &&
+      (!status || p.status === status) &&
+      (!needle ||
+        p.code.toLowerCase().includes(needle) ||
+        (p.businessId && byId.get(p.businessId)?.name.toLowerCase().includes(needle)) ||
+        (p.businessId && byId.get(p.businessId)?.email.includes(needle))),
+  );
+  const count = (s: PlateStatus) => all.filter((p) => p.status === s).length;
+  const exportHref = `/tap/admin/export${batch ? `?batch=${encodeURIComponent(batch)}` : ""}`;
+
+  return (
+    <TapShell
+      width="wide"
+      right={
+        <div className="flex gap-2">
+          <a href={`/tap/admin/encode${batch ? `?batch=${encodeURIComponent(batch)}` : ""}`} className={secondaryButton}>Encoder</a>
+          <form action={adminLogoutAction}><button className={secondaryButton}>Log out</button></form>
+        </div>
+      }
+    >
+      <PageTitle eyebrow="Admin" title="Plates" />
+
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-6">
+        {[["Total", all.length], ...STATUSES.map((s) => [s, count(s)] as const), ["Businesses", businesses.length]].map(([k, v]) => (
+          <Card key={k} className="!p-4">
+            <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-ink-3">{k}</p>
+            <p className="font-display-tuned mt-1 text-2xl text-ink">{v}</p>
+          </Card>
+        ))}
+      </div>
+
+      <Card className="mt-6">
+        <h2 className="mb-4 text-[1.05rem] font-medium text-ink">Make a new batch</h2>
+        <GenerateForm />
+        <p className="mt-3 text-[0.82rem] text-ink-3">
+          Then download the CSV for the insert cards (plate code, setup code and a setup QR link), and write the
+          plates with the Encoder on an Android phone.
+        </p>
+      </Card>
+
+      <form className="mt-6 grid gap-3 sm:grid-cols-[1fr_12rem_10rem_auto]">
+        <input name="q" defaultValue={q} placeholder="Search code, business or email" className={inputClass} />
+        <select name="batch" defaultValue={batch} className={inputClass}>
+          <option value="">All batches</option>
+          {batches.map((b) => <option key={b}>{b}</option>)}
+        </select>
+        <select name="status" defaultValue={status} className={inputClass}>
+          <option value="">Any status</option>
+          {STATUSES.map((s) => <option key={s}>{s}</option>)}
+        </select>
+        <button className={secondaryButton}>Filter</button>
+      </form>
+
+      <div className="mt-3 flex justify-between text-[0.82rem] text-ink-3">
+        <span>{plates.length} plates</span>
+        <a href={exportHref} className="underline hover:text-ink">Download CSV{batch ? ` for ${batch}` : ""}</a>
+      </div>
+
+      <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card shadow-lift">
+        <table className="w-full min-w-[46rem] text-left text-[0.86rem]">
+          <thead className="border-b border-line font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-3">
+            <tr>
+              <th className="px-4 py-3">Code</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Batch</th>
+              <th className="px-4 py-3">Business</th><th className="px-4 py-3">Taps</th><th className="px-4 py-3">Chip</th><th className="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-line">
+            {plates.slice(0, 500).map((p) => {
+              const b = p.businessId ? byId.get(p.businessId) : null;
+              return (
+                <tr key={p.code}>
+                  <td className="px-4 py-2.5 font-mono">{p.code}</td>
+                  <td className="px-4 py-2.5">
+                    <span className={`rounded-full px-2.5 py-0.5 text-[0.75rem] ${STATUS_STYLE[p.status]}`}>{p.status}</span>
+                    {p.failedClaims >= 10 && <span className="ml-1 text-[0.72rem] text-[#8a2e22]">claim locked</span>}
+                  </td>
+                  <td className="px-4 py-2.5 text-ink-2">{p.batch}</td>
+                  <td className="px-4 py-2.5">
+                    {b ? <a className="underline" href={`/b/${b.slug}`} target="_blank">{b.name}</a> : <span className="text-ink-3">–</span>}
+                    {b && <span className="block text-[0.74rem] text-ink-3">{b.email}</span>}
+                  </td>
+                  <td className="px-4 py-2.5">{p.taps}</td>
+                  <td className="px-4 py-2.5 font-mono text-[0.72rem] text-ink-3">{p.serial ? `${p.serial}${p.locked ? " 🔒" : ""}` : "–"}</td>
+                  <td className="px-4 py-2.5">
+                    <form action={plateAction} className="flex justify-end gap-1.5">
+                      <input type="hidden" name="code" value={p.code} />
+                      {p.status === "disabled"
+                        ? <button name="action" value="enable" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Enable</button>
+                        : <button name="action" value="disable" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Disable</button>}
+                      {p.businessId && <button name="action" value="release" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Release</button>}
+                      {p.failedClaims >= 10 && <button name="action" value="unlock-claims" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Unlock</button>}
+                    </form>
+                  </td>
+                </tr>
+              );
+            })}
+            {!plates.length && (
+              <tr><td colSpan={7} className="px-4 py-8 text-center text-ink-3">No plates yet. Make a batch above.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </TapShell>
+  );
+}
