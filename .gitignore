@@ -17,3 +17,6 @@ wd-demo-capture.mjs
 
 # SEO engine run logs (summaries go into PRs / Actions logs)
 seo-engine/logs/
+
+# Integrate Tap local test database
+.data
