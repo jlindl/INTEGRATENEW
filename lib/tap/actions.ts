@@ -68,7 +68,7 @@ export async function claimPlate(_: FormState, fd: FormData): Promise<FormState>
     return keep(fd, "Too many wrong setup codes. Contact Integrate and we'll unlock it for you.");
   }
   if (setupCode !== plate.setupCode) {
-    await store.updatePlate(code, { failedClaims: plate.failedClaims + 1 });
+    await store.failClaim(code);
     return keep(fd, "That setup code doesn't match. It's printed on the card that came with your plate.");
   }
 

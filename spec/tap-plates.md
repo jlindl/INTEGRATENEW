@@ -49,22 +49,43 @@ finished plates fine.
 - Passwords are hashed with scrypt; sessions and admin access are HMAC-signed httpOnly cookies.
 - Links are forced to http(s) so a plate can't be pointed at `javascript:` or similar.
 - Password reset is manual for now (customer emails hello@integrate.agency, admin releases the plate
-  or we reset it). Email-based reset comes with the database stage.
+  or we reset it).
+- Database: Supabase tables have RLS on with no policies and no grants for `anon`/`authenticated`,
+  so the publishable key gets "permission denied". Only the server, with the service role key,
+  can read or write. Tap counting (`tap_record`) and wrong-code counting (`tap_fail_claim`) are
+  atomic RPCs, also service-role only.
 
 ## Environment
 
-See `.env.example`: `TAP_SECRET` (required in production), `TAP_ADMIN_PASSWORD`, optional `TAP_BASE_URL`.
+See `.env.example`: `TAP_SECRET` (required in production), `TAP_ADMIN_PASSWORD`, optional
+`TAP_BASE_URL`, plus `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` for the database.
 
-## Status and next stage: database
+## Database (done)
 
-Built and tested locally on a JSON file store (`.data/tap.json`, gitignored). **Production refuses
-to run on the file store** (Vercel's filesystem doesn't persist), so `/tap` shows an "Almost ready"
-notice until the database exists.
+Runs on Supabase project **Integrate** (ref `xudrespgzcgrutluicgx`, eu-west-1).
 
-Next stage, deliberately left for later:
+- Schema: `supabase/migrations/20261106120546_tap_plates.sql` (applied). `spec/tap-plates.sql` is the
+  original draft, kept for reference; the migration is the source of truth.
+- Code: `lib/tap/supabase-store.ts` implements `TapStore`; `getStore()` uses it whenever
+  `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are both set, otherwise it falls back to the JSON
+  file store (`.data/tap.json`, dev only; production refuses it unless `TAP_ALLOW_FILE_STORE=1`).
+- Types: `lib/tap/database.types.ts`, generated from the database. Regenerate after schema changes.
 
-1. Create a Supabase project (or reuse one) and run `spec/tap-plates.sql`.
-2. Add a `SupabaseStore` implementing `TapStore` in `lib/tap/store.ts` and pick it when
-   `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` are set. No page changes needed.
-3. Optional: move logos to Supabase Storage, add email password reset, move tap counting to an
-   `increment` RPC so it's atomic.
+### Setting it up on Vercel
+
+Project → Settings → Environment Variables, for **Production** (and Preview if previews should work):
+
+| Variable | Value |
+| --- | --- |
+| `SUPABASE_URL` | `https://xudrespgzcgrutluicgx.supabase.co` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase dashboard → Project Settings → API Keys → secret / service_role. Mark it **Sensitive**. |
+| `TAP_SECRET` | 32+ random characters (already required). |
+| `TAP_ADMIN_PASSWORD` | Admin password for `/tap/admin` (no default in production). |
+
+Never prefix the service role key with `NEXT_PUBLIC_` and never set `TAP_ALLOW_FILE_STORE` on
+Vercel. Redeploy after adding the variables; `/tap` stops showing "Almost ready" once they're set.
+
+### Still to do
+
+- Logos to Supabase Storage (they're data URLs in `tap_businesses.logo` today).
+- Email password reset (needs an email provider decision).
