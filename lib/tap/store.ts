@@ -1,17 +1,19 @@
 import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { SupabaseStore } from "./supabase-store";
 import type { Business, Plate } from "./types";
 
 /**
  * Storage for Integrate Tap.
  *
  * Everything goes through this interface so the backing database can be
- * swapped without touching the pages. Right now there is one implementation,
- * a JSON file, which is fine for local development and testing. The Supabase
- * implementation is the next stage (schema in spec/tap-plates.sql); until it
- * exists, production refuses to run on the file store because Vercel's
- * filesystem is read-only and wiped between requests.
+ * swapped without touching the pages. Two implementations:
+ *  - SupabaseStore (lib/tap/supabase-store.ts), used whenever SUPABASE_URL and
+ *    SUPABASE_SERVICE_ROLE_KEY are set. This is what production runs on.
+ *  - FileStore, a JSON file for local development and testing. Production
+ *    refuses to run on it because Vercel's filesystem is read-only and wiped
+ *    between requests.
  */
 export interface TapStore {
   getPlate(code: string): Promise<Plate | null>;
@@ -19,6 +21,8 @@ export interface TapStore {
   insertPlates(plates: Plate[]): Promise<void>;
   updatePlate(code: string, patch: Partial<Plate>): Promise<Plate | null>;
   recordTap(code: string): Promise<void>;
+  /** Atomically add one wrong setup-code attempt; returns the new count. */
+  failClaim(code: string): Promise<number>;
 
   getBusiness(id: string): Promise<Business | null>;
   getBusinessBySlug(slug: string): Promise<Business | null>;
@@ -118,6 +122,15 @@ class FileStore implements TapStore {
     });
   }
 
+  failClaim(code: string) {
+    return this.mutate((d) => {
+      const p = d.plates[code];
+      if (!p) return 0;
+      d.plates[code] = { ...p, failedClaims: p.failedClaims + 1 };
+      return d.plates[code].failedClaims;
+    });
+  }
+
   async getBusiness(id: string) {
     return (await this.read()).businesses[id] ?? null;
   }
@@ -157,6 +170,12 @@ let store: TapStore | null = null;
 
 export function getStore(): TapStore {
   if (store) return store;
+  const url = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (url && serviceKey) {
+    store = new SupabaseStore(url, serviceKey);
+    return store;
+  }
   const allowFile = process.env.NODE_ENV !== "production" || process.env.TAP_ALLOW_FILE_STORE === "1";
   if (!allowFile) throw new StoreNotConfiguredError();
   store = new FileStore(process.env.TAP_DATA_FILE || path.join(process.cwd(), ".data", "tap.json"));
