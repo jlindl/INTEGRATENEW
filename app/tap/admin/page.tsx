@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { CopyLinks } from "@/components/tap/CopyLinks";
 import { GenerateForm } from "@/components/tap/forms";
 import { Card, PageTitle, TapShell, inputClass, secondaryButton } from "@/components/tap/ui";
 import { adminLogoutAction, plateAction } from "@/lib/tap/admin-actions";
@@ -37,7 +38,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         (p.businessId && (byId.get(p.businessId)?.phone ?? "").includes(needle.replace(/\s/g, "")))),
   );
   const count = (s: PlateStatus) => all.filter((p) => p.status === s).length;
-  const exportHref = `/tap/admin/export${batch ? `?batch=${encodeURIComponent(batch)}` : ""}`;
+  // Same order as the Encoder queue (by code), so a pasted list matches it.
+  const unencodedLinks = all
+    .filter((p) => p.status === "unencoded" && (!batch || p.batch === batch))
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .map((p) => plateUrl(p.code));
+  const exportHref =`/tap/admin/export${batch ? `?batch=${encodeURIComponent(batch)}` : ""}`;
 
   return (
     <TapShell
@@ -86,6 +92,10 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       <div className="mt-3 flex justify-between text-[0.82rem] text-ink-3">
         <span>{plates.length} plates</span>
         <span className="flex gap-4">
+          <CopyLinks
+            links={unencodedLinks}
+            label={`Copy ${unencodedLinks.length} unencoded link${unencodedLinks.length === 1 ? "" : "s"}${batch ? ` in ${batch}` : ""}`}
+          />
           <a href="/tap/admin/export?type=customers" className="underline hover:text-ink">Customers CSV</a>
           <a href={exportHref} className="underline hover:text-ink">Plates CSV{batch ? ` for ${batch}` : ""}</a>
         </span>
