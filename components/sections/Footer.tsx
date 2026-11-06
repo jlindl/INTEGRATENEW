@@ -21,9 +21,9 @@ const PLATFORM_LINKS: LinkItem[] = [
   { label: "Blog", href: "/blog" },
 ];
 
-/* Sitewide links to every service hub so Google can discover and pass
-   authority to them from all pages (blog posts included). Keep in sync with
-   SERVICE_HUBS in lib/serviceHubs.ts. */
+/* Sitewide links to every service hub, plus the review plates page, so Google
+   can discover and pass authority to them from all pages (blog posts
+   included). Keep in sync with SERVICE_HUBS in lib/serviceHubs.ts. */
 const SERVICE_LINKS: LinkItem[] = [
   { label: "Lead Generation", href: "/services/lead-generation" },
   { label: "Facebook Ads", href: "/services/facebook-ads" },
@@ -31,6 +31,7 @@ const SERVICE_LINKS: LinkItem[] = [
   { label: "AI Website Chatbot", href: "/services/ai-chatbot" },
   { label: "Websites for Trades", href: "/services/websites-for-trades" },
   { label: "AI Automation", href: "/services/ai-automation" },
+  { label: "NFC Review Plates", href: "/review-plates" },
   { label: "Web Design Pricing", href: "/web-design/pricing" },
 ];
 
