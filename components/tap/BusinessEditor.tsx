@@ -6,7 +6,13 @@ import { KIND_INFO, LINK_KINDS } from "@/lib/tap/links";
 import type { BusinessLink, LinkKind, PublicBusiness, TapMode } from "@/lib/tap/types";
 import { SubmitButton } from "./forms";
 import { LinkIcon } from "./LinkIcon";
-import { Field, Notice, inputClass, secondaryButton } from "./ui";
+import { Field, Notice, SectionTitle, iconButton, inputClass, secondaryButton } from "./ui";
+
+const chevron = (d: string) => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <path d={d} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 type Draft = Pick<BusinessLink, "kind" | "label" | "url"> & { id: string };
 
@@ -73,8 +79,8 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
 
       {/* Where taps go */}
       <section>
-        <h2 className="text-[1.05rem] font-medium text-ink">When someone taps your plate</h2>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <SectionTitle>When someone taps your plate</SectionTitle>
+        <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label="When someone taps your plate">
           {(
             [
               ["redirect", "Go straight to one link", "Best for reviews: one tap and they're writing."],
@@ -85,13 +91,24 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
               type="button"
               key={value}
               onClick={() => setMode(value)}
-              aria-pressed={mode === value}
-              className={`rounded-2xl border p-4 text-left transition-colors ${
-                mode === value ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink hover:border-ink-2"
+              role="radio"
+              aria-checked={mode === value}
+              className={`flex gap-3 rounded-2xl border p-4 text-left transition-colors ${
+                mode === value ? "border-ink bg-ink text-paper shadow-float" : "border-line bg-card text-ink hover:border-ink-2"
               }`}
             >
-              <span className="block font-medium">{title}</span>
-              <span className={`mt-1 block text-[0.84rem] ${mode === value ? "text-paper/75" : "text-ink-3"}`}>{note}</span>
+              <span
+                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                  mode === value ? "border-paper bg-paper" : "border-line-2"
+                }`}
+                aria-hidden="true"
+              >
+                {mode === value && <span className="h-2.5 w-2.5 rounded-full bg-ink" />}
+              </span>
+              <span>
+                <span className="block font-medium">{title}</span>
+                <span className={`mt-1 block text-[0.86rem] leading-snug ${mode === value ? "text-paper/75" : "text-ink-3"}`}>{note}</span>
+              </span>
             </button>
           ))}
         </div>
@@ -117,7 +134,7 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
 
       {/* Identity */}
       <section className="space-y-4">
-        <h2 className="text-[1.05rem] font-medium text-ink">Your page</h2>
+        <SectionTitle hint="What people see when a tap opens your page.">Your page</SectionTitle>
         <div className="flex items-center gap-4">
           {logo ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -162,15 +179,20 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
         <Field label="Business name">
           <input name="name" value={name} onChange={(e) => setName(e.target.value)} required maxLength={80} className={inputClass} />
         </Field>
-        <Field label="Short line under your name" hint="Optional, e.g. “Thanks for visiting! A quick review helps us loads.”">
+        <Field label="Short line under your name" optional hint="For example “Thanks for visiting! A quick review helps us loads.”">
           <input name="tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} maxLength={140} className={inputClass} />
         </Field>
       </section>
 
       {/* Links */}
       <section>
-        <h2 className="text-[1.05rem] font-medium text-ink">Links</h2>
-        <div className="mt-3 space-y-3">
+        <SectionTitle hint="Review links always show first on your page.">Links</SectionTitle>
+        <div className="space-y-3">
+          {links.length === 0 && (
+            <p className="rounded-2xl border border-dashed border-line-2 p-4 text-[0.9rem] text-ink-3">
+              No links yet. Add your Google review link below so taps lead to reviews.
+            </p>
+          )}
           {links.map((l, i) => (
             <div key={l.id} className="rounded-2xl border border-line bg-paper-2/40 p-3 sm:p-4">
               <div className="flex items-center gap-3">
@@ -192,19 +214,30 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
                 aria-label={`${KIND_INFO[l.kind].label} link`}
                 className={`${inputClass} mt-2 py-2.5 text-[0.92rem]`}
               />
-              <div className="mt-2 flex justify-end gap-1.5">
-                <button type="button" onClick={() => move(i, -1)} aria-label="Move up" disabled={i === 0} className="h-8 w-8 rounded-full border border-line bg-card text-[0.85rem] text-ink-2 disabled:opacity-30">↑</button>
-                <button type="button" onClick={() => move(i, 1)} aria-label="Move down" disabled={i === links.length - 1} className="h-8 w-8 rounded-full border border-line bg-card text-[0.85rem] text-ink-2 disabled:opacity-30">↓</button>
-                <button type="button" onClick={() => setLinks((ls) => ls.filter((x) => x.id !== l.id))} className="h-8 rounded-full border border-line bg-card px-3 text-[0.8rem] text-ink-2">Remove</button>
+              <div className="mt-2 flex justify-end gap-2">
+                <button type="button" onClick={() => move(i, -1)} aria-label={`Move ${l.label || "link"} up`} disabled={i === 0} className={iconButton}>
+                  {chevron("m6 15 6-6 6 6")}
+                </button>
+                <button type="button" onClick={() => move(i, 1)} aria-label={`Move ${l.label || "link"} down`} disabled={i === links.length - 1} className={iconButton}>
+                  {chevron("m6 9 6 6 6-6")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLinks((ls) => ls.filter((x) => x.id !== l.id))}
+                  aria-label={`Remove ${l.label || "link"}`}
+                  className={`${iconButton} hover:border-[#e7b4ac] hover:text-[#8a2e22]`}
+                >
+                  {chevron("M5 7h14M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3")}
+                </button>
               </div>
             </div>
           ))}
         </div>
         <div className="mt-4">
-          <p className="mb-2 text-[0.84rem] text-ink-3">Add a link</p>
+          <p className="mb-2 text-[0.9rem] font-medium text-ink">Add a link</p>
           <div className="flex flex-wrap gap-2">
             {LINK_KINDS.filter((k) => k.kind === "custom" || !used.has(k.kind)).map((k) => (
-              <button key={k.kind} type="button" onClick={() => add(k.kind)} className="inline-flex items-center gap-2 rounded-full border border-line bg-card py-1.5 pl-1.5 pr-3.5 text-[0.85rem] text-ink shadow-lift hover:border-ink-2">
+              <button key={k.kind} type="button" onClick={() => add(k.kind)} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-card py-1.5 pl-1.5 pr-3.5 text-[0.88rem] text-ink shadow-lift transition-colors hover:border-ink-2 active:translate-y-px">
                 <LinkIcon kind={k.kind} size={26} />
                 {k.kind === "google" ? "Google review" : k.kind === "whatsapp" ? "WhatsApp" : k.kind === "tripadvisor" ? "Tripadvisor" : k.kind === "custom" ? "Other" : k.label.replace(/^(Visit our|See our|Book) /, "")}
               </button>
@@ -215,21 +248,22 @@ export function BusinessEditor({ business }: { business: PublicBusiness }) {
 
       {/* Contact */}
       <section className="space-y-4">
-        <h2 className="text-[1.05rem] font-medium text-ink">Your details</h2>
-        <p className="-mt-2 text-[0.84rem] text-ink-3">Only Integrate sees these. Login email: {business.email}</p>
+        <SectionTitle hint={<>Only Integrate sees these. You log in with <b className="font-medium text-ink-2">{business.email}</b>.</>}>
+          Your details
+        </SectionTitle>
         <Field label="Contact name">
           <input name="contactName" value={contactName} onChange={(e) => setContactName(e.target.value)} required maxLength={80} autoComplete="name" className={inputClass} />
         </Field>
         <Field label="Phone number">
           <input name="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required autoComplete="tel" className={inputClass} />
         </Field>
-        <label className="flex items-start gap-3 text-[0.88rem] leading-relaxed text-ink-2">
-          <input type="checkbox" name="marketingConsent" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-4 w-4 shrink-0" />
+        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-paper-2/40 p-4 text-[0.88rem] leading-relaxed text-ink-2">
+          <input type="checkbox" name="marketingConsent" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-ink)]" />
           <span>Integrate can email, call or text me tips and offers. Untick to opt out.</span>
         </label>
       </section>
 
-      <div className="sticky bottom-4 z-10 space-y-3">
+      <div className="sticky bottom-3 z-10 -mx-2 space-y-3 rounded-[1.4rem] border border-line bg-card/90 p-2 shadow-float backdrop-blur-md">
         {state.error && <Notice tone="error">{state.error}</Notice>}
         {state.ok && <Notice tone="ok">{state.ok}</Notice>}
         <SubmitButton pending="Saving…">Save changes</SubmitButton>

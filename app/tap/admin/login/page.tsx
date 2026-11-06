@@ -4,7 +4,7 @@ import { Card, PageTitle, TapShell } from "@/components/tap/ui";
 export default function AdminLogin() {
   return (
     <TapShell>
-      <PageTitle eyebrow="Admin" title="Integrate Tap admin" />
+      <PageTitle kicker="Integrate staff only" title="Tap admin" intro="Make batches of plates, write them and manage customers." />
       <Card className="mt-8">
         <AdminLoginForm />
       </Card>

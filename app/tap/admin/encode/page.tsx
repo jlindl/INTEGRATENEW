@@ -15,9 +15,9 @@ export default async function EncodePage({ searchParams }: { searchParams: Promi
   return (
     <TapShell right={<a href="/tap/admin" className={secondaryButton}>Admin</a>}>
       <PageTitle
-        eyebrow="Encoder"
+        kicker="Encoder"
         title="Write plates"
-        intro="Android + Chrome only. Press start, then hold each plate to the back of the phone until it buzzes. Each plate gets the next code in the queue."
+        intro="Works in Chrome on Android. Press start, then hold each plate to the back of the phone until it buzzes. Each plate gets the next code in the queue."
       />
       <form className="mt-6 flex gap-2">
         <select name="batch" defaultValue={batch} className="flex-1 rounded-xl border border-line bg-card px-4 py-2.5">
