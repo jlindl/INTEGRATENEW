@@ -115,6 +115,23 @@ Phase 1 ships the shell + 3 flagship niches (electricians, recruiters,
 accountants) plus 4 more for scale/filtering. Phase 2 = add the remaining
 industries as data + real screenshots.
 
+## Integrate Tap review plates (`/review-plates`)
+
+The public, indexable page for Integrate Tap, the NFC review plates. The Tap
+tool itself (`/tap`, `/t`, `/b`) is noindex and blocked in robots.txt, so this
+is the page that can rank; it is in the sitemap and linked from the sitewide
+footer. Every hosted business page (`/b/SLUG`, "Made with Integrate Tap",
+tagged with UTMs per business) and every Tap page footer links here.
+
+- Page: [app/review-plates/page.tsx](app/review-plates/page.tsx), with its own
+  share card (`opengraph-image.tsx`) and Service, FAQPage and BreadcrumbList
+  JSON-LD. Copy follows [spec/tap-plates.md](spec/tap-plates.md): no invented
+  stats, prices or customers.
+- Hero picture: `components/review-plates/TapDemo.tsx`, the same plate drawing
+  and link icons as the Tap pages.
+- CTA: the shared `BookCallForm` with `interest="Review plates"` (hides the
+  topic picker, adds a "Review plates" tag in GHL) plus WhatsApp.
+
 ## Before launch — placeholders to replace (Jack)
 
 - [ ] **Stats figures** in `components/sections/Stats.tsx` are placeholders
@@ -135,6 +152,9 @@ industries as data + real screenshots.
       procedural mockup until you set its `cover` (`{ src, width, height,
       blurDataURL }`) to a real, optimised screenshot. Phase 2 also adds the
       remaining industries as new `Niche` entries.
+- [ ] **Review plates price or buy link**: `/review-plates` sells through the
+      call-back form and WhatsApp only. Add a price or a buy link once plates
+      are on sale, and swap the drawn plate for a real product photo.
 
 ## Accessibility & performance notes
 
