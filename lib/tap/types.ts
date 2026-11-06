@@ -19,7 +19,7 @@ export type PlateStatus =
 export type Plate = {
   /** Short public code written on the tag: /t/CODE. */
   code: string;
-  /** Secret printed on the insert card; needed to claim the plate. */
+  /** Legacy: random secret still generated, no longer needed to claim (first tap claims). */
   setupCode: string;
   status: PlateStatus;
   /** Batch label, e.g. "Amazon Nov 2026" or "Bounc". */

@@ -47,31 +47,11 @@ export function FindPlateForm() {
 
 /* --------------------------------------------------------------- claim -- */
 
-export function ClaimForm({
-  code,
-  signedInAs,
-  presetSetupCode,
-}: {
-  code: string;
-  signedInAs: string | null;
-  presetSetupCode?: string;
-}) {
+export function ClaimForm({ code, signedInAs }: { code: string; signedInAs: string | null }) {
   const [state, action] = useActionState(claimPlate, {});
   return (
     <form action={action} className="space-y-5">
       <input type="hidden" name="code" value={code} />
-
-      <Field label="Setup code" hint="Printed on the card that came with your plate, e.g. H4TR-9WQP.">
-        <input
-          name="setupCode"
-          required
-          defaultValue={state.values?.setupCode ?? presetSetupCode}
-          autoComplete="off"
-          autoCapitalize="characters"
-          placeholder="XXXX-XXXX"
-          className={`${inputClass} font-mono uppercase tracking-[0.2em]`}
-        />
-      </Field>
 
       {signedInAs ? (
         <Field label="Name this plate" hint="So you can tell your plates apart, e.g. Front desk, Table 4.">

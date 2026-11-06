@@ -3,6 +3,7 @@ import { GenerateForm } from "@/components/tap/forms";
 import { Card, PageTitle, TapShell, inputClass, secondaryButton } from "@/components/tap/ui";
 import { adminLogoutAction, plateAction } from "@/lib/tap/admin-actions";
 import { isAdmin } from "@/lib/tap/auth";
+import { plateUrl } from "@/lib/tap/codes";
 import { getStore } from "@/lib/tap/store";
 import type { PlateStatus } from "@/lib/tap/types";
 
@@ -63,8 +64,9 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         <h2 className="mb-4 text-[1.05rem] font-medium text-ink">Make a new batch</h2>
         <GenerateForm />
         <p className="mt-3 text-[0.82rem] text-ink-3">
-          Then download the CSV for the insert cards (plate code, setup code and a setup QR link), and write the
-          plates with the Encoder on an Android phone.
+          Then write each plate&apos;s link (shown under its code below) onto a tag: the Encoder on an Android
+          phone does a whole batch in order, or use the NFC Tools app on iPhone (Write → URL). The first person to
+          tap an unclaimed plate sets it up.
         </p>
       </Card>
 
@@ -102,10 +104,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
               const b = p.businessId ? byId.get(p.businessId) : null;
               return (
                 <tr key={p.code}>
-                  <td className="px-4 py-2.5 font-mono">{p.code}</td>
+                  <td className="px-4 py-2.5 font-mono">
+                    {p.code}
+                    <span className="block select-all text-[0.7rem] text-ink-3">{plateUrl(p.code)}</span>
+                  </td>
                   <td className="px-4 py-2.5">
                     <span className={`rounded-full px-2.5 py-0.5 text-[0.75rem] ${STATUS_STYLE[p.status]}`}>{p.status}</span>
-                    {p.failedClaims >= 10 && <span className="ml-1 text-[0.72rem] text-[#8a2e22]">claim locked</span>}
                   </td>
                   <td className="px-4 py-2.5 text-ink-2">{p.batch}</td>
                   <td className="px-4 py-2.5">
@@ -125,9 +129,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                       {p.status === "disabled"
                         ? <button name="action" value="enable" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Enable</button>
                         : <button name="action" value="disable" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Disable</button>}
-                      {p.businessId && <button name="action" value="release" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Release</button>}
-                      {p.failedClaims >= 10 && <button name="action" value="unlock-claims" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Unlock</button>}
-                    </form>
+                      {p.businessId && <button name="action" value="release" className="rounded-full border border-line px-2.5 py-1 text-[0.74rem]">Release</button>}                    </form>
                   </td>
                 </tr>
               );
