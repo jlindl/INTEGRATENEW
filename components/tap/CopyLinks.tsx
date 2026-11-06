@@ -6,7 +6,7 @@ import { useState } from "react";
  * Copies a list of plate links to the clipboard, one per line, for writing
  * tags with NFC Tools on iPhone (or sending to a supplier).
  */
-export function CopyLinks({ links, label }: { links: string[]; label: string }) {
+export function CopyLinks({ links, label, className = "" }: { links: string[]; label: string; className?: string }) {
   const [done, setDone] = useState<"ok" | "fail" | null>(null);
 
   async function copy() {
@@ -30,10 +30,10 @@ export function CopyLinks({ links, label }: { links: string[]; label: string }) 
     setTimeout(() => setDone(null), 2500);
   }
 
-  if (!links.length) return <span className="text-ink-3">No unencoded links</span>;
+  if (!links.length) return <span className="text-[0.85rem] text-ink-3">No unencoded plates to copy</span>;
 
   return (
-    <button type="button" onClick={copy} className="underline hover:text-ink">
+    <button type="button" onClick={copy} className={className}>
       {done === "ok" ? `Copied ${links.length} links` : done === "fail" ? "Couldn't copy" : label}
     </button>
   );

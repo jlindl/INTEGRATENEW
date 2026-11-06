@@ -89,13 +89,17 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         <button className={secondaryButton}>Filter</button>
       </form>
 
+      <div className="mt-4">
+        <CopyLinks
+          links={unencodedLinks}
+          className={`${secondaryButton} w-full sm:w-auto`}
+          label={`Copy ${unencodedLinks.length} unencoded link${unencodedLinks.length === 1 ? "" : "s"}${batch ? ` in ${batch}` : ""}`}
+        />
+      </div>
+
       <div className="mt-3 flex justify-between text-[0.82rem] text-ink-3">
         <span>{plates.length} plates</span>
         <span className="flex gap-4">
-          <CopyLinks
-            links={unencodedLinks}
-            label={`Copy ${unencodedLinks.length} unencoded link${unencodedLinks.length === 1 ? "" : "s"}${batch ? ` in ${batch}` : ""}`}
-          />
           <a href="/tap/admin/export?type=customers" className="underline hover:text-ink">Customers CSV</a>
           <a href={exportHref} className="underline hover:text-ink">Plates CSV{batch ? ` for ${batch}` : ""}</a>
         </span>
