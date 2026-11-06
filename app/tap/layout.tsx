@@ -20,7 +20,7 @@ export default function TapLayout({ children }: Readonly<{ children: React.React
     return (
       <main id="main">
         <TapShell>
-          <PageTitle eyebrow="Integrate Tap" title="Almost ready" />
+          <PageTitle title="Almost ready" />
           <div className="mt-6">
             <Notice tone="info">
               Plate setup is being switched on. If you have a plate to set up, email{" "}

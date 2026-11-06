@@ -161,7 +161,10 @@ export function Encoder({ initialQueue }: { initialQueue: EncodeItem[] }) {
         {mode === "encode" && (
           <>
             <div className="mt-5 rounded-xl border border-line bg-paper-2/50 p-4">
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-3">Next plate · {queue.length} left</p>
+              <p className="flex justify-between text-[0.84rem] text-ink-3">
+                <span>Next plate</span>
+                <span>{queue.length} left to write</span>
+              </p>
               <p className="mt-1 font-mono text-3xl tracking-[0.12em] text-ink">{next?.code ?? "None"}</p>
               {next && <p className="mt-1 break-all font-mono text-[0.72rem] text-ink-3">{next.url}</p>}
               {next && (

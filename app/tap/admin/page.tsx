@@ -55,19 +55,19 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         </div>
       }
     >
-      <PageTitle eyebrow="Admin" title="Plates" />
+      <PageTitle kicker="Admin" title="Plates" />
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-6">
-        {[["Total", all.length], ...STATUSES.map((s) => [s, count(s)] as const), ["Businesses", businesses.length]].map(([k, v]) => (
-          <Card key={k} className="!p-4">
-            <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-ink-3">{k}</p>
-            <p className="font-display-tuned mt-1 text-2xl text-ink">{v}</p>
-          </Card>
+      <dl className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-[1.25rem] border border-line bg-line shadow-lift sm:grid-cols-6">
+        {[["Total", all.length], ...STATUSES.map((s) => [s[0].toUpperCase() + s.slice(1), count(s)] as const), ["Businesses", businesses.length]].map(([k, v]) => (
+          <div key={k} className="bg-card px-4 py-3.5">
+            <dt className="text-[0.8rem] text-ink-3">{k}</dt>
+            <dd className="font-display-tuned mt-0.5 text-[1.6rem] leading-tight text-ink">{v}</dd>
+          </div>
         ))}
-      </div>
+      </dl>
 
       <Card className="mt-6">
-        <h2 className="mb-4 text-[1.05rem] font-medium text-ink">Make a new batch</h2>
+        <h2 className="mb-4 text-[1.08rem] font-semibold text-ink">Make a new batch</h2>
         <GenerateForm />
         <p className="mt-3 text-[0.82rem] text-ink-3">
           Then write each plate&apos;s link (shown under its code below) onto a tag: the Encoder on an Android
@@ -100,14 +100,14 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       <div className="mt-3 flex justify-between text-[0.82rem] text-ink-3">
         <span>{plates.length} plates</span>
         <span className="flex gap-4">
-          <a href="/tap/admin/export?type=customers" className="underline hover:text-ink">Customers CSV</a>
-          <a href={exportHref} className="underline hover:text-ink">Plates CSV{batch ? ` for ${batch}` : ""}</a>
+          <a href="/tap/admin/export?type=customers" className="inline-flex min-h-11 items-center underline hover:text-ink">Customers CSV</a>
+          <a href={exportHref} className="inline-flex min-h-11 items-center underline hover:text-ink">Plates CSV{batch ? ` for ${batch}` : ""}</a>
         </span>
       </div>
 
       <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card shadow-lift">
         <table className="w-full min-w-[46rem] text-left text-[0.86rem]">
-          <thead className="border-b border-line font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-3">
+          <thead className="border-b border-line text-[0.78rem] font-medium text-ink-3">
             <tr>
               <th className="px-4 py-3">Code</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Batch</th>
               <th className="px-4 py-3">Business</th><th className="px-4 py-3">Taps</th><th className="px-4 py-3">Chip</th><th className="px-4 py-3"></th>
@@ -130,8 +130,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                     {b ? <a className="underline" href={`/b/${b.slug}`} target="_blank">{b.name}</a> : <span className="text-ink-3">–</span>}
                     {b && (
                       <span className="block text-[0.74rem] text-ink-3">
-                        {b.contactName} · {b.email} · {b.phone}
-                        {b.marketingConsent && <span className="ml-1 rounded-full bg-[#edf7f0] px-1.5 text-[#22603a]">marketing ok</span>}
+                        <span className="block">{b.contactName}</span>
+                        <span className="block">{b.email}</span>
+                        <span className="block">
+                          {b.phone}
+                          {b.marketingConsent && <span className="ml-1.5 rounded-full bg-[#edf7f0] px-1.5 text-[#22603a]">Marketing OK</span>}
+                        </span>
                       </span>
                     )}
                   </td>

@@ -742,3 +742,26 @@ body {
     transform: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Integrate Tap: one tap ripple on the plate, once, on load.         */
+/* ------------------------------------------------------------------ */
+@keyframes tap-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgb(107 111 119 / 0.45);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 0 1.75rem rgb(107 111 119 / 0);
+    opacity: 0;
+  }
+}
+.tap-ping {
+  animation: tap-ping 1.4s var(--ease-out-expo) 0.35s 2 both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tap-ping {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -8,17 +8,22 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   if (await currentBusiness()) redirect(next?.startsWith("/tap/") ? next : "/tap/dashboard");
   return (
     <TapShell>
-      <PageTitle eyebrow="Integrate Tap" title="Log in" intro="Manage your plates, links and page." />
+      <PageTitle title="Log in" intro="Change where your plates send people, update your links and see your taps." />
       <Card className="mt-8">
         <LoginForm next={next} />
       </Card>
-      <p className="mt-6 text-center text-[0.85rem] text-ink-3">
-        Forgotten your password? Email{" "}
-        <a className="underline" href="mailto:hello@integrate.agency?subject=Tap%20password%20reset">
-          hello@integrate.agency
-        </a>
-        .
-      </p>
+      <div className="mt-6 space-y-2 text-[0.9rem] leading-relaxed text-ink-3">
+        <p>
+          New plate? You don&apos;t need an account yet. Just tap the plate and setup opens.
+        </p>
+        <p>
+          Forgotten your password? Email{" "}
+          <a className="font-medium text-ink underline underline-offset-2" href="mailto:hello@integrate.agency?subject=Tap%20password%20reset">
+            hello@integrate.agency
+          </a>{" "}
+          and we&apos;ll reset it.
+        </p>
+      </div>
     </TapShell>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LinkIcon } from "@/components/tap/LinkIcon";
+import { SITE } from "@/components/tap/ui";
 import { LogoMark } from "@/components/ui/LogoMark";
 import { getStore, storeReady } from "@/lib/tap/store";
 import type { BusinessLink } from "@/lib/tap/types";
@@ -26,20 +27,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/** Link back to integrate-tech.co.uk, tagged per business page for attribution. */
+function poweredByHref(slug: string) {
+  const q = new URLSearchParams({
+    utm_source: "integrate-tap",
+    utm_medium: "business-page",
+    utm_campaign: "powered-by",
+    utm_content: slug,
+  });
+  return `${SITE}/?${q}`;
+}
+
 function LinkButton({ link, primary }: { link: BusinessLink; primary: boolean }) {
   return (
     <a
       href={link.url}
       rel="noopener noreferrer"
-      className={`group flex items-center gap-4 rounded-2xl border p-4 transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] hover:-translate-y-0.5 sm:p-5 ${
+      className={`group flex min-h-[4.25rem] items-center gap-4 rounded-2xl border p-4 transition-[box-shadow,border-color,transform] duration-200 active:scale-[0.985] sm:p-5 ${
         primary
           ? "border-ink bg-ink text-paper shadow-float"
-          : "border-line bg-card text-ink shadow-lift hover:shadow-float"
+          : "border-line bg-card text-ink shadow-lift hover:border-line-2 hover:shadow-float"
       }`}
     >
       <LinkIcon kind={link.kind} />
-      <span className="min-w-0 flex-1 text-[1.02rem] font-medium leading-snug">{link.label}</span>
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true" className="opacity-60 transition-transform duration-500 group-hover:translate-x-0.5">
+      <span className="min-w-0 flex-1 text-[1.04rem] font-medium leading-snug">{link.label}</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true" className="opacity-60">
         <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </a>
@@ -79,17 +91,25 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             {ordered.length ? (
               ordered.map((l, i) => <LinkButton key={l.id} link={l} primary={i === 0 && review.length > 0} />)
             ) : (
-              <p className="text-center text-[0.9rem] text-ink-3">Links coming soon.</p>
+              <p className="rounded-2xl border border-dashed border-line-2 p-5 text-center text-[0.92rem] text-ink-3">
+                {b.name} hasn&apos;t added their links yet. Check back soon.
+              </p>
             )}
           </div>
 
-          <a
-            href="https://www.integrate-tech.co.uk/?utm_source=tap&utm_medium=plate"
-            className="mt-auto flex items-center justify-center gap-2 pt-14 text-[0.75rem] text-ink-3 transition-colors hover:text-ink"
-          >
-            <LogoMark className="h-4 w-4" />
-            Powered by integrate-tech.co.uk
-          </a>
+          {/* Backlink: every hosted page credits Integrate, tagged so referrals show up in analytics. */}
+          <footer className="mt-auto pt-16 text-center">
+            <a
+              href={poweredByHref(b.slug)}
+              className="inline-flex min-h-11 flex-col items-center justify-center gap-1 rounded-xl px-3 text-[0.78rem] text-ink-3 transition-colors hover:text-ink"
+            >
+              <span className="inline-flex items-center gap-2">
+                <LogoMark className="h-4 w-4" />
+                Made with Integrate Tap
+              </span>
+              <span className="underline decoration-line-2 underline-offset-2">Get a review plate for your business</span>
+            </a>
+          </footer>
         </div>
       </section>
     </main>
