@@ -48,7 +48,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
       {claimed && (
         <div className="mt-5 max-w-[36rem]">
           <Notice tone="ok">
-            <b className="font-medium">Plate {claimed} is live.</b> Tap it with your phone to check it works.
+            <b className="font-medium">Plate {claimed} is live.</b> Tap it with your phone to check it works. To
+            change anything later, log in at{" "}
+            <a href="/tap/login" className="font-medium underline underline-offset-2">integrate-tech.co.uk/tap/login</a>.
           </Notice>
         </div>
       )}
