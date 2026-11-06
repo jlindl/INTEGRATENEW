@@ -6,9 +6,10 @@ Customers set up and manage their own plates from any phone, with no app.
 
 1. **Plates are pre-encoded.** Each plate has a permanent link, `https://www.integrate-tech.co.uk/t/CODE`,
    written to the chip and locked. The plate never needs reprogramming.
-2. **An insert card in the box** carries the plate code, a secret setup code and a QR code
-   (the `setup_url` column in the CSV), so only the buyer can claim the plate.
-3. **First tap** on an unclaimed plate opens `/tap/setup/CODE`. The customer enters the setup code,
+2. **No setup code.** The plate's own link is what makes it unique. Whoever opens an unclaimed
+   plate first (in practice the buyer, who is holding it) claims it. Once claimed it can't be
+   claimed again; if someone else got there first, admin hits **Release** and it's claimable again.
+3. **First tap** on an unclaimed plate opens `/tap/setup/CODE`. The customer enters their
    business name, Google review link, their name, email, phone and password, plus an optional
    (unticked) marketing consent box. They can change these or withdraw consent from the dashboard;
    the time of the last change is stored. `/tap/admin` → Customers CSV exports them all.
@@ -23,29 +24,35 @@ Customers set up and manage their own plates from any phone, with no app.
 | --- | --- | --- |
 | `/t/[code]` | anyone | The link on the plate. 302 to setup, the chosen link or `/b/slug`. Never cached. |
 | `/tap` | customer | Enter a code by hand, how it works |
-| `/tap/setup/[code]` | customer | Claim a plate (`?s=SETUP-CODE` pre-fills from the card QR) |
+| `/tap/setup/[code]` | customer | Claim a plate: sign up (or, if logged in, add it to the account) |
 | `/tap/login`, `/tap/dashboard` | customer | Tap mode, logo, links, plate names, tap counts |
 | `/b/[slug]` | anyone | Hosted business page |
-| `/tap/admin` | Integrate | Make batches, search, disable/enable, release, unlock claims, CSV |
+| `/tap/admin` | Integrate | Make batches, see each plate's link, search, disable/enable, release, CSV |
 | `/tap/admin/encode` | Integrate | Android Chrome writer: write + lock + record chip serial; "check a plate" mode |
-| `/tap/admin/export` | Integrate | Plates CSV for printing insert cards (secret: contains setup codes). `?type=customers` exports contacts; only market to `marketing_consent = yes`. |
+| `/tap/admin/export` | Integrate | Plates CSV (code + link to write on each tag). `?type=customers` exports contacts; only market to `marketing_consent = yes`. |
 
 All `/tap`, `/t`, `/b` routes are `noindex` and disallowed in robots.txt.
 
 ## Encoding a batch
 
-1. `/tap/admin` → make a batch (e.g. "Amazon Nov 2026", 200 plates) → download the CSV.
-2. Print insert cards from the CSV: plate code, setup code and a QR of `setup_url`.
-3. On an Android phone (NFC on), open `/tap/admin/encode`, pick the batch, press **Start writing**,
-   hold each plate to the phone until it buzzes. Put the matching card in the box.
-   Plates come off the queue in code order, so print cards in the same order.
+1. `/tap/admin` → make a batch (e.g. "Amazon Nov 2026", 200 plates). Each plate's link is shown
+   under its code; the Plates CSV lists them too.
+2. Write one link per tag:
+   - **Android (fastest):** open `/tap/admin/encode` in Chrome with NFC on, pick the batch, press
+     **Start writing**, hold each plate to the phone until it buzzes. It locks the tag, records the
+     chip serial and marks the plate `ready`.
+   - **iPhone:** NFC Tools app → Write → Add a record → URL → paste the plate's link → Write.
+     The plate stays `unencoded` in admin (only the Android Encoder updates that), but it works.
+     Lock tags (NFC Tools → Other → Lock tag) only once tested: locking is permanent.
 
 Web NFC only exists in Chrome on Android. iPhones can't write from a web page, but they read the
 finished plates fine.
 
 ## Security
 
-- Setup codes are 8 random characters; 10 wrong tries locks the plate (admin can unlock).
+- Plate codes are 6 random characters (887 million combinations), so plates can't be guessed.
+  An unclaimed plate is claimed by whoever opens it first; admin can **Release** a wrongly
+  claimed plate.
 - Passwords are hashed with scrypt; sessions and admin access are HMAC-signed httpOnly cookies.
 - Links are forced to http(s) so a plate can't be pointed at `javascript:` or similar.
 - Password reset is manual for now (customer emails hello@integrate.agency, admin releases the plate

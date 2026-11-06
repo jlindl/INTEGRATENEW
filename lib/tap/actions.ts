@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { currentBusiness, endSession, hashPassword, startSession, verifyPassword } from "./auth";
-import { newId, normaliseCode, normaliseSetupCode, slugify } from "./codes";
+import { newId, normaliseCode, slugify } from "./codes";
 import { KIND_INFO, normaliseUrl } from "./links";
 import { getStore } from "./store";
 import type { Business, BusinessLink, LinkKind, TapMode } from "./types";
@@ -20,7 +20,6 @@ function keep(fd: FormData, error: string): FormState {
   return { error, values };
 }
 
-const MAX_FAILED_CLAIMS = 10;
 const MAX_LOGO_CHARS = 300_000;
 
 /** UK-friendly phone check: 10 to 15 digits once spaces and + are removed. */
@@ -43,12 +42,12 @@ async function uniqueSlug(name: string): Promise<string> {
 
 /* ---------------------------------------------------------- find plate -- */
 
-/** "I have a plate" box on /tap: type the code from the card. */
+/** "I have a plate" box on /tap: type the plate code by hand. */
 export async function findPlate(_: FormState, fd: FormData): Promise<FormState> {
   const code = normaliseCode(str(fd, "code", 20));
   if (code.length !== 6) return keep(fd, "Plate codes are 6 characters, e.g. K7QM3X.");
   const plate = await getStore().getPlate(code);
-  if (!plate) return keep(fd, "We couldn't find that plate. Check the code on your card.");
+  if (!plate) return keep(fd, "We couldn't find that plate. Check the code and try again, or just tap the plate with your phone.");
   redirect(`/tap/setup/${code}`);
 }
 
@@ -57,20 +56,14 @@ export async function findPlate(_: FormState, fd: FormData): Promise<FormState> 
 export async function claimPlate(_: FormState, fd: FormData): Promise<FormState> {
   const store = getStore();
   const code = normaliseCode(str(fd, "code", 20));
-  const setupCode = normaliseSetupCode(str(fd, "setupCode", 20));
   const label = str(fd, "label", 40) || "Plate";
 
+  // No setup code: whoever opens an unclaimed plate first (the buyer, holding
+  // it) claims it. Once claimed it can't be claimed again; admin can release it.
   const plate = await store.getPlate(code);
   if (!plate) return keep(fd, "This plate doesn't exist.");
   if (plate.status === "claimed") return keep(fd, "This plate has already been set up.");
   if (plate.status === "disabled") return keep(fd, "This plate has been switched off. Contact Integrate for help.");
-  if (plate.failedClaims >= MAX_FAILED_CLAIMS) {
-    return keep(fd, "Too many wrong setup codes. Contact Integrate and we'll unlock it for you.");
-  }
-  if (setupCode !== plate.setupCode) {
-    await store.failClaim(code);
-    return keep(fd, "That setup code doesn't match. It's printed on the card that came with your plate.");
-  }
 
   let business = await currentBusiness();
 

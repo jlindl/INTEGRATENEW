@@ -4,9 +4,8 @@ import { plateUrl } from "@/lib/tap/codes";
 import { getStore } from "@/lib/tap/store";
 
 /**
- * CSV for printing insert cards. setup_url carries the setup code so the QR on
- * the card opens a pre-filled setup form. Treat this file as secret: anyone
- * with a setup code can claim that plate.
+ * Plates CSV: each plate's code and the link to write onto its tag.
+ * `?type=customers` exports business contacts instead.
  */
 export const dynamic = "force-dynamic";
 
@@ -52,14 +51,11 @@ export async function GET(req: NextRequest) {
   if (req.nextUrl.searchParams.get("type") === "customers") return customers();
   const batch = req.nextUrl.searchParams.get("batch") || undefined;
   const plates = (await getStore().listPlates(batch ? { batch } : {})).sort((a, b) => a.code.localeCompare(b.code));
-  const base = new URL(plateUrl("X")).origin;
   const rows = [
-    ["code", "setup_code", "plate_url", "setup_url", "batch", "status", "serial", "taps"],
+    ["code", "plate_url", "batch", "status", "serial", "taps"],
     ...plates.map((p) => [
       p.code,
-      p.setupCode,
       plateUrl(p.code),
-      `${base}/tap/setup/${p.code}?s=${p.setupCode}`,
       p.batch,
       p.status,
       p.serial ?? "",

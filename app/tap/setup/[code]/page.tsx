@@ -1,20 +1,13 @@
 import { ClaimForm } from "@/components/tap/forms";
 import { Card, Notice, PageTitle, TapShell, secondaryButton } from "@/components/tap/ui";
 import { currentBusiness } from "@/lib/tap/auth";
-import { normaliseCode, normaliseSetupCode } from "@/lib/tap/codes";
+import { normaliseCode } from "@/lib/tap/codes";
 import { getStore } from "@/lib/tap/store";
 
 export const dynamic = "force-dynamic";
 
-export default async function SetupPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ code: string }>;
-  searchParams: Promise<{ s?: string }>;
-}) {
+export default async function SetupPage({ params }: { params: Promise<{ code: string }> }) {
   const code = normaliseCode((await params).code);
-  const { s } = await searchParams;
   const [plate, business] = await Promise.all([getStore().getPlate(code), currentBusiness()]);
 
   if (!plate || plate.status === "disabled") {
@@ -75,7 +68,7 @@ export default async function SetupPage({
         </div>
       )}
       <Card className="mt-6">
-        <ClaimForm code={code} signedInAs={business?.name ?? null} presetSetupCode={s ? normaliseSetupCode(s) : undefined} />
+        <ClaimForm code={code} signedInAs={business?.name ?? null} />
       </Card>
     </TapShell>
   );
