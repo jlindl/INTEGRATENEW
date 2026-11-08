@@ -38,19 +38,23 @@ export function AdVideo({ src, poster }: { src: string; poster?: string }) {
         playsInline
         preload="metadata"
         controls={!muted}
-        className="block aspect-[9/16] max-h-[78svh] w-full bg-ink object-cover sm:aspect-video"
+        className="block aspect-video w-full bg-ink object-contain"
       />
+      {/* The whole video is the tap target; the visible pill sits top-right
+          so it never covers the captions burned into the bottom of the VSL. */}
       {muted && (
         <button
           type="button"
           onClick={toggleSound}
-          className="absolute bottom-4 left-1/2 inline-flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-paper/95 px-5 py-2.5 text-[0.9rem] font-medium text-ink shadow-lg transition-colors hover:bg-paper"
+          className="group absolute inset-0 flex items-start justify-end p-2.5 sm:p-4"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M4 9v6h4l5 4V5L8 9H4Z" />
-            <path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" />
-          </svg>
-          Tap for sound
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-paper/95 px-3 py-1.5 text-[0.78rem] font-medium text-ink shadow-lg transition-colors group-hover:bg-paper sm:min-h-11 sm:gap-2 sm:px-5 sm:py-2 sm:text-[0.9rem]">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+              <path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+            </svg>
+            Tap for sound
+          </span>
         </button>
       )}
     </div>

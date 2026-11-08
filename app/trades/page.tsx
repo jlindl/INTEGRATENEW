@@ -14,13 +14,13 @@ import { LEGAL_DOCS } from "@/lib/legalData";
  * watches the video or fills in the form. It is noindex because it repeats
  * the lead generation service page and only exists for paid traffic.
  *
- * The video: drop the file at public/videos/trades.mp4 (and optionally a
- * poster frame at public/videos/trades-poster.jpg). The page checks for them
- * at build time, so the video block only appears once the file is there.
+ * The video is the Integrate VSL at public/Integrate_VSL.mp4 (16:9), with a
+ * poster frame at public/Integrate_VSL-poster.jpg. The page checks for them
+ * at build time, so the video block only appears while the file is there.
  */
 
-const VIDEO_FILE = "videos/trades.mp4";
-const POSTER_FILE = "videos/trades-poster.jpg";
+const VIDEO_FILE = "Integrate_VSL.mp4";
+const POSTER_FILE = "Integrate_VSL-poster.jpg";
 const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
 
 export const metadata: Metadata = {
@@ -100,7 +100,7 @@ export default function TradesPage() {
 
         {/* Video */}
         {hasVideo && (
-          <Reveal delay={0.1} className="mx-auto mt-10 max-w-md sm:max-w-none">
+          <Reveal delay={0.1} className="mt-10">
             <AdVideo src={`/${VIDEO_FILE}`} poster={poster} />
             <div className="mt-7 text-center">
               <CtaButton />
