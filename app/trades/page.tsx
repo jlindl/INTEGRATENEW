@@ -151,6 +151,14 @@ export default function TradesPage() {
                 We run local Facebook and Instagram ads for your business, answer every enquiry on
                 WhatsApp within seconds, and book the good ones straight into your calendar.
               </p>
+              {/* The promise the Meta ads make, repeated here so the page matches the ad. */}
+              <p className="mt-5 flex max-w-[52ch] items-start gap-2.5 rounded-2xl border border-line bg-card/70 px-4 py-3 text-[0.98rem] leading-snug text-ink-2">
+                <Tick className="mt-0.5 text-[#2f9e6b]" />
+                <span>
+                  <strong className="font-medium text-ink">10 booked quotes in your first 30 days.</strong> If we
+                  miss, we keep working without charging our fee until you have them.
+                </span>
+              </p>
             </Reveal>
   
             <Reveal delay={0.08} className="mt-9 lg:mt-10">
