@@ -15,6 +15,7 @@
  */
 import { useState, type FormEvent, type ReactNode } from "react";
 import { track } from "@/lib/gtag";
+import { metaTrack } from "@/lib/metaPixel";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -137,6 +138,7 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
       track("generate_lead", { form: "book_call", source });
+      metaTrack("Lead", { content_name: source });
       setStatus("success");
     } catch (err) {
       setStatus("error");
