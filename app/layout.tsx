@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { CookieBanner } from "@/components/analytics/CookieBanner";
 import { ContactClickTracker } from "@/components/analytics/ContactClickTracker";
 import { SITE_URL } from "@/lib/site";
@@ -73,6 +74,8 @@ export default function RootLayout({
         />
         {/* Google Analytics 4: Consent Mode v2, cookies only after "Accept" in the banner. */}
         <GoogleAnalytics />
+        {/* Meta Pixel: only loaded after "Accept" in the banner (see the Cookie Policy). */}
+        <MetaPixel />
         <ContactClickTracker />
         <CookieBanner />
       </body>
