@@ -31,7 +31,9 @@ Customers set up and manage their own plates from any phone, with no app.
 | `/tap/admin/encode` | Integrate | Android Chrome writer: write + lock + record chip serial; "check a plate" mode |
 | `/tap/admin/export` | Integrate | Plates CSV (code + link to write on each tag). `?type=customers` exports contacts; only market to `marketing_consent = yes`. |
 
-All `/tap`, `/t`, `/b` routes are `noindex` and disallowed in robots.txt.
+All `/tap`, `/t`, `/b` routes are `noindex` and disallowed in robots.txt. The public, indexable
+page for the product is `/review-plates` (in the sitemap and the sitewide footer). The "Made with
+Integrate Tap" link on every `/b` page and the footer on every `/tap` page point there.
 
 ## Encoding a batch
 

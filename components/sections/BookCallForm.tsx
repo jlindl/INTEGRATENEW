@@ -87,7 +87,16 @@ function FieldError({ children }: { children: ReactNode }) {
   return <p className="mt-1.5 text-xs text-[#8a3b23]">{children}</p>;
 }
 
-export function BookCallForm({ source = "Website — Book a call" }: { source?: string }) {
+export function BookCallForm({
+  source = "Website — Book a call",
+  interest,
+}: {
+  source?: string;
+  /** Fixed topic for a form that is only ever about one thing (e.g. review
+      plates). Hides the "What's it about?" picker and is sent as the interest,
+      which the API adds to the contact's tags. */
+  interest?: string;
+}) {
   const [data, setData] = useState<FormState>(EMPTY);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -115,16 +124,17 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
     setStatus("submitting");
     setError(null);
 
+    const focus = interest ?? data.primaryFocus;
     const payload = {
       name: `${data.firstName} ${data.lastName}`.trim(),
       email: data.email.trim(),
       phone: data.phone.trim(),
       company: data.businessName.trim(),
-      interest: data.primaryFocus,
+      interest: focus,
       firstName: data.firstName.trim(),
       lastName: data.lastName.trim(),
       businessName: data.businessName.trim(),
-      primaryFocus: data.primaryFocus,
+      primaryFocus: focus,
       company_website: honeypot, // honeypot
       source,
     };
@@ -212,33 +222,35 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
         </div>
       </div>
 
-      <div className="mt-7">
-        <p className={groupLabel}>
-          What&apos;s it about?
-          <span className="ml-auto font-mono text-[0.68rem] tracking-[0.12em] text-ink-3">Optional</span>
-        </p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {FOCUS.map((f) => {
-            const selected = data.primaryFocus === f.value;
-            return (
-              <button
-                key={f.value}
-                type="button"
-                aria-pressed={selected}
-                onClick={() => set("primaryFocus", selected ? "" : f.value)}
-                className={`flex items-center justify-center gap-3 rounded-xl border px-5 py-4 text-center text-[0.95rem] font-medium transition-colors duration-200 ${
-                  selected
-                    ? "border-ink bg-ink/[0.05] text-ink"
-                    : "border-line text-ink-2 hover:border-ink/40"
-                }`}
-              >
-                <span className={selected ? "text-ink" : "text-ink-3"}>{f.icon}</span>
-                {f.value}
-              </button>
-            );
-          })}
+      {!interest && (
+        <div className="mt-7">
+          <p className={groupLabel}>
+            What&apos;s it about?
+            <span className="ml-auto font-mono text-[0.68rem] tracking-[0.12em] text-ink-3">Optional</span>
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {FOCUS.map((f) => {
+              const selected = data.primaryFocus === f.value;
+              return (
+                <button
+                  key={f.value}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => set("primaryFocus", selected ? "" : f.value)}
+                  className={`flex items-center justify-center gap-3 rounded-xl border px-5 py-4 text-center text-[0.95rem] font-medium transition-colors duration-200 ${
+                    selected
+                      ? "border-ink bg-ink/[0.05] text-ink"
+                      : "border-line text-ink-2 hover:border-ink/40"
+                  }`}
+                >
+                  <span className={selected ? "text-ink" : "text-ink-3"}>{f.icon}</span>
+                  {f.value}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {status === "error" && error ? (
         <p className="mt-6 rounded-xl border border-[#d9b4a6] bg-[#f6e9e2] px-4 py-3 text-sm text-[#8a3b23]" role="alert">

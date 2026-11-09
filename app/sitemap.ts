@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/blog"), changeFrequency: "daily", priority: 0.8 },
     { url: absoluteUrl("/web-design"), changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/web-design/pricing"), changeFrequency: "monthly", priority: 0.7 },
+    { url: absoluteUrl("/review-plates"), changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/testimonials"), changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/services"), changeFrequency: "monthly", priority: 0.8 },
     ...SERVICE_HUBS.map((h) => ({
