@@ -15,7 +15,7 @@
  */
 import { useState, type FormEvent, type ReactNode } from "react";
 import { track } from "@/lib/gtag";
-import { metaTrack } from "@/lib/metaPixel";
+import { metaServerContext, metaSetUserData, metaTrack, newMetaEventId } from "@/lib/metaPixel";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -115,6 +115,7 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
     setStatus("submitting");
     setError(null);
 
+    const metaEventId = newMetaEventId();
     const payload = {
       name: `${data.firstName} ${data.lastName}`.trim(),
       email: data.email.trim(),
@@ -127,6 +128,7 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
       primaryFocus: data.primaryFocus,
       company_website: honeypot, // honeypot
       source,
+      meta: metaServerContext(metaEventId),
     };
 
     try {
@@ -138,7 +140,13 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
       track("generate_lead", { form: "book_call", source });
-      metaTrack("Lead", { content_name: source });
+      metaSetUserData({
+        email: data.email,
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+      metaTrack("Lead", { content_name: source }, metaEventId);
       setStatus("success");
     } catch (err) {
       setStatus("error");
