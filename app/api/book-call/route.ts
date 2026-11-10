@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
+import { readMetaContext, sendMetaLead } from "@/lib/metaCapi";
 
 /**
  * POST /api/book-call — receives the "Book a call" form and forwards the lead
@@ -166,7 +167,7 @@ async function upsertContact(token: string, locationId: string, lead: Lead) {
 }
 
 export async function POST(req: Request) {
-  let data: Partial<Lead> & { company_website?: string };
+  let data: Partial<Lead> & { company_website?: string; meta?: unknown };
   try {
     data = await req.json();
   } catch {
@@ -232,6 +233,25 @@ export async function POST(req: Request) {
     console.error("[book-call] GHL_WEBHOOK_URL is not an http(s) URL — ignoring it; falling back to the Contacts API");
   }
 
+  // Once the lead is safely in GoHighLevel, also send it to Meta's
+  // Conversions API (after the response, so the visitor never waits on Meta).
+  const metaCtx = readMetaContext(data.meta);
+  const reportToMeta = () =>
+    after(() =>
+      sendMetaLead(
+        req,
+        {
+          email: lead.email,
+          phone: lead.phone,
+          firstName: lead.firstName || lead.name.split(/\s+/)[0],
+          lastName: lead.lastName || lead.name.split(/\s+/).slice(1).join(" ") || undefined,
+          source: lead.source,
+          industry: lead.industry,
+        },
+        metaCtx,
+      ),
+    );
+
   try {
     if (usableWebhook) {
       // NB: a GHL Inbound Webhook accepts the POST and returns 2xx whether or
@@ -241,11 +261,13 @@ export async function POST(req: Request) {
       console.log(
         `[book-call] delivered via webhook (${lead.email}) — contact creation depends on the GHL Workflow`,
       );
+      reportToMeta();
       return NextResponse.json({ ok: true, via: "webhook" });
     }
     if (token && locationId) {
       const contactId = await upsertContact(token, locationId, lead);
       console.log(`[book-call] delivered via contacts API (${lead.email}) — contact ${contactId ?? "id unknown"}`);
+      reportToMeta();
       return NextResponse.json({ ok: true, via: "contacts-api" });
     }
     console.error("[book-call] NOT DELIVERED: no GHL_WEBHOOK_URL and no GHL_API_TOKEN + GHL_LOCATION_ID");

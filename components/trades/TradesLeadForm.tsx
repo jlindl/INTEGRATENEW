@@ -16,7 +16,7 @@
  */
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { track } from "@/lib/gtag";
-import { metaTrack } from "@/lib/metaPixel";
+import { metaServerContext, metaSetUserData, metaTrack, newMetaEventId } from "@/lib/metaPixel";
 
 const SOURCE = "Meta ads: trades landing page";
 const INTEREST = "Trades lead generation";
@@ -166,11 +166,14 @@ export function TradesLeadForm() {
       .filter(Boolean)
       .join("\n");
 
+    const metaEventId = newMetaEventId();
+
     try {
       const res = await fetch("/api/book-call", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          meta: metaServerContext(metaEventId),
           name,
           firstName,
           lastName: rest.join(" ") || undefined,
@@ -188,7 +191,8 @@ export function TradesLeadForm() {
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
       track("generate_lead", { form: "trades_lead", source: SOURCE, trade, job_value: jobValue });
       // The conversion the Meta ads optimise for (only sent if cookies were accepted).
-      metaTrack("Lead", { content_name: SOURCE, content_category: trade || "not given" });
+      metaSetUserData({ email: contact.email, phone: contact.phone, firstName, lastName: rest.join(" ") });
+      metaTrack("Lead", { content_name: SOURCE, content_category: trade || "not given" }, metaEventId);
       interacted.current = true;
       setStatus("success");
     } catch (err) {
