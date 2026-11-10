@@ -9,8 +9,6 @@ import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
 export const ORG_ID = `${SITE_URL}/#organization`;
 
-const AREAS = ["Lancashire", "Greater Manchester", "Merseyside", "Cumbria", "North West England", "United Kingdom"];
-
 export function organizationGraph() {
   return {
     "@context": "https://schema.org",
@@ -24,18 +22,12 @@ export function organizationGraph() {
         logo: absoluteUrl("/icon.svg"),
         image: absoluteUrl("/opengraph-image"),
         description:
-          "AI automation, lead generation and web design for trades and local businesses across Lancashire and the North West.",
+          "AI automation, lead generation and web design for trades and service businesses across the UK.",
         email: COMPANY.email,
         telephone: "+447765977085",
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "6 Aycliffe Drive",
-          addressLocality: "Chorley",
-          addressRegion: "Lancashire",
-          postalCode: "PR7 7GD",
-          addressCountry: "GB",
-        },
-        areaServed: AREAS.map((name) => ({ "@type": "AdministrativeArea", name })),
+        /* UK-wide: niched by trade, never by town, so no local address or
+           list of areas is asserted here. */
+        areaServed: { "@type": "Country", name: "United Kingdom" },
         knowsAbout: [
           "AI automation",
           "AI chatbots",

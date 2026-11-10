@@ -137,6 +137,8 @@ export default function ContactPage() {
 
           {/* Form: first on mobile, since most people arrive from "Book a call". */}
           <Reveal delay={0.1} className="max-lg:order-first">
+            {/* Anchor for every "Book a free call" button (/contact#book). */}
+            <span id="book" className="block scroll-mt-28" aria-hidden="true" />
             <BookCallForm source="Contact page — Book a call" />
           </Reveal>
         </div>

@@ -70,7 +70,7 @@ export default function RootLayout({
         <Script
           src="https://integrate-analytics.vercel.app/t.js"
           data-site="892b3a06-e0c2-4688-9e5b-9f037534165e"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         {/* Google Analytics 4: Consent Mode v2, cookies only after "Accept" in the banner. */}
         <GoogleAnalytics />
