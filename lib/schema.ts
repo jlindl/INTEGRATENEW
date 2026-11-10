@@ -19,7 +19,7 @@ export function organizationGraph() {
         name: SITE_NAME,
         legalName: COMPANY.name,
         url: SITE_URL,
-        logo: absoluteUrl("/icon.svg"),
+        logo: absoluteUrl("/icon.png"),
         image: absoluteUrl("/opengraph-image"),
         description:
           "AI automation, lead generation and web design for trades and service businesses across the UK.",
