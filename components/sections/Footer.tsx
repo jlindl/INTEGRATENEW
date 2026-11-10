@@ -5,7 +5,7 @@
  * Fully static — server component, no hooks, no motion.
  */
 
-import { LogoMark } from "@/components/ui/LogoMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { LEGAL_DOCS } from "@/lib/legalData";
 import { CookieSettingsLink } from "@/components/analytics/CookieBanner";
 
@@ -91,10 +91,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-3">
             {/* Chevron mark — same glyph as the nav. */}
             <div className="flex items-center gap-2.5">
-              <LogoMark className="h-[21px] w-[21px]" />
-              <span className="text-[1.05rem] font-semibold tracking-tight text-ink">
-                Integrate
-              </span>
+              <BrandLogo tone="ink" height={24} />
             </div>
             <p className="mt-5 max-w-[38ch] text-[0.95rem] leading-relaxed text-ink-2">
               Premium AI Automation Agency. We design, build, and maintain

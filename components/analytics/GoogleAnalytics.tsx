@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { CONSENT_KEY, GA_ID } from "@/lib/gtag";
+import { GaLoader } from "./GaLoader";
 
 /**
  * Google Analytics 4 with Consent Mode v2. Everything defaults to "denied"
@@ -33,11 +34,8 @@ gtag("config", ${JSON.stringify(GA_ID)});
       <Script id="ga4-init" strategy="afterInteractive">
         {init}
       </Script>
-      <Script
-        id="ga4-src"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
-      />
+      {/* The library itself loads on first interaction (or after 8s). */}
+      <GaLoader src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
     </>
   );
 }

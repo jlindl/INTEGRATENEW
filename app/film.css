@@ -1,0 +1,3239 @@
+/* ------------------------------------------------------------------ */
+/*  Integrate homepage film                                            */
+/*                                                                     */
+/*  Rule one: everything here is the FINISHED state. With no script,   */
+/*  or with reduced motion, the page is a complete, designed still.    */
+/*  When the director loads it adds `film-on` to <html> and feeds each */
+/*  beat its progress as custom properties (--p, --draw, --g, --s...). */
+/*  The `html.film-on` rules below are the only place motion lives.    */
+/*                                                                     */
+/*  Tokens: Integrate Design System v1. Carbon room for the noise,     */
+/*  paper room for the system. The silver accent appears on the        */
+/*  primary action and on the line at the turn, nowhere else.          */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  /* The fixed multiply grain forces a full-screen blend on every frame and is
+     invisible on carbon anyway, so the film page goes without it. */
+  body:has(.film) > .grain {
+    display: none;
+  }
+  .film {
+    --gutter: clamp(1.25rem, 4vw, 3.5rem);
+    --edge: max(var(--gutter), calc((100vw - 82rem) / 2 + var(--gutter)));
+    /* Where the line runs: the left gutter on phones, the centre on desktop. */
+    --rail: calc(var(--gutter) + 5px);
+    --silver: linear-gradient(135deg, #d5d8dd 0%, #f7f8f9 45%, #bfc3ca 58%, #e6e8eb 100%);
+  }
+  @media (min-width: 1024px) {
+    .film {
+      --rail: 50%;
+    }
+  }
+
+  /* ---------- Type ---------- */
+  /* Headlines: heavy, tight Instrument Sans. One word per headline is set
+     in Fraunces italic (<Em>), in brushed platinum on carbon and graphite
+     silver on paper: the brand's serif, kept as the accent. */
+
+  .film-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .film-h1,
+  .film-h2,
+  .film-h3,
+  .film-cut-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-variation-settings: normal;
+    text-wrap: balance;
+  }
+  .film-h1 {
+    font-size: clamp(2.05rem, min(10.6vw, 10svh), 5.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+  @media (min-width: 768px) {
+    .film-h1 {
+      font-size: clamp(2.2rem, min(6.6vw, 10.4svh), 5.25rem);
+    }
+  }
+  .film-h2 {
+    margin-top: 1.1rem;
+    font-size: clamp(2.15rem, 5.4vw, 4.4rem);
+    line-height: 0.97;
+    letter-spacing: -0.048em;
+  }
+  .film-h3 {
+    margin-top: 0.85rem;
+    font-size: clamp(1.75rem, 3vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .film-em {
+    font-family: var(--font-fraunces-film-italic), var(--font-fraunces), Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: normal;
+    letter-spacing: -0.025em;
+    /* Italic overhang would be clipped by background-clip: text. */
+    padding-inline: 0.02em 0.08em;
+    margin-inline: -0.02em -0.04em;
+    color: var(--color-accent-deep);
+    background-image: linear-gradient(118deg, #3d4046 0%, #7f838b 34%, #4d5056 58%, #8a8e96 82%, #55585e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .bg-carbon .film-em,
+  .text-ivory .film-em {
+    color: var(--color-halo);
+    background-image: linear-gradient(118deg, #aeb4be 0%, #f6f8fb 26%, #b6bcc6 50%, #eef1f5 72%, #c4c9d1 100%);
+  }
+  .bg-carbon .bg-paper .film-em {
+    color: var(--color-accent-deep);
+    background-image: linear-gradient(118deg, #3d4046 0%, #7f838b 34%, #4d5056 58%, #8a8e96 82%, #55585e 100%);
+  }
+  /* Section labels in the spec-sheet style: "02 ── integrate/noise". */
+  .film-slug {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
+    opacity: 0.72;
+  }
+  .film-slug-n {
+    letter-spacing: 0.08em;
+    opacity: 1;
+  }
+  .film-slug-rule {
+    width: 2.25rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+  .film-slug--center {
+    justify-content: center;
+  }
+  /* Tags: small mono chips used for features and typical jobs. */
+  .film-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+  }
+  .film-tag {
+    border-radius: 9999px;
+    padding: 0.32rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-2);
+    box-shadow: inset 0 0 0 1px var(--color-line-2);
+  }
+  .film-tags--dark .film-tag {
+    color: var(--color-ivory);
+    background: rgb(10 10 12 / 0.45);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .film-tick {
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-ink);
+  }
+  .film-tick::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 5.5px;
+    width: 4px;
+    height: 7px;
+    border: solid var(--color-paper);
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+  }
+  .film-tick--light {
+    background-image: var(--silver);
+  }
+  .film-tick--light::after {
+    border-color: #0a0a0c;
+  }
+  .film-tick--sm {
+    width: 14px;
+    height: 14px;
+  }
+  .film-tick--sm::after {
+    top: 3px;
+    left: 4.8px;
+    width: 3.5px;
+    height: 6px;
+  }
+  /* A live status: a dot that breathes. */
+  .film-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    border-radius: 9999px;
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+  }
+  .film-status-dot {
+    position: relative;
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-halo);
+  }
+  .film-status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: inherit;
+    animation: film-ping 2.4s var(--ease-out-expo) infinite;
+  }
+  .film-status-dot--ink {
+    background: var(--color-ink);
+  }
+  .film-lead {
+    margin-top: 1.25rem;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.6;
+  }
+  .film-body {
+    margin-top: 0.9rem;
+    max-width: 52ch;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .film-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A loop fades in over its own still once it can play. */
+  .film-loop {
+    opacity: 0;
+    transition: opacity 1.4s var(--ease-out-soft);
+  }
+  .film-loop[data-ready] {
+    opacity: 1;
+  }
+
+  /* ---------- Primary action ---------- */
+
+  .film-btn {
+    position: relative;
+    display: inline-flex;
+    border-radius: 9999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .film-btn-inner {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    overflow: hidden;
+    border-radius: inherit;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      transform 0.5s var(--ease-out-expo),
+      background-color 0.3s,
+      box-shadow 0.4s;
+  }
+  .film-btn--lg .film-btn-inner {
+    padding: 1.05rem 1.75rem;
+    font-size: 1rem;
+  }
+  .film-btn--light .film-btn-inner {
+    background-image: var(--silver);
+    color: #0a0a0c;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.6),
+      0 12px 44px -14px rgb(201 206 215 / 0.5);
+  }
+  .film-btn--dark .film-btn-inner {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  /* A light sweeps across the pill: once on arrival, again on hover. */
+  .film-btn-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.9) 50%, transparent 62%);
+    transform: translateX(-130%);
+    pointer-events: none;
+  }
+  .film-btn--dark .film-btn-inner::before {
+    background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.22) 50%, transparent 62%);
+  }
+  .film-btn-arrow {
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  @media (hover: hover) {
+    .film-btn:hover .film-btn-inner::before {
+      transform: translateX(130%);
+      transition: transform 0.9s var(--ease-out-expo);
+    }
+    .film-btn:hover .film-btn-arrow {
+      transform: translateX(4px);
+    }
+    .film-btn--dark:hover .film-btn-inner {
+      background: var(--color-accent-deep);
+    }
+    .film-btn--light:hover .film-btn-inner {
+      box-shadow:
+        inset 0 0 0 1px #fff,
+        0 16px 56px -12px rgb(201 206 215 / 0.75);
+    }
+  }
+  .film-btn:active .film-btn-label,
+  .film-btn:active .film-btn-arrow {
+    transform: scale(0.96);
+  }
+  .film-btn:active .film-btn-inner {
+    box-shadow: inset 0 0 0 2px rgb(107 111 119 / 0.55);
+  }
+  .film-btn-label {
+    display: inline-block;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .bg-carbon :focus-visible {
+    outline-color: var(--color-halo);
+  }
+
+  /* ---------- Text links ---------- */
+
+  .film-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .film-link > span {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    padding-bottom: 3px;
+    transition: background-size 0.5s var(--ease-out-expo);
+  }
+  .film-link svg {
+    flex: none;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .film-link--light {
+    color: var(--color-ivory);
+  }
+  .film-link--dark {
+    color: var(--color-ink);
+  }
+  @media (hover: hover) {
+    .film-link:hover > span {
+      background-size: 100% 2px;
+    }
+    .film-link:hover svg {
+      transform: translateX(4px);
+    }
+  }
+  .film-link:active {
+    opacity: 0.7;
+  }
+  .film-inline-link {
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-2);
+    text-underline-offset: 3px;
+    color: var(--color-ink);
+    transition: text-decoration-color 0.3s;
+  }
+  .film-inline-link:hover {
+    text-decoration-color: var(--color-ink);
+  }
+
+  /* ---------- Lines ---------- */
+
+  .film-stroke {
+    fill: none;
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .film-stroke--light {
+    stroke: rgb(242 241 236 / 0.72);
+  }
+  .film-spine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--rail);
+    width: 1px;
+    background: var(--color-ink);
+    transform: scaleY(var(--draw, 1));
+    transform-origin: top;
+  }
+
+  /* The enquiry itself: a silver point riding the tip of the line. */
+  .film-spine-tip {
+    display: none;
+  }
+  html.film-on .film-spine-tip {
+    position: absolute;
+    top: calc(var(--draw, 1) * 100%);
+    left: var(--rail);
+    z-index: 2;
+    display: block;
+    width: 9px;
+    height: 9px;
+    margin: -4.5px 0 0 -4px;
+    border-radius: 50%;
+    background-image: var(--silver);
+    box-shadow:
+      0 0 0 1px var(--color-ink),
+      0 0 0 5px var(--color-paper);
+  }
+
+  /* ---------- Notification chip ---------- */
+
+  .film-chip {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    width: max-content;
+    max-width: min(17rem, 62vw);
+    border-radius: 14px;
+    background: rgb(20 20 24 / 0.94);
+    padding: 0.7rem 0.95rem;
+    color: var(--color-ivory);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.09),
+      0 20px 44px -18px #000;
+  }
+  .film-chip-dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-top: 0.3rem;
+    border-radius: 50%;
+    background: var(--color-halo);
+  }
+  .film-chip-dot {
+    position: relative;
+  }
+  .film-chip-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-halo);
+    animation: film-ping 2.6s var(--ease-out-expo) infinite paused;
+    animation-delay: calc(var(--x, 0) * 37ms);
+  }
+  @keyframes film-ping {
+    0% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(3.6);
+    }
+  }
+  .film-chip-kind {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+  .film-chip-text {
+    display: block;
+    margin-top: 0.15rem;
+  }
+
+  /* ================================================================ */
+  /*  01. Cold open                                                    */
+  /* ================================================================ */
+
+  .film-hero {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    overflow: hidden;
+    --p: 0;
+  }
+  /* The set: a faint engineering grid and the brand's chevron, blown up. */
+  .film-hero-set {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .film-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgb(201 206 215 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(201 206 215 / 0.035) 1px, transparent 1px);
+    background-size: 72px 72px;
+    -webkit-mask-image: radial-gradient(90% 70% at 70% 45%, #000, transparent 75%);
+    mask-image: radial-gradient(90% 70% at 70% 45%, #000, transparent 75%);
+  }
+  .film-hero-limb {
+    position: absolute;
+    top: -6%;
+    left: 58%;
+    width: clamp(7rem, 15vw, 15rem);
+    height: 62%;
+    border-radius: 0 0 28px 28px;
+    background-image: linear-gradient(100deg, #45484e 0%, #9a9ea6 30%, #eef0f3 52%, #b5b9c0 70%, #5a5d63 100%);
+    transform-origin: 50% 0;
+    transform: translate3d(0, calc(var(--p) * -6%), 0) rotate(-40deg);
+    opacity: 0.92;
+    box-shadow: 0 40px 120px -40px rgb(201 206 215 / 0.35);
+  }
+  .film-hero-limb--ink {
+    top: auto;
+    bottom: -6%;
+    border-radius: 28px 28px 0 0;
+    background-image: linear-gradient(100deg, #101013 0%, #1d1d22 50%, #121215 100%);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+    transform-origin: 50% 100%;
+    transform: translate3d(0, calc(var(--p) * 4%), 0) rotate(40deg);
+    opacity: 1;
+  }
+  .film-hero-layout {
+    display: grid;
+    flex: 1;
+    align-content: start;
+    gap: 2.5rem;
+    padding-top: clamp(5.25rem, 13svh, 7rem);
+    padding-bottom: 3rem;
+  }
+  .film-hero-body .film-h1 {
+    margin-top: clamp(0.7rem, 2svh, 1.4rem);
+  }
+  .film-h1-line {
+    display: inline;
+  }
+  .film-hero-sub {
+    margin-top: clamp(0.8rem, 2.2svh, 1.5rem);
+    max-width: 34rem;
+    color: rgb(242 241 236 / 0.74);
+    font-size: clamp(0.9375rem, 1.25vw, 1.125rem);
+    line-height: 1.55;
+  }
+  .film-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.5rem;
+    margin-top: clamp(1rem, 3svh, 2rem);
+  }
+  .film-hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    margin-top: clamp(1.25rem, 3.5svh, 2.25rem);
+    font-size: 0.8125rem;
+    color: rgb(242 241 236 / 0.8);
+  }
+  .film-hero-facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .film-hero .film-btn-inner::before {
+    animation: film-sweep 1.5s var(--ease-out-expo) 0.55s both;
+  }
+  @keyframes film-sweep {
+    from {
+      transform: translateX(-130%);
+    }
+    to {
+      transform: translateX(130%);
+    }
+  }
+
+  /* The stage: the phone, with cards floating around it at three depths. */
+  .film-hero-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 34rem;
+    padding: 2rem 0 2.5rem;
+  }
+  .film-hero-note {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgb(242 241 236 / 0.62);
+  }
+  .film-float {
+    position: absolute;
+    z-index: 2;
+    animation: film-bob 7s ease-in-out infinite;
+  }
+  .film-float--a {
+    top: 6%;
+    left: 0;
+    --rot: -4deg;
+    animation-delay: -1.5s;
+  }
+  .film-float--b {
+    right: 0;
+    bottom: 22%;
+    --rot: 3deg;
+    animation-delay: -3s;
+  }
+  .film-float--c {
+    bottom: 8%;
+    left: 2%;
+    --rot: -2deg;
+    animation-delay: -5s;
+  }
+  @keyframes film-bob {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(var(--rot, 0deg));
+    }
+    50% {
+      transform: translate3d(0, -8px, 0) rotate(var(--rot, 0deg));
+    }
+  }
+  .film-chip--glass {
+    background: rgb(20 20 24 / 0.86);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .film-card-cal {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-radius: 16px;
+    background: var(--color-card);
+    padding: 0.7rem 1rem 0.7rem 0.7rem;
+    color: var(--color-ink);
+    box-shadow: 0 24px 60px -20px #000;
+  }
+  .film-card-cal-day {
+    display: grid;
+    width: 3.1rem;
+    flex: none;
+    place-items: center;
+    border-radius: 11px;
+    background: var(--color-ink);
+    padding: 0.4rem 0;
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+  }
+  .film-card-cal-day b {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .film-card-cal-text {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .film-card-cal-by {
+    display: block;
+    margin-top: 0.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .film-card-checks {
+    border-radius: 16px;
+    background: rgb(20 20 24 / 0.9);
+    padding: 0.85rem 1rem;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.1),
+      0 24px 60px -20px #000;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .film-card-checks-title {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+  .film-card-checks ul {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.45rem 1rem;
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+  }
+  .film-card-checks li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .film-card-checks .film-tick {
+    background-image: var(--silver);
+  }
+  .film-card-checks .film-tick::after {
+    border-color: #0a0a0c;
+  }
+
+  /* ---------- Phone (live HTML) ---------- */
+  .film-phone {
+    position: relative;
+    z-index: 1;
+    width: min(18.5rem, 74vw);
+    aspect-ratio: 9 / 19;
+    max-height: min(38rem, 76svh);
+    border-radius: 2.6rem;
+    background: linear-gradient(150deg, #5a5d63, #1c1c20 30%, #0e0e11 70%, #3d4046);
+    padding: 0.55rem;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08),
+      0 50px 120px -30px #000,
+      0 0 90px -30px rgb(201 206 215 / 0.3);
+  }
+  .film-phone-screen {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2.1rem;
+    background: #f2f1ec;
+    color: var(--color-ink);
+  }
+  .film-phone-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1.4rem 0.35rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+  .film-phone-island {
+    width: 5.2rem;
+    height: 1.35rem;
+    border-radius: 9999px;
+    background: #0a0a0c;
+  }
+  .film-phone-sig {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    width: 2.2rem;
+    justify-content: flex-end;
+  }
+  .film-phone-sig i {
+    width: 3px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+  .film-phone-sig i:nth-child(1) {
+    height: 5px;
+  }
+  .film-phone-sig i:nth-child(2) {
+    height: 7px;
+  }
+  .film-phone-sig i:nth-child(3) {
+    height: 9px;
+  }
+  .film-phone-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.5rem 0.9rem 0.65rem;
+  }
+  .film-phone-avatar {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .film-phone-title {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .film-phone-status {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-ink-2);
+  }
+  .film-phone-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    overflow: hidden;
+    padding: 0.7rem 0.7rem 0.5rem;
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgb(255 255 255 / 0.6), transparent 70%),
+      #ebe8df;
+  }
+  /* A full chat crops from the top, like a real scrolled conversation. */
+  .film-phone-body > * {
+    flex-shrink: 0;
+  }
+  .film-phone-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0.6rem 0.9rem;
+    border-radius: 9999px;
+    background: #fff;
+    padding: 0.5rem 0.5rem 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    color: var(--color-ink-3);
+  }
+  .film-phone-input i {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--color-ink);
+  }
+  .film-msg-pill {
+    align-self: center;
+    margin-bottom: 0.2rem;
+    border-radius: 9999px;
+    background: rgb(27 26 22 / 0.08);
+    padding: 0.25rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .film-hero-phone .film-msg {
+    max-width: 82%;
+    border-radius: 14px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+  .film-msg--them {
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    background: #fff;
+  }
+  .film-msg--us {
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .film-hero-phone .film-msg--photo {
+    width: 7.5rem;
+    overflow: hidden;
+    padding: 0.2rem;
+  }
+  .film-msg-img {
+    display: block;
+    width: 100%;
+    height: 5.5rem;
+    border-radius: 11px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+  .film-msg-booked {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: center;
+    margin-top: 0.2rem;
+    border-radius: 12px;
+    background: #fff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    box-shadow: 0 0 0 1px var(--color-line);
+  }
+  /* The conversation plays once, the moment the page opens. */
+  @media (prefers-reduced-motion: no-preference) {
+    .film-hero-phone .film-msg,
+    .film-hero-phone .film-msg-pill,
+    .film-hero-phone .film-msg-booked {
+      animation: film-msg-in 0.7s var(--ease-out-expo) both;
+      animation-delay: calc(0.35s + var(--i) * 0.42s);
+    }
+  }
+  @keyframes film-msg-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0) scale(0.96);
+    }
+  }
+
+  @media (max-width: 1023.98px) {
+    .film-hero-stage {
+      min-height: 0;
+      padding: 1rem 0 2.25rem;
+    }
+    .film-hero-limb {
+      top: auto;
+      bottom: 20%;
+      left: 54%;
+      height: 46%;
+    }
+    .film-hero-limb--ink {
+      bottom: -18%;
+    }
+    .film-float--a {
+      top: 2%;
+      left: -2%;
+    }
+    .film-float--b {
+      right: -2%;
+      bottom: 16%;
+    }
+    .film-float--b,
+    .film-float--c {
+      display: none;
+    }
+  }
+  @media (max-width: 479.98px) {
+    .film-float .film-chip,
+    .film-card-cal {
+      transform: scale(0.86);
+      transform-origin: left top;
+    }
+    .film-float--b .film-card-cal {
+      transform-origin: right bottom;
+    }
+  }
+  @media (min-width: 1024px) {
+    .film-hero-stage {
+      justify-items: end;
+      padding-right: 3%;
+    }
+    .film-hero-note {
+      left: auto;
+      right: 3%;
+      transform: none;
+    }
+    .film-float--a {
+      top: 12%;
+      left: 0;
+    }
+    .film-float--c {
+      top: 42%;
+      bottom: auto;
+      left: 6%;
+    }
+    .film-float--b {
+      right: auto;
+      bottom: 11%;
+      left: 0;
+    }
+    .film-hero-layout {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      align-content: center;
+      align-items: center;
+      gap: clamp(2rem, 4vw, 4rem);
+      padding-top: 5.5rem;
+      padding-bottom: clamp(2rem, 6svh, 4rem);
+    }
+    .film-hero-stage {
+      min-height: min(40rem, 84svh);
+    }
+    .film-phone {
+      height: min(38rem, 76svh);
+      width: auto;
+    }
+  }
+
+  .film-hero-line {
+    position: absolute;
+    bottom: 0;
+    left: var(--rail);
+    height: clamp(2rem, 7svh, 5rem);
+    width: 1px;
+  }
+  .film-hero-line-dot {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-image: var(--silver);
+    animation: film-dot 0.7s var(--ease-out-expo) 0.15s both;
+  }
+  .film-hero-line-rule {
+    position: absolute;
+    inset: 0;
+    background: rgb(242 241 236 / 0.72);
+    transform-origin: top;
+    animation: film-drop 1.4s var(--ease-out-expo) 0.3s both;
+  }
+  @keyframes film-dot {
+    from {
+      transform: scale(0);
+    }
+  }
+  @keyframes film-drop {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  @media (min-width: 768px) {
+    .film-hero-line {
+      left: var(--edge);
+    }
+  }
+
+  /* ================================================================ */
+  /*  02. The noise: one working day                                   */
+  /* ================================================================ */
+
+  .film-noise {
+    position: relative;
+    isolation: isolate;
+    --t: 1;
+  }
+  .film-noise-stage {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(4.5rem, 12svh, 7rem);
+  }
+  .film-noise-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .film-noise-media img,
+  .film-noise-media .film-loop[data-ready] {
+    opacity: 0.7;
+  }
+  .film-noise-media .film-cover {
+    object-position: 75% 60%;
+  }
+  .film-noise-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, #0a0a0c 0%, rgb(10 10 12 / 0.55) 22%, rgb(10 10 12 / 0.55) 75%, #0a0a0c 100%),
+      linear-gradient(90deg, #0a0a0c 0%, rgb(10 10 12 / 0.85) 34%, rgb(10 10 12 / 0.35) 70%, rgb(10 10 12 / 0.6) 100%);
+  }
+  .film-noise-grid {
+    display: grid;
+    gap: 3rem;
+  }
+  .film-noise-copy .film-h2 {
+    max-width: 11ch;
+  }
+  .film-noise-lead {
+    color: rgb(242 241 236 / 0.74);
+  }
+
+  /* The day: a big clock, a tally, and the line with every message on it. */
+  .film-day {
+    width: 100%;
+    max-width: 30rem;
+  }
+  .film-day-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.14);
+    padding-bottom: 0.9rem;
+  }
+  .film-day-clock {
+    font-family: var(--font-mono);
+    font-size: clamp(2.6rem, 6vw, 4.25rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .film-day-tally {
+    display: grid;
+    justify-items: end;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+  .film-day-tally-n {
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+    font-variant-numeric: tabular-nums;
+  }
+  .film-day-list {
+    position: relative;
+    display: grid;
+    gap: 0.55rem;
+    padding-top: 1rem;
+  }
+  .film-day-rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 3.1rem;
+    width: 1px;
+    background: rgb(242 241 236 / 0.5);
+    transform: scaleY(var(--t));
+    transform-origin: top;
+  }
+  .film-day-item {
+    --a: clamp(0, calc((var(--t) * var(--n) - var(--i)) * 1.6), 1);
+    --age: clamp(0, calc(var(--t) * var(--n) - var(--i) - 1), 4);
+    display: grid;
+    grid-template-columns: 2.6rem 1rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0 0.5rem;
+    opacity: calc(var(--a) * (1 - var(--age) * 0.09));
+    transform: translate3d(calc((1 - var(--a)) * 28px), 0, 0);
+  }
+  .film-day-time {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-mist);
+  }
+  .film-day-node {
+    justify-self: center;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-carbon);
+    box-shadow:
+      inset 0 0 0 1.5px var(--color-halo),
+      0 0 0 4px var(--color-carbon);
+  }
+  .film-chip--day {
+    width: 100%;
+    max-width: none;
+  }
+  @media (min-width: 1024px) {
+    .film-noise-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+      align-items: center;
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .film-day {
+      justify-self: end;
+    }
+  }
+
+  /* ================================================================ */
+  /*  03. The turn                                                     */
+  /* ================================================================ */
+
+  .film-turn {
+    position: relative;
+    --s0: 2;
+    --s: 2;
+    --g: 0;
+    --door: 1;
+    --o: 1;
+  }
+  @media (min-width: 768px) {
+    .film-turn {
+      --s0: 3;
+      --s: 3;
+    }
+  }
+  .film-turn-stage {
+    position: relative;
+    height: 100svh;
+    min-height: 36rem;
+    overflow: hidden;
+  }
+  .film-turn-carbon,
+  .film-turn-paper {
+    position: absolute;
+    inset: 0;
+  }
+  /* Still cut: paper below a carbon chevron that points the way forward. */
+  .film-turn-paper {
+    clip-path: polygon(0 0, 50% 9vw, 100% 0, 100% 100%, 0 100%);
+  }
+  html:not(.film-on) .film-turn-carbon > * {
+    display: none;
+  }
+  .film-turn-tangle {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .film-chip--gather {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 0.72% + 26%);
+    transform-origin: 0 0;
+    transform: translate3d(calc((50 - var(--x)) * var(--g) * 1vw), calc((50 - var(--y)) * var(--g) * 1svh), 0)
+      rotate(var(--r)) scale(calc(1 - 0.8 * var(--g)));
+    opacity: calc(1.2 - var(--g) * 1.2);
+  }
+  .film-turn-before {
+    position: absolute;
+    top: clamp(5.5rem, 13svh, 8rem);
+    right: var(--edge);
+    max-width: 11ch;
+    font-family: var(--font-sans);
+    font-size: clamp(1.7rem, 3.6vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    text-align: right;
+    opacity: calc(1 - var(--door) * 2.5);
+  }
+  .film-turn-mark {
+    position: absolute;
+    top: calc(50% - 24px * var(--s0));
+    left: calc(50% - 40px * var(--s0));
+    width: calc(50px * var(--s0));
+    height: calc(48px * var(--s0));
+    transform: translate3d(calc(var(--door) * -9vw), 0, 0);
+    opacity: calc(1 - var(--door) * 2);
+  }
+  .film-turn-mark-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+  .film-turn-sheen {
+    position: absolute;
+    inset: 0 0 50% 0;
+    background-image: linear-gradient(118deg, #8f8d86 0%, #f6f5f2 50%, #767470 100%);
+    opacity: calc(1 - var(--door) * 3.5);
+    pointer-events: none;
+  }
+  /* The paper room is a working surface: a drafting grid and a status. */
+  .film-turn-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgb(27 26 22 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(27 26 22 / 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(80% 70% at 50% 50%, #000 30%, transparent 85%);
+    mask-image: radial-gradient(80% 70% at 50% 50%, #000 30%, transparent 85%);
+  }
+  .film-turn-status {
+    position: absolute;
+    top: clamp(5.25rem, 12svh, 7rem);
+    left: var(--edge);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .film-turn-copy {
+    position: absolute;
+    top: clamp(7rem, 19svh, 11rem);
+    right: 0;
+    left: 0;
+    padding-inline: var(--gutter);
+    text-align: center;
+  }
+  .film-turn-copy .film-h2 {
+    max-width: 14ch;
+    margin-inline: auto;
+  }
+  /* The line, pulled taut. This is the accent's one signature beat. */
+  .film-turn-rule {
+    position: absolute;
+    top: calc(50% + 2rem - 1px);
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1b1a16 0%, #8a8e96 30%, #c8ccd2 50%, #8a8e96 70%, #1b1a16 100%);
+    transform: scaleX(var(--o));
+  }
+  .film-turn-order {
+    position: absolute;
+    top: calc(50% + 3.25rem);
+    right: var(--gutter);
+    left: calc(var(--rail) + 1.75rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem 1rem;
+  }
+  .film-bead {
+    --b: clamp(0, calc(var(--o) * 1.75 - var(--i) * 0.25), 1);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.2rem 0.6rem;
+    opacity: var(--b);
+    transform: translate3d(0, calc((1 - var(--b)) * 14px), 0);
+  }
+  .film-bead-was {
+    grid-column: 2;
+    grid-row: 1;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+    text-decoration-thickness: 1px;
+  }
+  .film-bead-dot {
+    grid-row: 2;
+    flex: none;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-ink);
+    box-shadow: 0 0 0 4px var(--color-paper);
+  }
+  .film-bead-label {
+    grid-row: 2;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .film-tdemo {
+    display: none;
+  }
+  .film-turn-drop {
+    position: absolute;
+    top: calc(50% + 2rem);
+    bottom: 0;
+    left: var(--rail);
+    width: 1px;
+    background: var(--color-ink);
+    transform: scaleY(var(--o));
+    transform-origin: top;
+  }
+  /* The day, replayed as a log ticker along the bottom of the frame. */
+  .film-turn-log {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--color-line-2);
+    background: rgb(247 245 240 / 0.92);
+    padding-block: 0.8rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    opacity: var(--o);
+  }
+  .film-turn-log-track {
+    display: flex;
+    width: max-content;
+    animation: film-marquee 38s linear infinite paused;
+  }
+  [data-live] .film-turn-log-track {
+    animation-play-state: running;
+  }
+  @keyframes film-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .film-turn-log-set {
+    display: flex;
+    gap: 2.75rem;
+    padding-right: 2.75rem;
+  }
+  .film-turn-log-item {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-2);
+  }
+  .film-turn-log-item b {
+    margin-right: 0.4rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .film-turn-log-arrow {
+    margin-inline: 0.3rem;
+    color: var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .film-chip--gather {
+      top: calc(var(--y) * 1%);
+    }
+  }
+  @media (min-width: 1024px) {
+    .film-turn-rule {
+      top: calc(50% - 1rem - 1px);
+    }
+    .film-turn-drop {
+      top: calc(50% - 1rem);
+    }
+    .film-turn-copy {
+      top: clamp(6rem, 14svh, 9rem);
+    }
+    .film-turn-order {
+      top: calc(50% - 1rem - 2.3rem);
+      right: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      padding-inline: var(--edge);
+    }
+    .film-bead {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 0.8rem;
+      text-align: center;
+    }
+    .film-bead-was,
+    .film-bead-dot,
+    .film-bead-label {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .film-bead-was {
+      min-height: 1.6rem;
+      align-content: end;
+    }
+    /* A worked example under every step. */
+    .film-tdemo {
+      display: grid;
+      gap: 0.55rem;
+      width: min(100%, 13.5rem);
+      margin-top: 0.4rem;
+      border: 1px solid var(--color-line);
+      border-radius: 14px;
+      background: var(--color-card);
+      padding: 0.8rem;
+      text-align: left;
+      box-shadow: var(--shadow-lift);
+    }
+    .film-tdemo-cap {
+      font-family: var(--font-mono);
+      font-size: 0.5625rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-ink-3);
+    }
+    .film-tdemo-bubble {
+      border-radius: 12px;
+      border-bottom-right-radius: 4px;
+      background: var(--color-ink);
+      padding: 0.5rem 0.65rem;
+      color: var(--color-paper);
+      font-size: 0.75rem;
+      line-height: 1.35;
+    }
+    .film-tdemo-doc {
+      display: grid;
+      gap: 5px;
+      border-radius: 8px;
+      background: var(--color-paper-2);
+      padding: 0.6rem;
+    }
+    .film-tdemo-doc i {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--color-line-2);
+    }
+    .film-tdemo-doc i:nth-child(1) {
+      width: 55%;
+      background: var(--color-ink-3);
+    }
+    .film-tdemo-doc i:nth-child(3) {
+      width: 80%;
+    }
+    .film-tdemo-doc i:nth-child(4) {
+      width: 40%;
+      justify-self: end;
+      background: var(--color-ink);
+    }
+    .film-tdemo-week {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+    .film-tdemo-week span {
+      display: grid;
+      height: 2.1rem;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--color-paper-2);
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--color-ink-3);
+    }
+    .film-tdemo-week span.is-on {
+      background: var(--color-ink);
+      color: var(--color-paper);
+    }
+    .film-tdemo-bar {
+      height: 6px;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--color-paper-2);
+    }
+    .film-tdemo-bar i {
+      display: block;
+      width: 72%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--color-ink);
+    }
+    .film-tdemo-ok {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  }
+
+  /* ================================================================ */
+  /*  04. The system                                                   */
+  /* ================================================================ */
+
+  .film-system {
+    position: relative;
+    overflow-x: clip;
+    padding-bottom: clamp(4rem, 10svh, 8rem);
+  }
+  .film-head {
+    max-width: 50rem;
+    padding-top: clamp(4rem, 12svh, 8rem);
+  }
+  .film-head--onspine {
+    position: relative;
+    z-index: 1;
+    padding-left: 2.25rem;
+  }
+  .film-stations {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(5rem, 14svh, 10rem);
+    margin-top: clamp(3rem, 9svh, 6rem);
+  }
+  .film-station {
+    position: relative;
+    display: grid;
+    gap: 2.25rem;
+    padding-left: 2.25rem;
+  }
+  .film-node {
+    position: absolute;
+    top: 0.2rem;
+    left: 0;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    box-shadow:
+      inset 0 0 0 1.5px var(--color-ink),
+      0 0 0 5px var(--color-paper);
+  }
+  .film-more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+  }
+  .film-more a {
+    display: inline-block;
+    padding-block: 0.6rem;
+    color: var(--color-ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-2);
+    text-underline-offset: 3px;
+    transition:
+      color 0.3s,
+      text-decoration-color 0.3s;
+  }
+  .film-more a:hover {
+    color: var(--color-ink);
+    text-decoration-color: var(--color-ink);
+  }
+  .film-onspine-cta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    margin-top: clamp(3.5rem, 10svh, 7rem);
+    padding-left: 2.25rem;
+  }
+  @media (min-width: 1024px) {
+    .film-head--onspine {
+      margin-inline: auto;
+      margin-top: clamp(2rem, 6svh, 4rem);
+      padding: 1.5rem 2rem;
+      background: var(--color-paper);
+      text-align: center;
+    }
+    .film-head--onspine .film-slug {
+      justify-content: center;
+    }
+    .film-station {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      column-gap: clamp(5rem, 10vw, 10rem);
+      padding-left: 0;
+    }
+    .film-station[data-flip] .film-station-text {
+      order: 2;
+    }
+    .film-station-demo {
+      width: 100%;
+      max-width: 32rem;
+    }
+    .film-station:not([data-flip]) .film-station-demo {
+      justify-self: start;
+    }
+    .film-station[data-flip] .film-station-demo {
+      justify-self: end;
+    }
+    .film-node {
+      top: 50%;
+      left: 50%;
+      margin: -5.5px;
+    }
+    .film-onspine-cta {
+      justify-content: center;
+      padding-left: 0;
+    }
+    .film-onspine-cta .film-btn {
+      box-shadow: 0 0 0 12px var(--color-paper);
+    }
+  }
+
+  /* ---------- Scenes: one object per service, with satellites ---------- */
+  .film-scene {
+    position: relative;
+    padding: 2.25rem 0.5rem 2.75rem;
+  }
+  .film-scene-note {
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .film-panel {
+    position: relative;
+    border: 1px solid var(--color-line);
+    border-radius: 20px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-float);
+  }
+  .film-panel-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.9rem 1.1rem;
+  }
+  .film-panel-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .film-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .film-inbox-rows {
+    display: grid;
+    padding: 0.4rem;
+  }
+  .film-inbox-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 12px;
+    padding: 0.6rem 0.7rem;
+  }
+  .film-inbox-row + .film-inbox-row {
+    box-shadow: inset 0 1px 0 var(--color-line);
+  }
+  .film-inbox-av {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-paper-3);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+  .film-inbox-who {
+    display: block;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .film-inbox-via {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .film-state {
+    border-radius: 9999px;
+    padding: 0.28rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-2);
+    box-shadow: inset 0 0 0 1px var(--color-line-2);
+  }
+  .film-state--on {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    box-shadow: none;
+  }
+  .film-sat {
+    position: absolute;
+    z-index: 2;
+    max-width: 80%;
+  }
+  .film-sat--tr {
+    top: 0;
+    right: 0;
+    transform: rotate(2.5deg);
+  }
+  .film-sat--bl {
+    bottom: 1rem;
+    left: 0;
+    transform: rotate(-2deg);
+  }
+  .film-chip--paper {
+    background: var(--color-card);
+    color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 1px var(--color-line),
+      var(--shadow-float);
+  }
+  .film-chip--paper .film-chip-kind {
+    color: var(--color-ink-3);
+  }
+  .film-chip--paper .film-chip-icon {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+  }
+  .film-chip--ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    box-shadow: 0 24px 50px -18px rgb(27 26 22 / 0.55);
+  }
+
+  /* SYS.02: the ad, the form, the follow-up. */
+  .film-scene--leads {
+    padding-bottom: 5.5rem;
+  }
+  .film-ad {
+    width: min(100%, 21rem);
+    overflow: hidden;
+    padding-bottom: 0.2rem;
+  }
+  .film-ad-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 0.95rem 0.5rem;
+  }
+  .film-ad-copy {
+    padding: 0 0.95rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+  .film-ad-img {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0a0a0c;
+  }
+  .film-ad-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+  .film-ad-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.95rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+  .film-ad-btn {
+    border-radius: 8px;
+    background: var(--color-paper-3);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  .film-form {
+    position: absolute;
+    top: 42%;
+    right: 0;
+    z-index: 2;
+    display: grid;
+    gap: 0.45rem;
+    width: min(62%, 15rem);
+    padding: 0.95rem;
+    transform: rotate(1.5deg);
+  }
+  .film-form-row {
+    display: grid;
+    gap: 0.1rem;
+    border-radius: 9px;
+    background: var(--color-paper-2);
+    padding: 0.4rem 0.6rem;
+  }
+  .film-form-row span {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .film-form-row b {
+    overflow: hidden;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .film-form-send {
+    margin-top: 0.2rem;
+    border-radius: 9px;
+    background: var(--color-ink);
+    padding: 0.5rem;
+    color: var(--color-paper);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .film-sat--follow {
+    bottom: 2.6rem;
+    left: 6%;
+    transform: rotate(-1.5deg);
+  }
+  .film-bubble {
+    display: flex;
+    max-width: 17rem;
+    align-items: flex-start;
+    gap: 0.5rem;
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+    background: var(--color-ink);
+    padding: 0.65rem 0.85rem;
+    color: var(--color-paper);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    box-shadow: 0 24px 50px -18px rgb(27 26 22 / 0.55);
+  }
+  .film-bubble svg {
+    flex: none;
+    margin-top: 0.1rem;
+  }
+  .film-sat--booked {
+    right: 4%;
+    bottom: 0.9rem;
+  }
+  .film-pill-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background: var(--color-card);
+    padding: 0.45rem 0.85rem 0.45rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow:
+      inset 0 0 0 1px var(--color-line),
+      var(--shadow-lift);
+  }
+
+  /* SYS.03: a demo build in a browser. */
+  .film-browser {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--color-line-2);
+    border-radius: 16px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-float);
+  }
+  .film-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-card);
+    padding-inline: 12px;
+  }
+  .film-browser-bar i {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--color-line-2);
+  }
+  .film-browser-url {
+    margin-left: 0.6rem;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--color-paper-2);
+    padding: 0.15rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-ink-2);
+  }
+  .film-browser-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    filter: grayscale(1);
+    transition:
+      filter 0.6s,
+      transform 1.2s var(--ease-out-expo);
+  }
+  @media (hover: hover) {
+    .film-browser:hover .film-browser-img {
+      filter: none;
+      transform: scale(1.03);
+    }
+  }
+  .film-sat--toast {
+    top: 0.4rem;
+    right: 0;
+    transform: rotate(2deg);
+  }
+  .film-sat--tags {
+    bottom: 0.9rem;
+    left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .film-tag--card {
+    background: var(--color-card);
+    color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 1px var(--color-line-2),
+      var(--shadow-lift);
+  }
+  @media (min-width: 1024px) {
+    .film-sat--tr {
+      right: -1.5rem;
+    }
+    .film-sat--bl {
+      left: -1.5rem;
+    }
+    .film-sat--toast {
+      right: -1.5rem;
+    }
+  }
+
+  /* ================================================================ */
+  /*  05. Who it is for                                                */
+  /* ================================================================ */
+
+  .film-trades {
+    position: relative;
+  }
+  .film-trades-track {
+    position: relative;
+    --open: 1;
+    --c1: 1;
+    --c2: 1;
+  }
+  .film-trades-stage {
+    position: relative;
+  }
+  .film-cut {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-carbon);
+    min-height: 74svh;
+    overflow: hidden;
+  }
+  .film-cut-media {
+    position: absolute;
+    top: calc((0.5 - var(--ht) * 1.24) * 100%);
+    right: 0;
+    left: 0;
+    z-index: -2;
+    height: 124%;
+  }
+  .film-cut-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgb(10 10 12 / 0.6) 0%, rgb(10 10 12 / 0) 34%, rgb(10 10 12 / 0) 52%, rgb(10 10 12 / 0.86) 100%);
+  }
+  .film-cut-body {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+  }
+  .film-cut-count {
+    position: absolute;
+    top: clamp(5.25rem, 13svh, 8rem);
+    left: var(--edge);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+  }
+  .film-cut-count span {
+    opacity: 0.75;
+  }
+  /* The trade's name stands on the line. */
+  .film-cut-name {
+    position: absolute;
+    bottom: 50%;
+    left: var(--edge);
+    padding-bottom: 0.1em;
+    font-size: clamp(2.6rem, 8vw, 7.25rem);
+    font-weight: 400;
+    line-height: 0.92;
+    text-shadow: 0 2px 30px rgb(10 10 12 / 0.55);
+  }
+  .film-cut-foot {
+    position: absolute;
+    top: calc(50% + 1.25rem);
+    right: var(--edge);
+    left: var(--edge);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  .film-cut-line {
+    max-width: 30ch;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-shadow: 0 1px 16px rgb(10 10 12 / 0.8);
+  }
+  .film-horizon {
+    display: none;
+  }
+  .film-cut::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: rgb(242 241 236 / 0.6);
+  }
+  @media (min-width: 768px) {
+    .film-cut-media {
+      top: calc((0.5 - var(--hw) * 1.24) * 100%);
+    }
+    .film-cut-foot {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .film-cut-foot .film-link {
+      padding-top: 0;
+    }
+  }
+  .film-trades-paper {
+    display: grid;
+    gap: 2.5rem;
+    padding: clamp(4rem, 12svh, 8rem) var(--edge) 3rem;
+  }
+  .film-trades-also {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+  }
+  .film-also-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 1.5rem;
+    margin-top: 0.9rem;
+    max-width: 40rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+    letter-spacing: 0;
+    font-feature-settings: "liga" 0;
+  }
+  .film-also-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  /* ================================================================ */
+  /*  06. Proof                                                        */
+  /* ================================================================ */
+
+  .film-proof {
+    position: relative;
+    padding-bottom: clamp(3rem, 8svh, 6rem);
+    --travel: 0;
+    --shift: 0px;
+  }
+  .film-proof .film-head {
+    padding-top: clamp(2rem, 6svh, 4rem);
+  }
+  .film-strip-wrap {
+    margin-top: 2.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    padding-bottom: 1.5rem;
+  }
+  .film-strip {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    width: max-content;
+    padding-inline: var(--edge);
+    transform: translate3d(calc(var(--travel) * var(--shift) * -1), 0, 0);
+  }
+  .film-frame {
+    flex: none;
+    width: min(78vw, 35rem);
+    scroll-snap-align: center;
+  }
+  .film-frame-link {
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .film-frame-shot {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--color-line-2);
+    border-radius: 14px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-lift);
+    aspect-ratio: 16 / 10;
+    transition: box-shadow 0.6s var(--ease-out-expo);
+  }
+  .film-frame-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition:
+      filter 0.6s,
+      transform 1.2s var(--ease-out-expo);
+  }
+  .film-frame-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-top: 1rem;
+  }
+  .film-frame-num {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-3);
+  }
+  .film-frame-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .film-frame-built {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8125rem;
+    color: var(--color-ink-2);
+  }
+  .film-frame-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .film-frame-open svg {
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  @media (hover: hover) {
+    .film-frame-img {
+      filter: grayscale(1) contrast(1.03);
+    }
+    .film-frame-link:hover .film-frame-img,
+    .film-frame-link:focus-visible .film-frame-img {
+      filter: none;
+      transform: scale(1.03);
+    }
+    .film-frame-link:hover .film-frame-shot {
+      box-shadow: var(--shadow-float);
+    }
+    .film-frame-link:hover .film-frame-open svg {
+      transform: translate(2px, -2px) rotate(-45deg);
+    }
+  }
+  .film-frame-link:active .film-frame-shot {
+    box-shadow: var(--shadow-hairline);
+  }
+  .film-strip-rail {
+    height: 1px;
+    background: var(--color-ink);
+    transform: scaleX(var(--draw, 1));
+    transform-origin: left;
+  }
+  .film-proof-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-top: 2rem;
+  }
+
+  /* ================================================================ */
+  /*  07. How it works                                                 */
+  /* ================================================================ */
+
+  .film-process {
+    position: relative;
+    padding-bottom: clamp(5rem, 13svh, 10rem);
+  }
+  .film-process-grid {
+    display: grid;
+    gap: 0 clamp(2rem, 6vw, 6rem);
+  }
+  .film-phases {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.25rem, 7svh, 4.5rem);
+    padding-top: 2.75rem;
+    padding-left: 2.5rem;
+  }
+  .film-phases-rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5px;
+    width: 1px;
+    background: var(--color-line-2);
+  }
+  .film-phases-rail::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-ink);
+    transform: scaleY(var(--draw, 1));
+    transform-origin: top;
+  }
+  .film-phase {
+    position: relative;
+  }
+  .film-phase-node {
+    position: absolute;
+    top: 0.1rem;
+    left: -2.5rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-ink);
+    box-shadow: 0 0 0 5px var(--color-paper);
+    transition:
+      background-color 0.5s,
+      transform 0.7s var(--ease-out-expo);
+  }
+  .film-qa {
+    display: grid;
+    gap: 0 clamp(2rem, 6vw, 6rem);
+    margin-top: clamp(3.5rem, 10svh, 7rem);
+    border-top: 1px solid var(--color-line-2);
+  }
+  .film-qa-item {
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 1.6rem;
+  }
+  .film-qa-q {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+  @media (min-width: 1024px) {
+    .film-process-grid {
+      grid-template-columns: 5fr 7fr;
+    }
+    .film-process-head {
+      position: sticky;
+      top: 5.5rem;
+      align-self: start;
+    }
+    .film-phases {
+      padding-top: clamp(4rem, 12svh, 8rem);
+    }
+    .film-qa {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ================================================================ */
+  /*  08. The payoff                                                   */
+  /* ================================================================ */
+
+  .film-payoff {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(7rem, 18svh, 12rem) clamp(4rem, 10svh, 7rem);
+    scroll-margin-top: 0;
+  }
+  /* Paper pushes into carbon with the chevron's point: the mark, once more. */
+  .film-payoff-notch {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: clamp(3rem, 8vw, 7rem);
+    background: var(--color-paper);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .film-payoff-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .film-payoff-media img {
+    opacity: 0.55;
+  }
+  .film-payoff-media .film-loop[data-ready] {
+    opacity: 0.55;
+  }
+  .film-payoff-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #0a0a0c 0%, rgb(10 10 12 / 0.66) 30%, rgb(10 10 12 / 0.84) 100%);
+  }
+  .film-payoff-grid {
+    display: grid;
+    gap: 2.5rem clamp(2rem, 6vw, 6rem);
+  }
+  .film-payoff-title {
+    margin-top: 1rem;
+    font-size: clamp(2.6rem, 6.4vw, 5.2rem);
+  }
+  .film-payoff-routes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .film-route {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-radius: 14px;
+    padding: 0.8rem 1.1rem;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+    transition:
+      background-color 0.3s,
+      box-shadow 0.3s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .film-route:hover {
+    background: rgb(255 255 255 / 0.06);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+  }
+  .film-route:active {
+    background: rgb(255 255 255 / 0.12);
+  }
+  .film-route-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+  .film-route-value {
+    display: block;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+  .film-company {
+    margin-top: 2rem;
+    max-width: 46ch;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.75;
+    color: var(--color-mist);
+  }
+  .film-payoff-form {
+    position: relative;
+  }
+  .film-ring {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .film-ring-stroke {
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
+    fill: none;
+    stroke: var(--color-halo);
+    stroke-width: 1.25;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--draw, 1));
+  }
+  @media (min-width: 1024px) {
+    .film-payoff-grid {
+      grid-template-columns: 5fr 6fr;
+      align-items: center;
+    }
+  }
+
+  /* ================================================================ */
+  /*  Detail layer: chips, cuts, proof, process, payoff                */
+  /* ================================================================ */
+
+  .film-chip-icon {
+    display: grid;
+    width: 1.9rem;
+    height: 1.9rem;
+    flex: none;
+    place-items: center;
+    border-radius: 9px;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--color-ivory);
+  }
+  .film-chip:has(.film-chip-icon) {
+    align-items: center;
+  }
+  .film-chip--ink .film-chip-icon {
+    background: rgb(255 255 255 / 0.12);
+    color: var(--color-paper);
+  }
+  .film-chip--ink .film-chip-kind {
+    color: rgb(247 245 240 / 0.6);
+  }
+
+  /* Trade cuts: the name stands on the line, jobs listed under it. */
+  .film-cut-name {
+    font-size: clamp(3rem, 9vw, 8rem);
+    line-height: 0.88;
+    letter-spacing: -0.055em;
+  }
+  .film-cut-foot .film-tags {
+    margin-top: 0.85rem;
+  }
+  .film-cut-line {
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  }
+  .film-also-list {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  /* Proof: the head carries two literal counts of what is on the page. */
+  .film-proof-head {
+    display: grid;
+    gap: 2rem;
+  }
+  .film-counts {
+    display: flex;
+    gap: 2.5rem;
+    align-self: end;
+  }
+  .film-counts dt {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .film-counts dd {
+    margin-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+  }
+  .film-frame-shot {
+    position: relative;
+    aspect-ratio: auto;
+  }
+  .film-frame-shot .film-frame-img {
+    aspect-ratio: 16 / 10;
+    height: auto;
+  }
+  .film-frame-tag {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    border-radius: 9999px;
+    background: rgb(10 10 12 / 0.82);
+    padding: 0.32rem 0.7rem;
+    color: var(--color-ivory);
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .film-frame-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  @media (min-width: 1024px) {
+    .film-proof-head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+  }
+
+  /* Process: an artefact under each phase, questions as cards. */
+  .film-process-cta {
+    display: none;
+    margin-top: 2rem;
+  }
+  .film-art {
+    display: grid;
+    gap: 0.35rem;
+    width: min(100%, 22rem);
+    margin-top: 1.1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: var(--color-card);
+    padding: 0.8rem 0.9rem;
+    box-shadow: var(--shadow-lift);
+  }
+  .film-art--call {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .film-art-slot {
+    display: grid;
+    width: 3.2rem;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--color-ink);
+    padding: 0.4rem 0;
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .film-art-slot b {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .film-art-text {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  .film-art-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8125rem;
+  }
+  .film-art-row + .film-art-row {
+    border-top: 1px solid var(--color-line);
+    padding-top: 0.35rem;
+  }
+  .film-art-n {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--color-ink-3);
+  }
+  .film-art--links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .film-art-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .film-art-link i {
+    width: 1rem;
+    height: 1px;
+    background: var(--color-ink);
+  }
+  .film-art--run {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .film-phase .film-h3 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+  }
+  .film-qa {
+    gap: 0.9rem;
+    border-top: 0;
+  }
+  .film-qa-item {
+    border: 1px solid var(--color-line);
+    border-radius: 18px;
+    background: var(--color-card);
+    padding: 1.4rem 1.5rem;
+  }
+  .film-qa-n {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-3);
+  }
+  .film-qa-q {
+    margin-top: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  @media (min-width: 1024px) {
+    .film-process-cta {
+      display: flex;
+    }
+  }
+
+  /* Payoff */
+  .film-payoff-title {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+  }
+  .film-payoff-promises {
+    margin-top: 1.5rem;
+  }
+
+  /* ================================================================ */
+  /*  Navigation and the always-in-reach action                        */
+  /* ================================================================ */
+
+  .film-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    color: var(--color-ivory);
+    transition:
+      color 0.4s,
+      background-color 0.4s,
+      box-shadow 0.4s;
+  }
+  .film-nav[data-nav-tone="light"] {
+    color: var(--color-ink);
+  }
+  .film-nav[data-scrolled][data-nav-tone="dark"] {
+    background: rgb(10 10 12 / 0.62);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    box-shadow: inset 0 -1px 0 rgb(255 255 255 / 0.07);
+  }
+  .film-nav[data-scrolled][data-nav-tone="light"] {
+    background: rgb(247 245 240 / 0.8);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    box-shadow: inset 0 -1px 0 rgb(27 26 22 / 0.08);
+  }
+  .film-nav-row {
+    display: flex;
+    height: 4.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .film-nav-logo {
+    display: flex;
+    align-items: center;
+    padding-block: 0.5rem;
+  }
+  .film-nav-logo-ink,
+  .film-nav[data-nav-tone="light"] .film-nav-logo-light {
+    display: none;
+  }
+  .film-nav[data-nav-tone="light"] .film-nav-logo-ink {
+    display: block;
+  }
+  .film-nav-links {
+    display: none;
+    gap: 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .film-nav-links a {
+    position: relative;
+    padding-block: 0.5rem;
+    opacity: 0.78;
+    transition: opacity 0.3s;
+  }
+  .film-nav-links a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0.2rem;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .film-nav-links a:hover {
+    opacity: 1;
+  }
+  .film-nav-links a:hover::after {
+    transform: scaleX(1);
+  }
+  .film-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .film-nav-cta {
+    display: none;
+    border-radius: 9999px;
+    background: var(--color-ivory);
+    padding: 0.6rem 1.1rem;
+    color: #0a0a0c;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      transform 0.25s var(--ease-out-expo);
+  }
+  .film-nav[data-nav-tone="light"] .film-nav-cta {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .film-nav-cta:hover {
+    background: #fff;
+  }
+  .film-nav[data-nav-tone="light"] .film-nav-cta:hover {
+    background: var(--color-accent-deep);
+  }
+  .film-nav-cta:active {
+    transform: scale(0.96);
+  }
+  .film-nav-toggle {
+    display: flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-right: -0.6rem;
+  }
+  .film-nav-toggle span,
+  .film-nav-toggle span::after {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .film-nav-toggle span {
+    transform: translateY(-3px);
+  }
+  .film-nav-toggle span::after {
+    content: "";
+    transform: translateY(6px);
+  }
+  .film-nav-toggle span[data-open] {
+    transform: rotate(45deg);
+  }
+  .film-nav-toggle span[data-open]::after {
+    transform: rotate(-90deg);
+  }
+  .film-menu {
+    max-height: calc(100svh - 4.5rem);
+    overflow-y: auto;
+    padding: 0.5rem var(--gutter, 1.25rem) 2rem;
+  }
+  .film-menu a {
+    display: block;
+    border-top: 1px solid var(--color-line);
+    padding-block: 0.9rem;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+  }
+  @media (min-width: 480px) {
+    .film-nav-cta {
+      display: inline-block;
+    }
+  }
+  @media (min-width: 1024px) {
+    .film-nav-links {
+      display: flex;
+    }
+    .film-nav-toggle,
+    .film-menu {
+      display: none;
+    }
+  }
+
+  .film-slate {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .film-slate {
+      /* Lives in the right-hand gutter, outside the text column, so it never
+         sits on copy. */
+      position: fixed;
+      top: 50%;
+      right: calc(var(--gutter) / 2 - 0.45rem);
+      z-index: 40;
+      display: flex;
+      writing-mode: vertical-rl;
+      transform: translateY(-50%);
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--color-ivory);
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      pointer-events: none;
+      transition: color 0.4s;
+    }
+    .film-slate[data-slate-tone="light"] {
+      color: var(--color-ink);
+    }
+    .film-slate-bar {
+      width: 1px;
+      height: 4.5rem;
+      background: color-mix(in srgb, currentColor 28%, transparent);
+    }
+    .film-slate-bar i {
+      display: block;
+      height: 100%;
+      background: currentColor;
+      transform-origin: top;
+      transition: transform 0.8s var(--ease-out-expo);
+    }
+    .film-slate-name {
+      margin-top: 0.4rem;
+      opacity: 0.7;
+      animation: film-slate-in 0.7s var(--ease-out-expo) both;
+    }
+    @keyframes film-slate-in {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 6px, 0);
+      }
+    }
+  }
+
+  .film-sticky {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 45;
+    display: flex;
+    gap: 0.5rem;
+    background: rgb(10 10 12 / 0.94);
+    padding: 0.6rem 0.75rem max(0.6rem, env(safe-area-inset-bottom));
+    box-shadow: 0 -1px 0 rgb(255 255 255 / 0.1);
+    transform: translate3d(0, 110%, 0);
+    transition: transform 0.6s var(--ease-out-expo);
+  }
+  .film-sticky[data-show] {
+    transform: none;
+  }
+  .film-sticky-book {
+    flex: 1;
+    border-radius: 9999px;
+    background-image: linear-gradient(135deg, #d5d8dd 0%, #f7f8f9 45%, #bfc3ca 58%, #e6e8eb 100%);
+    padding: 0.85rem 1rem;
+    color: #0a0a0c;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .film-sticky-wa {
+    display: flex;
+    width: 3rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: var(--color-ivory);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .film-sticky-book:active,
+  .film-sticky-wa:active {
+    transform: scale(0.96);
+  }
+  /* Room at the very end of the page so the bar never sits on the footer. */
+  .film-footer {
+    padding-bottom: 4.25rem;
+    background: var(--color-paper-2);
+  }
+  @media (min-width: 1024px) {
+    .film-sticky {
+      display: none;
+    }
+    .film-footer {
+      padding-bottom: 0;
+    }
+  }
+
+  /* ================================================================ */
+  /*  Film mode: only once the director is running                     */
+  /* ================================================================ */
+
+  html.film-on {
+    scroll-behavior: auto;
+  }
+
+  html.film-on [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 0.9s var(--ease-out-expo) var(--d, 0ms),
+      transform 0.9s var(--ease-out-expo) var(--d, 0ms);
+  }
+  html.film-on [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The noise: on a desktop, a short pinned stage while the day runs (about
+     one screen of travel). Phones keep a free-scrolling cut. */
+  @media (min-width: 1024px) {
+    html.film-on .film-noise {
+      height: 200svh;
+    }
+    html.film-on .film-noise-stage {
+      position: sticky;
+      top: 0;
+      display: grid;
+      min-height: 100svh;
+      align-items: center;
+      padding-block: 5.5rem 2.5rem;
+    }
+  }
+  html.film-on .film-noise {
+    --t: 0;
+  }
+
+  /* Hero: the cards drift against the phone as the visitor leaves. */
+  html.film-on .film-hero-stage > .film-float--a {
+    translate: 0 calc(var(--p) * -60px);
+  }
+  html.film-on .film-hero-stage > .film-float--b {
+    translate: 0 calc(var(--p) * -110px);
+  }
+  html.film-on .film-hero-stage > .film-float--c {
+    translate: 0 calc(var(--p) * -30px);
+  }
+  html.film-on .film-hero-phone {
+    translate: 0 calc(var(--p) * 40px);
+  }
+
+  /* Looping details only run while their beat is on screen. */
+  [data-live] .film-chip-dot::after,
+  [data-live] .film-flow-runner {
+    animation-play-state: running;
+  }
+
+  /* The turn: a pinned stage, 1.5 screens of travel. */
+  html.film-on .film-turn {
+    height: 250svh;
+    --door: 0;
+    --o: 0;
+  }
+  html.film-on .film-turn-stage {
+    position: sticky;
+    top: 0;
+  }
+  /* Push through: the carbon room rushes past as the paper room settles. */
+  html.film-on .film-turn-carbon {
+    transform: scale(calc(1 + var(--door) * 0.4));
+  }
+  html.film-on .film-turn-copy {
+    transform: scale(calc(1.1 - var(--door) * 0.1));
+  }
+  html.film-on .film-turn-paper {
+    clip-path: polygon(
+      calc(50% - 18px * var(--s)) calc(50% - 22px * var(--s)),
+      calc(50% + 6px * var(--s)) 50%,
+      calc(50% - 18px * var(--s)) calc(50% + 22px * var(--s)),
+      calc(50% - 18px * var(--s)) calc(50% + 12px * var(--s)),
+      calc(50% - 6px * var(--s)) 50%,
+      calc(50% - 18px * var(--s)) calc(50% - 12px * var(--s))
+    );
+  }
+
+  /* The trade cuts: the line opens into a window, three match cuts, then
+     the window closes back to the line. 1.5 screens of travel. */
+  html.film-on .film-trades-track {
+    height: 270svh;
+    --open: 0;
+    --c1: 0;
+    --c2: 0;
+  }
+  html.film-on .film-trades-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  html.film-on .film-trades-stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: var(--rail);
+    width: 1px;
+    height: 50%;
+    background: var(--color-ink);
+  }
+  html.film-on .film-trades-stage::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: var(--color-ink);
+  }
+  html.film-on .film-trades-paper {
+    position: absolute;
+    inset: 0;
+    grid-template-rows: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+  }
+  html.film-on .film-trades-head {
+    align-self: end;
+    padding: 0 var(--edge) clamp(1.5rem, 5svh, 3rem) calc(var(--gutter) + 2.25rem);
+  }
+  html.film-on .film-trades-also {
+    align-self: start;
+    padding: clamp(1.5rem, 5svh, 3rem) var(--edge) 0 calc(var(--gutter) + 2.25rem);
+  }
+  @media (min-width: 1024px) {
+    html.film-on .film-trades-head,
+    html.film-on .film-trades-also {
+      padding-left: var(--edge);
+    }
+    html.film-on .film-trades-head .film-h2 {
+      max-width: 12ch;
+    }
+  }
+  html.film-on .film-shutter {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    clip-path: inset(calc((1 - var(--open)) * 50%) 0);
+  }
+  html.film-on .film-cut {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+  html.film-on .film-cut-body {
+    opacity: calc(var(--open) * 4 - 3);
+  }
+  html.film-on .film-cut:nth-child(2) {
+    clip-path: inset(0 0 0 calc((1 - var(--c1)) * 100%));
+  }
+  html.film-on .film-cut:nth-child(3) {
+    clip-path: inset(0 0 0 calc((1 - var(--c2)) * 100%));
+  }
+  html.film-on .film-cut:nth-child(2) .film-cut-media {
+    transform: translate3d(calc((1 - var(--c1)) * 7%), 0, 0);
+  }
+  html.film-on .film-cut:nth-child(3) .film-cut-media {
+    transform: translate3d(calc((1 - var(--c2)) * 7%), 0, 0);
+  }
+
+  /* Proof: on a desktop the strip travels with the scroll, so it must not
+     also be its own scroller. */
+  @media (hover: hover) and (min-width: 1024px) {
+    html.film-on .film-strip-wrap {
+      overflow: hidden;
+      scroll-snap-type: none;
+    }
+  }
+
+  /* Process: phases wait, dimmed but readable, until the rail reaches them. */
+  html.film-on .film-phase > :not(.film-phase-node) {
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+  html.film-on .film-phase:not(.is-on) > :not(.film-phase-node) {
+    transform: translate3d(14px, 0, 0);
+  }
+  html.film-on .film-phase:not(.is-on) .film-phase-node {
+    background: var(--color-paper);
+    box-shadow:
+      inset 0 0 0 1.5px var(--color-ink-3),
+      0 0 0 5px var(--color-paper);
+  }
+  html.film-on .film-phase.is-on .film-phase-node {
+    transform: scale(1.2);
+  }
+
+  /* ---------- Reduced motion: the designed still ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .film-push,
+    .film-hero-line-dot,
+    .film-hero-line-rule,
+    .film-hero .film-btn-inner::before,
+    .film-flow-runner,
+    .film-chip-dot::after,
+    .film-status-dot::after,
+    .film-float,
+    .film-turn-log-track {
+      animation: none;
+    }
+    .film-flow-runner {
+      transform: translateX(75cqw);
+    }
+    .film-btn-inner,
+    .film-sticky {
+      transition: none;
+    }
+  }
+}
+
+/* Outside the layer on purpose: the shared `eyebrow` utility sets a tertiary
+   ink that falls just short of AA on the footer band, and utilities outrank
+   component-layer rules. */
+.film-footer .eyebrow,
+.film-footer .text-ink-3 {
+  color: var(--color-ink-2);
+}

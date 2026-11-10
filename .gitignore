@@ -20,3 +20,6 @@ seo-engine/logs/
 
 # Integrate Tap local test database
 .data
+
+# Homepage film: raw generated media (web encodes live in public/media/film)
+public/media/raw/
