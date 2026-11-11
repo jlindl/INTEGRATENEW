@@ -104,6 +104,25 @@
   }
 }
 
+/* Web design portal palette — app/web-design/(portal). Registered here only so
+   Tailwind generates its utilities (bg-neon-500, bg-abyss-raised, ...); the
+   names are its own and nothing else on the site uses them. */
+@theme {
+  --color-abyss: #050208;
+  --color-abyss-raised: #0c0714;
+  --color-abyss-line: #1b1226;
+  --color-neon-50: #f8efff;
+  --color-neon-100: #eed9ff;
+  --color-neon-200: #ddb8ff;
+  --color-neon-300: #c98fff;
+  --color-neon-400: #b25dff;
+  --color-neon-500: #a02bff;
+  --color-neon-600: #8710e8;
+  --color-neon-700: #660bb2;
+  --color-neon-800: #45077b;
+  --color-neon-900: #260545;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Base                                                               */
 /* ------------------------------------------------------------------ */

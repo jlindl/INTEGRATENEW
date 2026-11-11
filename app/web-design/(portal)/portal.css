@@ -1,0 +1,952 @@
+/* ==========================================================================
+   Web design portal — /web-design
+
+   Imported only by app/web-design/(portal)/layout.tsx. Every rule is nested
+   under `.wdp` (the portal's wrapper) and every animation is prefixed
+   `wdp-`, so none of it can reach the rest of the site, even after a
+   client-side navigation keeps this stylesheet loaded.
+   ========================================================================== */
+
+/* Overscroll and the area behind short pages stay dark on this route. */
+html:has(.wdp) {
+  background-color: #050208;
+}
+
+/* --------------------------------------------------------------------------
+   Lenis — the handful of rules from lenis/dist/lenis.css that apply here
+   -------------------------------------------------------------------------- */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+@keyframes wdp-shine-pan {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes wdp-rt-rise {
+  from {
+    transform: translate3d(0, 118%, 0) rotate(5deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes wdp-intro-lift {
+  to {
+    transform: translate3d(0, -101%, 0);
+    visibility: hidden;
+  }
+}
+
+@keyframes wdp-cue-drop {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  60%,
+  100% {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes wdp-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wdp-plume-drift {
+  from {
+    transform: scale(1.06) translate3d(-1.5%, 1%, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(2.5%, -2%, 0);
+  }
+}
+
+@keyframes wdp-grain-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(-3%, 2%, 0);
+  }
+  66% {
+    transform: translate3d(2%, -3%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes wdp-rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@property --badge-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes wdp-badge-spin {
+  to {
+    --badge-angle: 360deg;
+  }
+}
+
+@keyframes wdp-marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes wdp-marquee-scroll-reverse {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes wdp-orb-travel {
+  0%,
+  100% {
+    transform: translate3d(calc(-1 * var(--orb-throw)), 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--orb-throw), 0, 0);
+  }
+}
+
+@keyframes wdp-orb-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 5px rgba(160, 43, 255, 0.18),
+      0 0 26px 6px rgba(160, 43, 255, 0.75);
+  }
+  50% {
+    box-shadow:
+      0 0 0 9px rgba(160, 43, 255, 0.1),
+      0 0 44px 12px rgba(178, 93, 255, 0.95);
+  }
+}
+
+@keyframes wdp-cap-pulse {
+  0%,
+  100% {
+    border-color: rgba(178, 93, 255, 0.85);
+    color: #eed9ff;
+    box-shadow: 0 0 22px -2px rgba(160, 43, 255, 0.8);
+  }
+  45%,
+  55% {
+    border-color: rgba(178, 93, 255, 0.28);
+    color: rgba(238, 217, 255, 0.45);
+    box-shadow: 0 0 0 0 rgba(160, 43, 255, 0);
+  }
+}
+
+@keyframes wdp-iso-wave {
+  0%,
+  100% {
+    transform: translateY(0) scale(0.93);
+  }
+  50% {
+    transform: translateY(-7px) scale(1.07);
+  }
+}
+
+@keyframes wdp-autoplay-fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes wdp-halo-breathe {
+  from {
+    transform: scale(0.92);
+    opacity: 0.75;
+  }
+  to {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes wdp-sheen-sweep {
+    to {
+      left: 130%;
+    }
+  }
+
+.wdp {
+  /* Palette — named so it never collides with the site theme's `ink`. */
+  --color-abyss: #050208;
+  --color-abyss-raised: #0c0714;
+  --color-abyss-line: #1b1226;
+  --color-neon-50: #f8efff;
+  --color-neon-100: #eed9ff;
+  --color-neon-200: #ddb8ff;
+  --color-neon-300: #c98fff;
+  --color-neon-400: #b25dff;
+  --color-neon-500: #a02bff;
+  --color-neon-600: #8710e8;
+  --color-neon-700: #660bb2;
+  --color-neon-800: #45077b;
+  --color-neon-900: #260545;
+
+  /* The portal's own type, without touching the rest of the site. */
+  --font-sans: var(--font-inter-tight), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  background-color: var(--color-abyss);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+
+  & ::selection {
+    background: var(--color-neon-500);
+    color: #ffffff;
+  }
+
+  /* --------------------------------------------------------------------------
+     Display typography
+  
+     One loud voice for every headline: heavy, uppercase, tracked in hard, with
+     lines stacked almost touching. Sizes are fluid against the viewport; the hero
+     is also capped against viewport height so three lines always fit above the
+     fold.
+     -------------------------------------------------------------------------- */
+  
+  .display {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    text-wrap: balance;
+  }
+
+  .display-hero {
+    font-size: clamp(3rem, min(10.2vw, 15svh), 10.75rem);
+  }
+
+  .display-xl {
+    font-size: clamp(2.5rem, 7.4vw, 7.5rem);
+  }
+
+  .display-lg {
+    font-size: clamp(2.25rem, 5.4vw, 5.25rem);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 1.25vw, 1.3rem);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+
+  /* Small mono label used for HUD-style annotations around the big type. */
+  .label-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Hollow type — the counterweight to the solid headlines.
+  
+     Not simply a transparent fill with a stroke: Inter Tight is a variable font
+     whose glyphs are built from overlapping contours, and stroking them draws
+     every internal seam. Instead the stroke is painted first at double width and
+     the glyph is then filled with the surface colour over it, which hides the
+     inner half of the stroke and all the seams with it. `--outline-fill` names
+     that surface when it is not the page ink. */
+  .text-outline {
+    color: var(--outline-fill, var(--color-abyss));
+    -webkit-text-stroke: 3px rgba(221, 184, 255, 0.72);
+    paint-order: stroke fill;
+    /* Looser than the solid headlines: at their tracking the letters touch, and
+       each hollow letter's fill then bites a notch out of its neighbour's edge. */
+    letter-spacing: -0.012em;
+  }
+
+  @supports not (-webkit-text-stroke: 1px #000) {
+    .text-outline {
+      color: rgba(221, 184, 255, 0.72);
+    }
+  }
+
+  /* Neon gradient that pans through the glyphs. The image is two elements wide
+     and starts and ends on the same stop, so sliding it one full width loops
+     with no seam. */
+  .text-shine {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      var(--color-neon-200) 16%,
+      var(--color-neon-400) 38%,
+      var(--color-neon-500) 54%,
+      var(--color-neon-200) 80%,
+      #ffffff 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: wdp-shine-pan 5.5s linear infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Masked word reveal
+  
+     Each word sits in its own clipping box and rises into it. `data-rt="load"`
+     plays on first paint from CSS alone (the hero must not wait for hydration);
+     `data-rt="view"` is released by an IntersectionObserver setting data-shown.
+  
+     The padding/negative-margin pair widens the clip box without moving the
+     layout, so tight tracking and overshooting glyphs are not shaved off.
+     -------------------------------------------------------------------------- */
+  
+  .rt-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0.1em 0.06em 0.14em;
+    margin: -0.1em -0.06em -0.14em;
+  }
+
+  .rt-inner {
+    display: inline-block;
+    transform: translate3d(0, 118%, 0) rotate(5deg);
+    transform-origin: 0% 100%;
+    will-change: transform;
+  }
+
+  [data-rt="view"] .rt-inner {
+    transition: transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(
+      var(--rt-delay, 0ms) + var(--i, 0) * var(--rt-stagger, 55ms)
+    );
+  }
+
+  [data-rt="view"][data-shown="true"] .rt-inner {
+    transform: none;
+  }
+
+  [data-rt="load"] .rt-inner {
+    animation: wdp-rt-rise 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(
+      var(--rt-delay, 0ms) + var(--i, 0) * var(--rt-stagger, 55ms)
+    );
+  }
+
+  /* --------------------------------------------------------------------------
+     Intro curtain
+  
+     Two panels lift off the page on load: ink first, a neon one a beat behind it,
+     so the hero is unveiled with a flash of colour. CSS only — it never waits on
+     JavaScript and never blocks input.
+     -------------------------------------------------------------------------- */
+  
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 95;
+    pointer-events: none;
+  }
+
+  .intro-panel {
+    position: absolute;
+    inset: 0;
+    animation: wdp-intro-lift 900ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  }
+
+  .intro-panel-ink {
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    background: var(--color-abyss);
+    animation-delay: 430ms;
+  }
+
+  .intro-panel-neon {
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      var(--color-neon-400),
+      var(--color-neon-700)
+    );
+    animation-delay: 540ms;
+  }
+
+  .intro-mark {
+    display: flex;
+    overflow: hidden;
+    font-size: clamp(2.25rem, 7vw, 6rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .intro-mark span {
+    display: inline-block;
+    animation: wdp-rt-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 26ms);
+  }
+
+  /* --------------------------------------------------------------------------
+     Scroll cue
+     -------------------------------------------------------------------------- */
+  
+  .scroll-cue-line {
+    position: relative;
+    width: 1px;
+    height: 52px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .scroll-cue-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-neon-300);
+    animation: wdp-cue-drop 1.9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Rotating type badge
+     -------------------------------------------------------------------------- */
+  
+  .spin-slow {
+    animation: wdp-spin-slow 18s linear infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Background layers
+     -------------------------------------------------------------------------- */
+  
+  /* Painted before WebGL takes over (and the permanent look if it never does).
+     Flattened ellipses on the shader's diagonal read as the same silk bands, and
+     the mask fades them out low in the frame exactly as the shader does. */
+  .plume-fallback {
+    background:
+      radial-gradient(
+        58% 17% at 20% 32%,
+        rgba(139, 35, 232, 0.34) 0%,
+        rgba(74, 10, 145, 0.12) 48%,
+        transparent 74%
+      ),
+      radial-gradient(
+        54% 15% at 80% 60%,
+        rgba(178, 93, 255, 0.26) 0%,
+        rgba(74, 10, 145, 0.09) 50%,
+        transparent 76%
+      ),
+      var(--color-abyss);
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 58%,
+      rgba(0, 0, 0, 0.35) 82%,
+      transparent 100%
+    );
+    animation: wdp-plume-drift 26s ease-in-out infinite alternate;
+  }
+
+  /* The shader canvas fades in on its first painted frame. */
+  .plume-canvas {
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+
+  .plume-canvas[data-ready="true"] {
+    opacity: 1;
+  }
+
+  /* Faint dot matrix across the whole field — crisper as CSS than in the shader.
+     It should stay readable in the black areas, so no centre mask; just a soft
+     fade at the very edges. */
+  .dot-grid {
+    background-image: radial-gradient(
+      rgba(221, 184, 255, 0.22) 1px,
+      transparent 1px
+    );
+    background-size: 30px 30px;
+    mask-image: radial-gradient(115% 105% at 50% 50%, #000 55%, transparent 100%);
+  }
+
+  /* Film grain over everything — kills gradient banding on wide screens. */
+  .wdp-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    animation: wdp-grain-shift 700ms steps(3) infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Entrance choreography — each hero element eases up in sequence
+     -------------------------------------------------------------------------- */
+  
+  .rise {
+    opacity: 0;
+    animation: wdp-rise-in 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Slow shimmer that travels along the badge border. */
+  .badge-glow::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--badge-angle, 0deg),
+      transparent 0deg,
+      var(--color-neon-400) 60deg,
+      var(--color-neon-200) 90deg,
+      transparent 170deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: wdp-badge-spin 6s linear infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Scroll reveal
+  
+     Elements start displaced and are released when an IntersectionObserver adds
+     `data-shown`. Kept in CSS (rather than animating from JS) so the only work on
+     the main thread is a class flip.
+     -------------------------------------------------------------------------- */
+  
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 26px), 0) scale(var(--reveal-s, 1));
+    transition:
+      opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal="left"] {
+    transform: translate3d(-32px, 0, 0);
+  }
+
+  [data-reveal="right"] {
+    transform: translate3d(32px, 0, 0);
+  }
+
+  [data-reveal="zoom"] {
+    --reveal-y: 18px;
+    --reveal-s: 0.96;
+  }
+
+  [data-reveal][data-shown="true"] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  /* --------------------------------------------------------------------------
+     Hover behaviour
+  
+     Only bound on devices that actually hover — on touch these would stick on
+     after a tap.
+     -------------------------------------------------------------------------- */
+  
+  @media (hover: hover) {
+    .lift {
+      transition:
+        transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 400ms ease,
+        background-color 400ms ease,
+        box-shadow 400ms ease;
+    }
+  
+    .lift:hover {
+      transform: translateY(-6px);
+    }
+  
+    /* Radial highlight that tracks the pointer. --mx/--my are written by JS on
+       pointermove; the fallback keeps it centred before the first move. */
+    .spotlight::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        340px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(160, 43, 255, 0.16),
+        transparent 62%
+      );
+      opacity: 0;
+      transition: opacity 400ms ease;
+      pointer-events: none;
+    }
+  
+    .spotlight:hover::after {
+      opacity: 1;
+    }
+  
+    /* Light sweeping across a solid button. */
+    .sheen {
+      position: relative;
+      overflow: hidden;
+    }
+  
+    .sheen::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -60%;
+      width: 45%;
+      background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255, 255, 255, 0.55),
+        transparent
+      );
+      transform: skewX(-18deg);
+      pointer-events: none;
+    }
+  
+    .sheen:hover::before {
+      animation: wdp-sheen-sweep 850ms ease-out;
+    }
+  
+    
+  
+    /* Underline that grows from the left. */
+    .underline-grow {
+      position: relative;
+    }
+  
+    .underline-grow::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      height: 1px;
+      width: 100%;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  
+    .underline-grow:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Scroll progress
+     -------------------------------------------------------------------------- */
+  
+  .scroll-progress {
+    transform-origin: left;
+    transform: scaleX(var(--progress, 0));
+  }
+
+  /* --------------------------------------------------------------------------
+     Logo marquee
+     -------------------------------------------------------------------------- */
+  
+  .marquee {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
+  }
+
+  /* Two identical copies of the list sit side by side; sliding exactly one copy
+     width lands back on an identical frame, so the loop has no seam. Each item
+     carries its own trailing margin (rather than a flex `gap`) to keep that
+     halfway point exact. */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: wdp-marquee-scroll 42s linear infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Second row runs the other way so the strip reads as movement, not drift. */
+  .marquee-track-reverse {
+    animation-name: wdp-marquee-scroll-reverse;
+    animation-duration: 56s;
+  }
+
+  /* --------------------------------------------------------------------------
+     Orb slider
+     -------------------------------------------------------------------------- */
+  
+  /* Travel distance lives here rather than inline, so it can shrink with the
+     track and never let the orb overlap an end cap. */
+  .orb-track {
+    --orb-throw: 62px;
+  }
+
+  @media (min-width: 640px) {
+    .orb-track {
+      --orb-throw: 78px;
+    }
+  }
+
+  .orb-travel {
+    animation: wdp-orb-travel 4.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  .orb-pulse {
+    animation: wdp-orb-pulse 2.3s ease-in-out infinite;
+  }
+
+  /* End caps brighten as the orb arrives. Same 4.6s clock as the travel, with the
+     right cap running half a cycle behind so the two alternate. */
+  .cap-pulse {
+    animation: wdp-cap-pulse 4.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  .cap-pulse-late {
+    animation-delay: -2.3s;
+  }
+
+  /* --------------------------------------------------------------------------
+     Isometric lattice
+     -------------------------------------------------------------------------- */
+  
+  /* Each node runs the same wave; the per-node animation-delay is set inline from
+     its lattice coordinate, which is what turns it into a diagonal ripple. */
+  .iso-node {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wdp-iso-wave 3.8s ease-in-out infinite;
+  }
+
+  /* --------------------------------------------------------------------------
+     Morphing device stage
+     -------------------------------------------------------------------------- */
+  
+  /* The frame is authored at a fixed 560x430 and scaled to fit. Scale and stage
+     height move together here, because a transform contributes nothing to layout
+     height — the stage has to reserve the room itself. */
+  .device-stage {
+    --device-scale: 0.46;
+    height: 230px;
+  }
+
+  @media (min-width: 480px) {
+    .device-stage {
+      --device-scale: 0.6;
+      height: 285px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .device-stage {
+      --device-scale: 0.8;
+      height: 375px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .device-stage {
+      --device-scale: 1;
+      height: 470px;
+    }
+  }
+
+  .device-scale {
+    transform: scale(var(--device-scale));
+    transform-origin: center;
+  }
+
+  /* --------------------------------------------------------------------------
+     Capability list autoplay indicator
+     -------------------------------------------------------------------------- */
+  
+  /* Fills top-to-bottom over one autoplay tick. Remounted on each change (via a
+     React key) so it restarts, and frozen while the list is being hovered. */
+  .autoplay-bar {
+    transform-origin: top;
+    animation: wdp-autoplay-fill var(--autoplay-duration, 4500ms) linear forwards;
+  }
+
+  .autoplay-bar[data-paused="true"] {
+    animation-play-state: paused;
+  }
+
+  .halo-breathe {
+    animation: wdp-halo-breathe 7s ease-in-out infinite alternate;
+  }
+
+  /* --------------------------------------------------------------------------
+     Work rail
+  
+     Cards are a fixed width per breakpoint (--w), and the screenshot inside is
+     16:10 at that width — so the card's height is known at every size and the
+     whole thing is guaranteed to fit the pinned, one-screen-tall stage.
+     -------------------------------------------------------------------------- */
+  
+  .work-card {
+    --w: 300px;
+    width: var(--w);
+  }
+
+  @media (min-width: 640px) {
+    .work-card {
+      --w: 460px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .work-card {
+      --w: 600px;
+    }
+  }
+
+  @media (min-width: 1536px) and (min-height: 900px) {
+    .work-card {
+      --w: 700px;
+    }
+  }
+
+  /* Short laptop screens: the card has to fit under the header with room for
+     the progress rail, so it gives up width before it gives up height. */
+  @media (min-width: 1024px) and (max-height: 780px) {
+    .work-card {
+      --w: 500px;
+    }
+  }
+
+  .work-shot {
+    width: var(--w);
+    aspect-ratio: 16 / 10;
+  }
+
+  /* The hollow index numeral fills with neon when its card is hovered. Written
+     here rather than as a utility because `.text-outline` is unlayered and would
+     win over one. */
+  .work-index {
+    transition:
+      color 500ms ease,
+      -webkit-text-stroke-color 500ms ease;
+  }
+
+  @media (hover: hover) {
+    .group:hover .work-index {
+      color: var(--color-neon-400);
+      -webkit-text-stroke-color: var(--color-neon-400);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Reduced motion — hold everything still, keep every element visible
+     -------------------------------------------------------------------------- */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .plume-fallback,
+    .wdp-grain,
+    .badge-glow::before,
+    .marquee-track,
+    .orb-travel,
+    .orb-pulse,
+    .cap-pulse,
+    .iso-node,
+    .halo-breathe,
+    .text-shine,
+    .spin-slow,
+    .scroll-cue-line::after,
+    .animate-ping {
+      animation: none;
+    }
+  
+    /* No curtain at all — the page is simply there. */
+    .intro {
+      display: none;
+    }
+  
+    /* Headline words sit in place rather than rising into it. */
+    .rt-inner,
+    [data-rt="view"] .rt-inner,
+    [data-rt="load"] .rt-inner {
+      transform: none;
+      transition: none;
+      animation: none;
+    }
+  
+    /* Hold the indicator full rather than empty — it never advances now. */
+    .autoplay-bar {
+      animation: none;
+      transform: scaleY(1);
+    }
+  
+    .rise {
+      opacity: 1;
+      animation: none;
+      transform: none;
+    }
+  
+    /* Reveals resolve instantly — content must never depend on motion to appear. */
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  
+    .lift:hover {
+      transform: none;
+    }
+  
+    .sheen:hover::before {
+      animation: none;
+    }
+  
+    /* The marquee stops scrolling, so let it scroll by hand instead. */
+    .marquee {
+      overflow-x: auto;
+    }
+  }
+}
