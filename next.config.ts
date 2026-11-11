@@ -18,7 +18,15 @@ const nextConfig: NextConfig = {
       "highest-roi-automation",
       "ai-agents-vs-simple-automation",
       "bespoke-vs-off-the-shelf",
-    ].map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true }));
+    ]
+      .map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true }))
+      .concat([
+        // Old-site URLs Google still requests (Search Console 404 and
+        // "crawled, not indexed" reports, Nov 2026).
+        { source: "/about", destination: "/", permanent: true },
+        { source: "/insights", destination: "/blog", permanent: true },
+        { source: "/insights/:path*", destination: "/blog", permanent: true },
+      ]);
   },
 };
 
