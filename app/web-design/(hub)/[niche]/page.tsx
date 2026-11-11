@@ -7,6 +7,24 @@ import { ContactBand } from "@/components/web-design/ContactBand";
 import { allSlugs, getNiche } from "@/lib/webDesignData";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { webDesignServiceGraph } from "@/lib/schema";
+import { NicheFaq, nicheFaqItems, nicheFaqJsonLd } from "@/components/web-design/NicheFaq";
+import { getAllPosts } from "@/lib/blog";
+
+/** Search-led meta description, built only from pricing-page facts. */
+function nicheDescription(name: string, hasDemo: boolean): string {
+  const trade = name.toLowerCase();
+  return `Web design for ${trade} across the UK. Mobile-first websites from a £200 build fee plus £30 a month, hosting and edits included.${hasDemo ? " See the live demo." : ""}`;
+}
+
+/** Blog guides written for this trade, e.g. "websites-for-electricians-...". */
+function relatedPosts(slug: string) {
+  const key = slug.replace(/s$/, "");
+  return getAllPosts()
+    .filter((p) => p.slug.includes(key))
+    .sort((a, b) => Number(b.slug.startsWith("websites-for")) - Number(a.slug.startsWith("websites-for")))
+    .slice(0, 4)
+    .map((p) => ({ slug: p.slug, title: p.title }));
+}
 
 /**
  * The niche detail template. One dynamic route serves every case study — adding
@@ -31,10 +49,12 @@ export async function generateMetadata({
   const niche = getNiche(slug);
   if (!niche) return { title: "Not found | Integrate Web Design" };
 
+  const base = `Web design for ${niche.name.toLowerCase()}`;
+  const long = `${base} | Websites from £200 | Integrate`;
   return {
-    // Keyword-first title, e.g. "Web design for plumbers | Integrate".
-    title: `Web design for ${niche.name.toLowerCase()} | Integrate`,
-    description: niche.positioning,
+    // Keyword-first title, e.g. "Web design for plumbers | Websites from £200 | Integrate".
+    title: { absolute: long.length <= 62 ? long : `${base} | Integrate` },
+    description: nicheDescription(niche.name, Boolean(niche.demo)),
     alternates: { canonical: `/web-design/${niche.slug}` },
   };
 }
@@ -47,6 +67,7 @@ export default async function NicheDetailPage({
   const { niche: slug } = await params;
   const niche = getNiche(slug);
   if (!niche) notFound();
+  const faq = nicheFaqItems(niche);
 
   return (
     <>
@@ -54,11 +75,13 @@ export default async function NicheDetailPage({
         data={webDesignServiceGraph({
           slug: niche.slug,
           name: `Web design for ${niche.name.toLowerCase()}`,
-          description: niche.positioning,
+          description: nicheDescription(niche.name, false),
         })}
       />
+      <JsonLd data={nicheFaqJsonLd(faq)} />
       <NicheDetailHero niche={niche} />
       <NicheDetailContent niche={niche} />
+      <NicheFaq niche={niche} items={faq} related={relatedPosts(niche.slug)} />
       <NichePager slug={niche.slug} />
       <ContactBand nicheName={niche.singular} />
     </>
