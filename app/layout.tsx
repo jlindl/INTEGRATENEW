@@ -41,9 +41,9 @@ const plexMono = localFont({
 export const metadata: Metadata = {
   // Resolves relative OG images and canonicals to absolute URLs.
   metadataBase: new URL(SITE_URL),
-  title: "Integrate | The strategic AI partner for high-growth B2B",
+  title: "Integrate | AI automation and websites for UK trades",
   description:
-    "We design, deploy, and manage bespoke AI systems that automate revenue operations, so your team can focus on what only humans can do.",
+    "Integrate builds AI automation, lead generation and websites for UK trades and service businesses. Missed calls answered, quotes sent, jobs booked.",
 };
 
 export default function RootLayout({
