@@ -7,7 +7,9 @@ import { META_PIXEL_ID, normalisePhone } from "@/lib/metaPixel";
  * tracking limits stop the pixel. The browser and server events share an
  * event_id, so Meta counts each lead once.
  *
- * Only sent for visitors who accepted cookies (the form passes consent: true).
+ * Sent for visitors who accepted cookies (the form passes consent: true), and
+ * on the /trades form also for visitors who made no cookie choice (serverLead:
+ * true, no cookies used). Never sent for a visitor who clicked "Reject".
  * Does nothing until META_CAPI_TOKEN is set in Vercel. Never throws: a failure
  * here is logged and the lead still goes to GoHighLevel as normal.
  *
@@ -19,6 +21,8 @@ import { META_PIXEL_ID, normalisePhone } from "@/lib/metaPixel";
 
 export type MetaClientContext = {
   consent?: boolean;
+  /** No cookie choice made, but the form allows a cookieless server-side lead. */
+  serverLead?: boolean;
   eventId?: string;
   eventSourceUrl?: string;
   fbp?: string;
@@ -41,7 +45,20 @@ const clip = (v: unknown, max = 500) => (typeof v === "string" && v.trim() ? v.t
 export function readMetaContext(raw: unknown): MetaClientContext | undefined {
   if (!raw || typeof raw !== "object") return undefined;
   const r = raw as Record<string, unknown>;
-  if (r.consent !== true) return { consent: false };
+  if (r.consent !== true) {
+    // Cookieless lead (no cookie choice made, /trades form): no _fbp, only
+    // the click id that came in on the ad URL.
+    if (r.serverLead === true) {
+      return {
+        consent: false,
+        serverLead: true,
+        eventId: clip(r.eventId, 100),
+        eventSourceUrl: clip(r.eventSourceUrl, 1000),
+        fbc: clip(r.fbc, 500),
+      };
+    }
+    return { consent: false };
+  }
   return {
     consent: true,
     eventId: clip(r.eventId, 100),
@@ -54,8 +71,8 @@ export function readMetaContext(raw: unknown): MetaClientContext | undefined {
 export async function sendMetaLead(req: Request, lead: LeadForMeta, ctx: MetaClientContext | undefined) {
   const token = process.env.META_CAPI_TOKEN?.trim();
   if (!token) return;
-  if (!ctx?.consent || !ctx.eventId) {
-    console.log("[meta-capi] skipped: visitor did not accept cookies");
+  if (!(ctx?.consent || ctx?.serverLead) || !ctx.eventId) {
+    console.log("[meta-capi] skipped: visitor rejected cookies or form does not allow a cookieless lead");
     return;
   }
 

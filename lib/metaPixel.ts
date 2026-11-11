@@ -82,17 +82,40 @@ function readCookie(name: string): string | undefined {
 }
 
 /**
- * What the server needs to send the matching Conversions API event. Only
- * filled in when the visitor accepted cookies; otherwise consent is false and
- * the server sends nothing to Meta.
+ * What the server needs to send the matching Conversions API event.
+ *
+ * Default: only filled in when the visitor accepted cookies; otherwise
+ * consent is false and the server sends nothing to Meta.
+ *
+ * With `leadWithoutCookies` (the /trades ad landing form), a visitor who has
+ * not made a cookie choice still has their submitted lead sent to Meta from
+ * the server, so the ads can optimise. No cookies are read or set for them:
+ * the only browser value used is the fbclid already in the ad's URL. A
+ * visitor who clicked "Reject" is never sent. The form shows a notice about
+ * this next to its submit button, and the privacy policy describes it.
  */
-export function metaServerContext(eventId: string) {
-  if (!metaConsented()) return { consent: false as const };
+export function metaServerContext(eventId: string, opts: { leadWithoutCookies?: boolean } = {}) {
+  const fbclid = new URLSearchParams(window.location.search).get("fbclid");
+  if (!metaConsented()) {
+    let choice: string | null = null;
+    try {
+      choice = window.localStorage.getItem("cookie-consent");
+    } catch {
+      choice = null;
+    }
+    if (!opts.leadWithoutCookies || choice === "denied") return { consent: false as const };
+    return {
+      consent: false as const,
+      serverLead: true as const,
+      eventId,
+      eventSourceUrl: window.location.href,
+      fbc: fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined,
+    };
+  }
   let fbc = readCookie("_fbc");
-  if (!fbc) {
+  if (!fbc && fbclid) {
     // The pixel normally writes _fbc from ?fbclid=; build it if it hasn't yet.
-    const fbclid = new URLSearchParams(window.location.search).get("fbclid");
-    if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
+    fbc = `fb.1.${Date.now()}.${fbclid}`;
   }
   return {
     consent: true as const,

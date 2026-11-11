@@ -173,7 +173,7 @@ export function TradesLeadForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          meta: metaServerContext(metaEventId),
+          meta: metaServerContext(metaEventId, { leadWithoutCookies: true }),
           name,
           firstName,
           lastName: rest.join(" ") || undefined,
@@ -190,7 +190,9 @@ export function TradesLeadForm() {
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
       track("generate_lead", { form: "trades_lead", source: SOURCE, trade, job_value: jobValue });
-      // The conversion the Meta ads optimise for (only sent if cookies were accepted).
+      // Browser copy of the Lead the ads optimise for (only if cookies were accepted).
+      // The server sends it either way unless cookies were rejected; the shared
+      // event id stops Meta counting it twice.
       metaSetUserData({ email: contact.email, phone: contact.phone, firstName, lastName: rest.join(" ") });
       metaTrack("Lead", { content_name: SOURCE, content_category: trade || "not given" }, metaEventId);
       interacted.current = true;
@@ -325,6 +327,11 @@ export function TradesLeadForm() {
                   <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
                 )}
               </button>
+              <p className="text-[0.78rem] leading-relaxed text-ink-3">
+                We use your details to arrange your call. We also share them with Meta in scrambled (hashed) form to
+                measure our ads, unless you&apos;ve rejected cookies.{" "}
+                <a href="/legal/privacy" className="underline underline-offset-2 hover:text-ink">Privacy Policy</a>
+              </p>
             </div>
           )}
 
