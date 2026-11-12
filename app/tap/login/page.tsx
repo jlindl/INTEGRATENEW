@@ -18,8 +18,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         </p>
         <p>
           Forgotten your password? Email{" "}
-          <a className="font-medium text-ink underline underline-offset-2" href="mailto:hello@integrate.agency?subject=Tap%20password%20reset">
-            hello@integrate.agency
+          <a className="font-medium text-ink underline underline-offset-2" href="mailto:sales@integrate-tech.co.uk?subject=Tap%20password%20reset">
+            sales@integrate-tech.co.uk
           </a>{" "}
           and we&apos;ll reset it.
         </p>
