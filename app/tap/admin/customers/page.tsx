@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { AdminTabs } from "@/components/tap/AdminTabs";
 import { PageTitle, TapShell, inputClass, secondaryButton } from "@/components/tap/ui";
-import { adminLogoutAction, plateAction } from "@/lib/tap/admin-actions";
+import { adminLogoutAction, deleteCustomerAction, plateAction } from "@/lib/tap/admin-actions";
 import { isAdmin } from "@/lib/tap/auth";
 import { getStore } from "@/lib/tap/store";
 
@@ -91,7 +91,20 @@ export default async function Customers({ searchParams }: { searchParams: Promis
                     {b.phone && <a className="block" href={`tel:${b.phone}`}>{b.phone}</a>}
                     {b.marketingConsent && <span className="mt-1 inline-block rounded-full bg-[#edf7f0] px-1.5 text-[0.74rem] text-[#22603a]">Marketing OK</span>}
                   </td>
-                  <td className="px-4 py-3 text-[0.8rem] text-ink-3">{new Date(b.createdAt).toLocaleDateString("en-GB")}</td>
+                  <td className="px-4 py-3 text-[0.8rem] text-ink-3">
+                    {new Date(b.createdAt).toLocaleDateString("en-GB")}
+                    <details className="mt-2">
+                      <summary className={`${pill} inline-block cursor-pointer list-none text-[#8a2e22]`}>Remove</summary>
+                      <form action={deleteCustomerAction} className="mt-2 w-44 rounded-xl border border-line bg-paper p-2.5 text-ink-2">
+                        <input type="hidden" name="id" value={b.id} />
+                        <p className="text-[0.74rem] leading-snug">
+                          Deletes {b.name} and their details.{" "}
+                          {plates.length ? `Their ${plates.length === 1 ? "plate goes" : `${plates.length} plates go`} back to unclaimed stock.` : "They have no plates."}
+                        </p>
+                        <button className="mt-2 w-full rounded-full bg-[#8a2e22] px-2.5 py-1.5 text-[0.74rem] font-medium text-paper">Yes, remove</button>
+                      </form>
+                    </details>
+                  </td>
                   <td className="px-4 py-3">
                     {!plates.length && <span className="text-ink-3">No plates (all released)</span>}
                     <ul className="space-y-2">

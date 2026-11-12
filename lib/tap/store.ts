@@ -30,6 +30,8 @@ export interface TapStore {
   listBusinesses(): Promise<Business[]>;
   insertBusiness(b: Business): Promise<void>;
   updateBusiness(id: string, patch: Partial<Business>): Promise<Business | null>;
+  /** Remove a business for good. Release its plates first. */
+  deleteBusiness(id: string): Promise<void>;
 }
 
 export class StoreNotConfiguredError extends Error {
@@ -160,6 +162,12 @@ class FileStore implements TapStore {
       if (!b) return null;
       d.businesses[id] = { ...b, ...patch, id, updatedAt: new Date().toISOString() };
       return d.businesses[id];
+    });
+  }
+
+  async deleteBusiness(id: string) {
+    await this.mutate((d) => {
+      delete d.businesses[id];
     });
   }
 }

@@ -224,4 +224,9 @@ export class SupabaseStore implements TapStore {
     if (error) fail("updateBusiness", error);
     return data ? businessFromRow(data) : null;
   }
+
+  async deleteBusiness(id: string) {
+    const { error } = await this.db.from("tap_businesses").delete().eq("id", id);
+    if (error) fail("deleteBusiness", error);
+  }
 }

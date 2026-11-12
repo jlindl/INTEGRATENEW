@@ -120,3 +120,27 @@ export async function lookupScanned(url: string | null, serial: string | null) {
   const business = plate.businessId ? await store.getBusiness(plate.businessId) : null;
   return { code: plate.code, status: plate.status, batch: plate.batch, business: business?.name ?? null, taps: plate.taps };
 }
+
+/**
+ * Remove a customer (wrong sign-up, refund, or they asked to be deleted).
+ * Their plates go back to unclaimed stock first, then the account, page,
+ * links and contact details are deleted. Their login stops working.
+ */
+export async function deleteCustomerAction(fd: FormData) {
+  await requireAdmin();
+  const id = String(fd.get("id") ?? "");
+  const store = getStore();
+  if (!id || !(await store.getBusiness(id))) return;
+  for (const p of await store.listPlates({ businessId: id })) {
+    const settled = p.encodedAt ? "ready" : "unencoded";
+    await store.updatePlate(p.code, {
+      status: p.status === "disabled" ? "disabled" : settled,
+      businessId: null,
+      label: "",
+      claimedAt: null,
+      failedClaims: 0,
+    });
+  }
+  await store.deleteBusiness(id);
+  revalidatePath("/tap/admin", "layout");
+}
