@@ -57,7 +57,7 @@ export async function generatePlates(_: FormState, fd: FormData): Promise<FormSt
     });
   }
   await store.insertPlates(plates);
-  revalidatePath("/tap/admin");
+  revalidatePath("/tap/admin", "layout");
   return { ok: `Created ${count} plates in "${batch}".` };
 }
 
@@ -75,7 +75,7 @@ export async function plateAction(fd: FormData) {
     // Detach from the business so it can be claimed again (e.g. resold or wrong account).
     await store.updatePlate(code, { status: settled, businessId: null, label: "", claimedAt: null, failedClaims: 0 });
   } else if (action === "unlock-claims") await store.updatePlate(code, { failedClaims: 0 });
-  revalidatePath("/tap/admin");
+  revalidatePath("/tap/admin", "layout");
 }
 
 /* ------------------------------------------------------------- encoder -- */
