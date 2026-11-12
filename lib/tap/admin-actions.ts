@@ -75,6 +75,8 @@ export async function plateAction(fd: FormData) {
     // Detach from the business so it can be claimed again (e.g. resold or wrong account).
     await store.updatePlate(code, { status: settled, businessId: null, label: "", claimedAt: null, failedClaims: 0 });
   } else if (action === "unlock-claims") await store.updatePlate(code, { failedClaims: 0 });
+  else if (action === "amazon-on") await store.updatePlate(code, { sentToAmazonAt: new Date().toISOString() });
+  else if (action === "amazon-off") await store.updatePlate(code, { sentToAmazonAt: null });
   revalidatePath("/tap/admin", "layout");
 }
 
@@ -142,5 +144,18 @@ export async function deleteCustomerAction(fd: FormData) {
     });
   }
   await store.deleteBusiness(id);
+  revalidatePath("/tap/admin", "layout");
+}
+
+/** Tick "Sent to Amazon" on every plate in a list (the ones currently shown). */
+export async function bulkAmazonAction(fd: FormData) {
+  await requireAdmin();
+  const codes = String(fd.get("codes") ?? "").split(",").map(normaliseCode).filter(Boolean).slice(0, 500);
+  const store = getStore();
+  const now = new Date().toISOString();
+  for (const code of codes) {
+    const p = await store.getPlate(code);
+    if (p && !p.sentToAmazonAt) await store.updatePlate(code, { sentToAmazonAt: now });
+  }
   revalidatePath("/tap/admin", "layout");
 }

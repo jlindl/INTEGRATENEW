@@ -35,6 +35,7 @@ create table if not exists tap_plates (
   last_tap_at timestamptz,
   daily_taps jsonb not null default '{}',
   failed_claims integer not null default 0,
+  sent_to_amazon_at timestamptz,
   created_at timestamptz not null default now()
 );
 

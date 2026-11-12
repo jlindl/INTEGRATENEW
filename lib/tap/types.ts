@@ -39,6 +39,8 @@ export type Plate = {
   /** Wrong setup-code attempts, to stop guessing. */
   failedClaims: number;
   createdAt: string;
+  /** When admin ticked "Sent to Amazon" (stock shipped in for FBA), or null. */
+  sentToAmazonAt?: string | null;
 };
 
 export type LinkKind =

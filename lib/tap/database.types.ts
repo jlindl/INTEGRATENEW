@@ -91,6 +91,7 @@ export type Database = {
           setup_code: string
           status: string
           taps: number
+          sent_to_amazon_at: string | null
         }
         Insert: {
           batch: string
@@ -108,6 +109,7 @@ export type Database = {
           setup_code: string
           status?: string
           taps?: number
+          sent_to_amazon_at?: string | null
         }
         Update: {
           batch?: string
@@ -125,6 +127,7 @@ export type Database = {
           setup_code?: string
           status?: string
           taps?: number
+          sent_to_amazon_at?: string | null
         }
         Relationships: [
           {

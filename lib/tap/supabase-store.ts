@@ -32,6 +32,7 @@ function plateFromRow(r: TapPlateRow): Plate {
     dailyTaps: (r.daily_taps ?? {}) as Record<string, number>,
     failedClaims: r.failed_claims,
     createdAt: r.created_at,
+    sentToAmazonAt: r.sent_to_amazon_at ?? null,
   };
 }
 
@@ -51,6 +52,7 @@ const PLATE_COLUMNS = {
   dailyTaps: "daily_taps",
   failedClaims: "failed_claims",
   createdAt: "created_at",
+  sentToAmazonAt: "sent_to_amazon_at",
 } as const satisfies Record<keyof Plate, keyof TapPlateRow>;
 
 function plateToRow(p: Partial<Plate>): TapPlateUpdate {

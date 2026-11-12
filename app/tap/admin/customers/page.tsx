@@ -113,6 +113,7 @@ export default async function Customers({ searchParams }: { searchParams: Promis
                           <span className="font-mono">{p.code}</span>
                           {p.label && <span className="text-[0.78rem] text-ink-3">{p.label}</span>}
                           <span className="text-[0.78rem] text-ink-3">{p.taps} taps</span>
+                          {p.sentToAmazonAt && <span className="rounded-full bg-[#fff4e0] px-2 text-[0.72rem] text-[#8a5a00]">via Amazon</span>}
                           {p.status === "disabled" && <span className="rounded-full bg-[#fbeeec] px-2 text-[0.72rem] text-[#8a2e22]">disabled</span>}
                           <form action={plateAction} className="ml-auto flex gap-1.5">
                             <input type="hidden" name="code" value={p.code} />

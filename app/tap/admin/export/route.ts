@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
   const batch = req.nextUrl.searchParams.get("batch") || undefined;
   const plates = (await getStore().listPlates(batch ? { batch } : {})).sort((a, b) => a.code.localeCompare(b.code));
   const rows = [
-    ["code", "plate_url", "batch", "status", "serial", "taps"],
+    ["code", "plate_url", "batch", "status", "serial", "taps", "sent_to_amazon"],
     ...plates.map((p) => [
       p.code,
       plateUrl(p.code),
@@ -60,6 +60,7 @@ export async function GET(req: NextRequest) {
       p.status,
       p.serial ?? "",
       p.taps,
+      p.sentToAmazonAt ? p.sentToAmazonAt.slice(0, 10) : "",
     ]),
   ];
   return csvResponse(rows, `tap-plates-${(batch ?? "all").replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.csv`);
