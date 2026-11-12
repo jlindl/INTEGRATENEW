@@ -68,6 +68,70 @@ export function readMetaContext(raw: unknown): MetaClientContext | undefined {
   };
 }
 
+/**
+ * Cookieless PageView for a visitor who landed on /trades from a Meta ad and
+ * has not made a cookie choice yet (so the browser pixel is not loaded). Uses
+ * only the fbclid from the ad URL plus the request's IP and user agent, the
+ * same basis as the cookieless /trades lead. Lets Meta see that the ad click
+ * reached the page. Never sent for a visitor who clicked "Reject" (the browser
+ * checks that before calling /api/meta-pageview).
+ */
+export async function sendMetaPageView(
+  req: Request,
+  ctx: { eventId: string; eventSourceUrl: string; fbc: string },
+) {
+  const token = process.env.META_CAPI_TOKEN?.trim();
+  if (!token) return { sent: false as const, reason: "no token" };
+
+  const userData: Record<string, unknown> = { fbc: ctx.fbc };
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || undefined;
+  const ua = req.headers.get("user-agent") || undefined;
+  if (ip) userData.client_ip_address = ip;
+  if (ua) userData.client_user_agent = ua;
+
+  const body: Record<string, unknown> = {
+    data: [
+      {
+        event_name: "PageView",
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: ctx.eventId,
+        action_source: "website",
+        event_source_url: ctx.eventSourceUrl,
+        user_data: userData,
+      },
+    ],
+  };
+  const testCode = process.env.META_CAPI_TEST_CODE?.trim();
+  if (testCode) body.test_event_code = testCode;
+
+  const version = process.env.META_GRAPH_VERSION?.trim() || "v24.0";
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5_000);
+  try {
+    const res = await fetch(
+      `https://graph.facebook.com/${version}/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(token)}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      },
+    );
+    const text = await res.text().catch(() => "");
+    if (res.ok) {
+      console.log(`[meta-capi] PageView sent (event ${ctx.eventId}) ${text.slice(0, 120)}`);
+      return { sent: true as const };
+    }
+    console.error(`[meta-capi] PageView: Meta responded ${res.status}: ${text.slice(0, 300)}`);
+    return { sent: false as const, reason: `meta ${res.status}` };
+  } catch (err) {
+    console.error("[meta-capi] PageView request failed:", err instanceof Error ? err.message : err);
+    return { sent: false as const, reason: "request failed" };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function sendMetaLead(req: Request, lead: LeadForMeta, ctx: MetaClientContext | undefined) {
   const token = process.env.META_CAPI_TOKEN?.trim();
   if (!token) return;
