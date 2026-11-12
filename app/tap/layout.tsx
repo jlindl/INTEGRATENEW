@@ -24,7 +24,7 @@ export default function TapLayout({ children }: Readonly<{ children: React.React
           <div className="mt-6">
             <Notice tone="info">
               Plate setup is being switched on. If you have a plate to set up, email{" "}
-              <a className="underline" href="mailto:hello@integrate.agency">hello@integrate.agency</a> and we&apos;ll
+              <a className="underline" href="mailto:sales@integrate-tech.co.uk">sales@integrate-tech.co.uk</a> and we&apos;ll
               do it for you.
             </Notice>
           </div>
