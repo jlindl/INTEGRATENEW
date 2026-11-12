@@ -328,8 +328,7 @@ export function TradesLeadForm() {
                 )}
               </button>
               <p className="text-[0.78rem] leading-relaxed text-ink-3">
-                We use your details to arrange your call. We also share them with Meta in scrambled (hashed) form to
-                measure our ads, unless you&apos;ve rejected cookies.{" "}
+                We use your details to arrange your call.{" "}
                 <a href="/legal/privacy" className="underline underline-offset-2 hover:text-ink">Privacy Policy</a>
               </p>
             </div>
