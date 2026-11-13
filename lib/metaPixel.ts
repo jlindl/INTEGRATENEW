@@ -91,8 +91,8 @@ function readCookie(name: string): string | undefined {
  * not made a cookie choice still has their submitted lead sent to Meta from
  * the server, so the ads can optimise. No cookies are read or set for them:
  * the only browser value used is the fbclid already in the ad's URL. A
- * visitor who clicked "Reject" is never sent. The form shows a notice about
- * this next to its submit button, and the privacy policy describes it.
+ * visitor who clicked "Reject" is never sent. The privacy policy (linked under
+ * the form's submit button) describes it.
  */
 export function metaServerContext(eventId: string, opts: { leadWithoutCookies?: boolean } = {}) {
   const fbclid = new URLSearchParams(window.location.search).get("fbclid");
