@@ -1,0 +1,3108 @@
+/* ==========================================================================
+   Emberline Heating (immersive demo). Everything is scoped under .eh and
+   prefixed eh-. Finished state first; scroll-driven states sit under
+   [data-imm="on"] and read --p from the nearest [data-scrub] ancestor.
+
+   The idea: scrolling turns the heating up. The page starts on frost navy
+   and ends on ember.
+   ========================================================================== */
+
+.eh {
+  --eh-navy: #0f1c2b;
+  --eh-navy-2: #162739;
+  --eh-navy-3: #1e354b;
+  --eh-ice: #cfe3f5;
+  --eh-ice-2: #9db6cd;
+  --eh-ember: #ff7a2f;
+  --eh-ember-ink: #a83c08;
+  --eh-amber: #ffb347;
+  --eh-cream: #fff6ea;
+  --eh-peach: #ffe6c8;
+  --eh-slate: #42566b;
+  --eh-line: rgb(207 227 245 / 0.16);
+  --eh-line-ink: rgb(15 28 43 / 0.13);
+  --eh-sans: var(--font-eh-sans), system-ui, sans-serif;
+  --eh-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --eh-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --eh-head: 3.75rem;
+  position: relative;
+  background: var(--eh-navy);
+  color: var(--eh-ice);
+  font-family: var(--eh-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.eh ::selection {
+  background: var(--eh-ember);
+  color: var(--eh-navy);
+}
+.eh :focus-visible {
+  outline: 2px solid var(--eh-ember);
+  outline-offset: 3px;
+}
+.eh-sec--cream :focus-visible,
+.eh-sec--peach :focus-visible,
+.eh-sec--amber :focus-visible,
+.eh-book :focus-visible {
+  outline-color: var(--eh-navy);
+}
+.eh-wrap {
+  width: min(100% - 2.5rem, 78rem);
+  margin-inline: auto;
+}
+.eh-mono {
+  font-family: var(--eh-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.eh-num {
+  font-family: var(--eh-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.eh-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.eh-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--eh-ember);
+}
+.eh-kicker::before {
+  content: "";
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 26%, transparent);
+}
+.eh-h1,
+.eh-h2 {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.eh-h1 {
+  font-size: clamp(2.5rem, 12.4vw, 4.5rem);
+  line-height: 0.94;
+}
+.eh-h2 {
+  margin-top: 0.9rem;
+  font-size: clamp(2.2rem, 6.2vw, 4.5rem);
+  line-height: 0.97;
+}
+.eh-h1 em,
+.eh-h2 em {
+  font-style: normal;
+  color: var(--eh-ember);
+}
+.eh-lead {
+  margin-top: 1.1rem;
+  max-width: 46ch;
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  color: var(--eh-ice-2);
+}
+@media (min-width: 1024px) {
+  .eh {
+    --eh-head: 4.25rem;
+  }
+  .eh-h1 {
+    font-size: clamp(4rem, min(7.2vw, 13svh), 7rem);
+  }
+}
+
+/* A pulsing "live" dot. The ring only animates while its section is on screen. */
+.eh-live {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--eh-ember);
+}
+.eh-live::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--eh-ember);
+  opacity: 0.45;
+}
+[data-live] .eh-live::after {
+  animation: eh-ping 1.9s var(--eh-ease) infinite;
+}
+@keyframes eh-ping {
+  from {
+    opacity: 0.7;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+/* ---------- Buttons, links, chips ---------- */
+.eh-btn {
+  display: inline-flex;
+  min-height: 3.1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  padding: 0.35rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 0.45s var(--eh-ease),
+    box-shadow 0.45s var(--eh-ease),
+    background-color 0.3s var(--eh-ease);
+}
+.eh-btn--lg {
+  min-height: 3.5rem;
+  font-size: 1.0625rem;
+}
+.eh-btn--full {
+  width: 100%;
+}
+.eh-btn--ember {
+  background: var(--eh-ember);
+  color: var(--eh-navy);
+  box-shadow: 0 16px 34px -16px rgb(255 122 47 / 0.85);
+}
+.eh-btn--ember:has(.eh-arrow) {
+  padding-right: 0.4rem;
+}
+.eh-btn--navy {
+  background: var(--eh-navy);
+  color: var(--eh-cream);
+}
+.eh-btn--ghost {
+  color: inherit;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, currentColor 45%, transparent);
+}
+.eh-arrow {
+  display: grid;
+  flex: none;
+  width: 2.3rem;
+  height: 2.3rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--eh-navy);
+  color: var(--eh-amber);
+  transition: transform 0.45s var(--eh-ease);
+}
+.eh-btn--lg .eh-arrow {
+  width: 2.7rem;
+  height: 2.7rem;
+}
+.eh-btn--navy .eh-arrow {
+  background: var(--eh-ember);
+  color: var(--eh-navy);
+}
+@media (hover: hover) {
+  .eh-btn:hover {
+    transform: translateY(-2px);
+  }
+  .eh-btn:hover .eh-arrow {
+    transform: rotate(-45deg);
+  }
+  .eh-btn--ember:hover {
+    background: #ff8b47;
+    box-shadow: 0 22px 44px -16px rgb(255 122 47 / 0.95);
+  }
+  .eh-btn--ghost:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+}
+.eh-btn:active {
+  transform: scale(0.97);
+}
+.eh-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: gap 0.4s var(--eh-ease);
+}
+.eh-link svg {
+  flex: none;
+  color: var(--eh-ember);
+}
+.eh-link span {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1.5px no-repeat;
+  padding-bottom: 0.15rem;
+}
+.eh-link:hover {
+  gap: 0.85rem;
+}
+.eh-link:active {
+  opacity: 0.7;
+}
+.eh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.eh-chip b {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.eh-chip--ice {
+  background: var(--eh-ice);
+  color: var(--eh-navy);
+}
+.eh-chip--navy {
+  background: rgb(15 28 43 / 0.94);
+  color: var(--eh-cream);
+  box-shadow: inset 0 0 0 1px rgb(207 227 245 / 0.22);
+}
+.eh-chip--navy b {
+  color: var(--eh-amber);
+}
+
+/* ---------- The heat line: the whole page's scroll, ice to ember ---------- */
+.eh-heat {
+  position: absolute;
+  inset: 0;
+  z-index: 41;
+  pointer-events: none;
+  --p: 1;
+}
+.eh-heat i {
+  position: sticky;
+  top: var(--eh-head);
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--eh-ice) 0%, var(--eh-amber) 55%, var(--eh-ember) 100%);
+  clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0);
+}
+
+/* ---------- Header ---------- */
+.eh-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  height: var(--eh-head);
+  align-items: center;
+  gap: 1.25rem;
+  padding-inline: max(1.25rem, calc((100vw - 78rem) / 2));
+  background: rgb(15 28 43 / 0.9);
+  box-shadow: inset 0 -1px 0 var(--eh-line);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.eh-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--eh-cream);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.eh-logo small {
+  display: none;
+  margin-left: 0.15rem;
+  border-left: 1px solid var(--eh-line);
+  padding-left: 0.6rem;
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+/* The mark: a little dial, three quarters lit. */
+.eh-logo-mark {
+  position: relative;
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.eh-logo-mark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 225deg, var(--eh-ember) 0 190deg, rgb(207 227 245 / 0.35) 190deg 270deg, transparent 270deg);
+  -webkit-mask: radial-gradient(closest-side, transparent 60%, #000 62%);
+  mask: radial-gradient(closest-side, transparent 60%, #000 62%);
+  transition: transform 0.7s var(--eh-ease);
+}
+.eh-logo-mark::after {
+  content: "";
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: var(--eh-amber);
+}
+.eh-logo:hover .eh-logo-mark::before {
+  transform: rotate(80deg);
+}
+.eh-nav {
+  display: none;
+  gap: 1.6rem;
+  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.eh-nav a {
+  position: relative;
+  padding-block: 0.45rem;
+  color: var(--eh-ice-2);
+  transition: color 0.3s var(--eh-ease);
+}
+.eh-nav a::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--eh-ice), var(--eh-ember));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--eh-ease);
+}
+.eh-nav a:hover {
+  color: var(--eh-cream);
+}
+.eh-nav a:hover::after {
+  transform: scaleX(1);
+}
+.eh-header-phone {
+  display: none;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: var(--eh-cream);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.eh-header-phone .eh-mono {
+  font-size: 0.5625rem;
+  color: var(--eh-ice-2);
+}
+.eh-header-phone .eh-num {
+  transition: color 0.3s var(--eh-ease);
+}
+.eh-header-phone:hover .eh-num {
+  color: var(--eh-amber);
+}
+.eh-header-cta {
+  min-height: 2.5rem;
+  margin-left: auto;
+  padding-inline: 1rem;
+  font-size: 0.875rem;
+}
+.eh-header-cta .eh-wide {
+  display: none;
+}
+@media (min-width: 360px) {
+  .eh-header-cta .eh-wide {
+    display: inline;
+  }
+  .eh-header-cta .eh-narrow {
+    display: none;
+  }
+}
+@media (min-width: 480px) {
+  .eh-logo small {
+    display: block;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-nav {
+    display: flex;
+    white-space: nowrap;
+  }
+  .eh-logo small {
+    display: none;
+  }
+  .eh-header-cta {
+    min-height: 2.75rem;
+    margin-left: 0;
+    padding-inline: 1.2rem;
+    font-size: 0.9375rem;
+  }
+}
+@media (min-width: 1200px) {
+  .eh-header-phone {
+    display: flex;
+    white-space: nowrap;
+  }
+  .eh-logo small {
+    display: block;
+  }
+}
+
+/* ---------- Hero: the cold house ---------- */
+.eh-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: calc(100svh - var(--eh-head));
+  flex-direction: column;
+  overflow: hidden;
+  --p: 0;
+}
+.eh-hero-frost {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(62% 52% at 88% 0%, rgb(207 227 245 / 0.16), rgb(207 227 245 / 0) 70%),
+    radial-gradient(45% 40% at 0% 100%, rgb(207 227 245 / 0.07), rgb(207 227 245 / 0) 70%);
+}
+.eh-hero-frost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(rgb(207 227 245 / 0.55) 1px, transparent 1.6px) 0 0 / 26px 26px;
+  opacity: 0.22;
+  -webkit-mask: linear-gradient(200deg, #000 0%, transparent 46%);
+  mask: linear-gradient(200deg, #000 0%, transparent 46%);
+}
+/* The first of the heat: it comes up from below as the hero leaves. */
+.eh-hero-glow {
+  position: absolute;
+  inset: auto -10% -45% -10%;
+  z-index: -1;
+  height: 90%;
+  background: radial-gradient(closest-side, rgb(255 122 47 / 0.5), rgb(255 122 47 / 0));
+  opacity: calc(var(--p) * 0.95);
+}
+.eh-hero-grid {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 1.75rem;
+  padding-block: clamp(1.1rem, 3.4svh, 2.5rem) 1.5rem;
+}
+.eh-hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--eh-ice);
+}
+.eh-hero .eh-h1 {
+  margin-top: clamp(0.7rem, 2svh, 1.3rem);
+}
+.eh-h1 span,
+.eh-h1 em {
+  display: block;
+}
+.eh-hero-sub {
+  margin-top: clamp(0.8rem, 2.2svh, 1.4rem);
+  max-width: 33rem;
+  font-size: clamp(0.98rem, 1.25vw, 1.125rem);
+  color: var(--eh-ice-2);
+}
+.eh-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: clamp(1rem, 2.8svh, 1.9rem);
+}
+.eh-hero-actions .eh-btn {
+  flex: 1 1 auto;
+}
+.eh-btn-label {
+  font-weight: 600;
+  opacity: 0.75;
+}
+.eh-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: clamp(1.2rem, 3svh, 2rem);
+  border-top: 1px solid var(--eh-line);
+  padding-top: 1rem;
+}
+.eh-hero-stats dt {
+  color: var(--eh-cream);
+  font-size: clamp(0.95rem, 4.2vw, 1.2rem);
+  line-height: 1.1;
+}
+.eh-hero-stats dd {
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--eh-ice-2);
+}
+.eh-hero-visual {
+  position: relative;
+  min-width: 0;
+}
+.eh-hero-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  aspect-ratio: 10 / 9;
+  box-shadow: 0 0 0 1px var(--eh-line);
+}
+.eh-hero-photo img {
+  object-fit: cover;
+  object-position: 86% 50%;
+}
+.eh-hero-chip-a,
+.eh-hero-chip-b {
+  position: absolute;
+  top: 0.85rem;
+  z-index: 2;
+}
+.eh-hero-chip-a {
+  right: 0.85rem;
+}
+.eh-hero-chip-b {
+  left: 0.85rem;
+}
+/* The status card: what a customer sees once a job is booked. */
+.eh-eta {
+  position: relative;
+  z-index: 2;
+  margin: -3rem 0.75rem 0;
+  border-radius: 1.25rem;
+  background: var(--eh-cream);
+  padding: 1rem 1.1rem 0.6rem;
+  color: var(--eh-navy);
+  box-shadow:
+    0 0 0 1px rgb(15 28 43 / 0.06),
+    0 34px 60px -30px rgb(2 6 12 / 0.95);
+}
+.eh-eta-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.eh-eta-head .eh-mono {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--eh-ember-ink);
+}
+.eh-eta-time {
+  color: var(--eh-slate);
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.eh-eta-time b {
+  margin-left: 0.2rem;
+  color: var(--eh-navy);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.eh-eta-who {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--eh-line-ink);
+  padding-top: 0.8rem;
+}
+.eh-eta-avatar {
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--eh-navy);
+  color: var(--eh-amber);
+  font-family: var(--eh-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.eh-eta-who b {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.eh-eta-who p span {
+  font-size: 0.78rem;
+  color: var(--eh-slate);
+}
+.eh-eta-track {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+}
+.eh-eta-track li {
+  position: relative;
+  padding-top: 0.75rem;
+  color: var(--eh-slate);
+  font-family: var(--eh-mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.eh-eta-track li::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  border-radius: 2px;
+  background: rgb(15 28 43 / 0.13);
+}
+.eh-eta-track li[data-done]::before {
+  background: var(--eh-ember);
+}
+.eh-eta-track li[data-now] {
+  color: var(--eh-navy);
+}
+.eh-eta-track li[data-now]::before {
+  background: linear-gradient(90deg, var(--eh-ember) 0 50%, rgb(15 28 43 / 0.13) 50% 100%) 0 0 / 200% 100%;
+  background-position: 40% 0;
+}
+[data-live] .eh-eta-track li[data-now]::before {
+  animation: eh-travel 2.8s var(--eh-ease) infinite alternate;
+}
+@keyframes eh-travel {
+  from {
+    background-position: 78% 0;
+  }
+  to {
+    background-position: 30% 0;
+  }
+}
+.eh-eta-rows {
+  margin-top: 0.85rem;
+  border-top: 1px solid var(--eh-line-ink);
+}
+.eh-eta-rows div {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding-block: 0.42rem;
+}
+.eh-eta-rows div + div {
+  border-top: 1px solid rgb(15 28 43 / 0.07);
+}
+.eh-eta-rows dt {
+  padding-top: 0.12rem;
+  color: var(--eh-slate);
+  font-family: var(--eh-mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.eh-eta-rows dd {
+  font-family: var(--eh-mono);
+  font-size: 0.72rem;
+  letter-spacing: -0.01em;
+}
+/* The scale along the bottom of the hero: 12 to 21, waiting to be lit. */
+.eh-ruler {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-block: 1rem 1.3rem;
+  color: var(--eh-ice-2);
+}
+.eh-ruler i {
+  flex: 1;
+  height: 0.6rem;
+  background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 7px);
+  opacity: 0.5;
+}
+.eh-ruler span:first-child {
+  color: var(--eh-ice);
+}
+.eh-ruler span:last-child {
+  color: var(--eh-ember);
+}
+@media (min-width: 640px) {
+  .eh-hero-actions .eh-btn {
+    flex: 0 0 auto;
+  }
+  .eh-hero-photo {
+    aspect-ratio: 16 / 10;
+  }
+  .eh-eta {
+    width: 21rem;
+    margin: -9rem 1.25rem 0 auto;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-hero-grid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-content: center;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+    padding-block: 2rem 3.25rem;
+  }
+  .eh-hero-photo {
+    height: min(64svh, 36rem);
+    aspect-ratio: auto;
+    border-radius: 1.75rem;
+  }
+  .eh-hero-photo img {
+    object-position: 100% 50%;
+  }
+  .eh-eta {
+    position: absolute;
+    right: -1rem;
+    bottom: -1.75rem;
+    margin: 0;
+  }
+  .eh-hero-chip-a,
+  .eh-hero-chip-b {
+    top: 1.1rem;
+  }
+  .eh-hero-chip-a {
+    right: 1.1rem;
+  }
+  .eh-hero-chip-b {
+    left: 1.1rem;
+  }
+  /* Short enough to leave the bottom-left corner to the demo pill. */
+  .eh-hero .eh-ruler {
+    width: min(100% - 26rem, 60rem);
+  }
+}
+[data-imm="on"] .eh-hero-copy {
+  transform: translate3d(0, calc(var(--p) * -34px), 0);
+}
+[data-imm="on"] .eh-hero-photo img {
+  transform: scale(calc(1.02 + var(--p) * 0.12));
+}
+[data-imm="on"] .eh-eta {
+  transform: translate3d(0, calc(var(--p) * -64px), 0);
+}
+[data-imm="on"] .eh-hero-chip-a {
+  transform: translate3d(0, calc(var(--p) * 46px), 0);
+}
+[data-imm="on"] .eh-hero-chip-b {
+  transform: translate3d(0, calc(var(--p) * 24px), 0);
+}
+
+/* ---------- Signature: turn it up ---------- */
+.eh-scene {
+  background: var(--eh-navy);
+  --p: 1;
+  /* The dial runs from 12 to 21 between a tenth and nine tenths of the pin. */
+  --eh-dp: clamp(0, calc((var(--p) - 0.1) / 0.8), 1);
+  /* Ember light from the radiators first, then an amber wash, then cream. */
+  --eh-w1: clamp(0, calc((var(--p) - 0.08) / 0.26), 1);
+  --eh-wa: clamp(0, calc((var(--p) - 0.34) / 0.17), 1);
+  --eh-w2: clamp(0, calc((var(--p) - 0.58) / 0.26), 1);
+  /* Type flips from ice to navy once the ground is light enough to carry it. */
+  --eh-flip: clamp(0, calc((var(--p) - 0.43) * 1000), 1);
+}
+.eh-scene-stage {
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  color: color-mix(in srgb, var(--eh-navy) calc(var(--eh-flip) * 100%), var(--eh-ice));
+  transition: color 0.5s var(--eh-ease);
+}
+.eh-scene-ground,
+.eh-scene-ground span {
+  position: absolute;
+  inset: 0;
+}
+.eh-scene-ground {
+  z-index: -1;
+}
+.eh-scene-cold {
+  background:
+    radial-gradient(rgb(207 227 245 / 0.5) 1px, transparent 1.6px) 0 0 / 26px 26px,
+    radial-gradient(70% 55% at 80% 8%, rgb(207 227 245 / 0.13), rgb(207 227 245 / 0) 70%),
+    linear-gradient(180deg, #0f1c2b 0%, #13263a 100%);
+}
+.eh-scene-cold::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(15 28 43 / 0.86), rgb(15 28 43 / 0.94));
+}
+.eh-scene-dusk {
+  background: radial-gradient(125% 88% at 50% 100%, rgb(255 122 47 / 0.72) 0%, rgb(255 122 47 / 0.3) 36%, rgb(255 122 47 / 0) 72%);
+  opacity: var(--eh-w1);
+}
+.eh-scene-wash {
+  background: linear-gradient(180deg, #ffa64d 0%, #ffbd70 58%, #ffd193 100%);
+  opacity: var(--eh-wa);
+}
+.eh-scene-warm {
+  background: linear-gradient(180deg, #fff6ea 0%, #ffedd4 52%, #ffd9a6 100%);
+  opacity: var(--eh-w2);
+}
+.eh-scene-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 1;
+  grid-template-areas: "head" "dial" "body";
+  align-content: center;
+  gap: 1.5rem;
+}
+.eh-scene-head {
+  grid-area: head;
+  min-width: 0;
+}
+.eh-scene-body {
+  grid-area: body;
+  min-width: 0;
+}
+/* Orange type cannot stay legible while the ground passes through orange, so
+   in this scene the kicker follows the body colour and the accent word is a
+   navy label: readable on frost, on amber and on cream alike. */
+.eh-scene .eh-kicker {
+  color: inherit;
+}
+.eh-scene .eh-kicker::before {
+  background: var(--eh-ember);
+  box-shadow: 0 0 0 3px rgb(255 122 47 / 0.28);
+}
+.eh-scene .eh-h2 {
+  font-size: clamp(2.6rem, 7.4vw, 5rem);
+}
+.eh-scene .eh-h2 em {
+  display: inline-block;
+  border-radius: 0.16em;
+  background: var(--eh-navy);
+  padding: 0.02em 0.16em 0.08em;
+  color: var(--eh-amber);
+  box-shadow: inset 0 0 0 1.5px rgb(207 227 245 / 0.3);
+}
+.eh-scene-lead {
+  margin-top: 0.9rem;
+  max-width: 40ch;
+  text-wrap: balance;
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  opacity: 0.84;
+}
+.eh-moment {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.4rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  padding-block: 0.8rem;
+  transition:
+    opacity 0.6s var(--eh-ease),
+    border-color 0.6s var(--eh-ease);
+}
+.eh-moment:last-child {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+.eh-moment-n {
+  padding-top: 0.32rem;
+  opacity: 0.75;
+}
+.eh-moment h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.eh-moment-more p {
+  margin-top: 0.25rem;
+  max-width: 40ch;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  opacity: 0.84;
+}
+.eh-moment-temp {
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+.eh-scene-cta {
+  margin-top: 1.4rem;
+}
+/* The thermostat. */
+.eh-dial-wrap {
+  display: grid;
+  grid-area: dial;
+  justify-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+.eh-dial {
+  --eh-d: min(76vw, 21rem);
+  position: relative;
+  width: var(--eh-d);
+  height: var(--eh-d);
+}
+.eh-dial-halo {
+  position: absolute;
+  inset: -17%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 150 60 / 0.55) 52%, rgb(255 122 47 / 0) 100%);
+  opacity: var(--eh-w1);
+}
+.eh-dial-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 26%, #1d354e 0%, #0f1c2b 60%, #09131e 100%);
+  box-shadow:
+    0 0 0 1px rgb(207 227 245 / 0.2),
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 44px 70px -34px rgb(4 9 16 / 0.85);
+}
+.eh-dial-scale {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.eh-dial-track,
+.eh-dial-arc {
+  fill: none;
+  stroke-linecap: round;
+}
+.eh-dial-track {
+  stroke: rgb(207 227 245 / 0.14);
+  stroke-width: 3;
+  stroke-dasharray: 75 25;
+}
+.eh-dial-arc {
+  stroke: var(--eh-ember);
+  stroke-width: 4;
+  stroke-dasharray: 75 100;
+  stroke-dashoffset: calc(75px * (1 - var(--eh-dp)));
+}
+.eh-tick {
+  --on: clamp(0, calc(var(--eh-dp) * 36 - var(--i) + 1), 1);
+  stroke: color-mix(in srgb, var(--c) calc(var(--on) * 100%), rgb(207 227 245 / 0.2));
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.eh-tick--major {
+  stroke-width: 4.5;
+}
+.eh-dial-num {
+  fill: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.eh-dial-num--hot {
+  fill: var(--eh-amber);
+}
+.eh-dial-knob {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 22%, #2d4b69 0%, #182d43 56%, #0f1f31 100%);
+  box-shadow:
+    0 0 0 1px rgb(207 227 245 / 0.22),
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 18px 30px -12px rgb(0 0 0 / 0.75);
+}
+.eh-dial-turn {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  transform: rotate(calc(-135deg + var(--eh-dp) * 270deg));
+}
+.eh-dial-turn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgb(207 227 245 / 0.2) 0 1.2deg, transparent 1.2deg 6deg);
+  -webkit-mask: radial-gradient(closest-side, transparent 80%, #000 81%, #000 96%, transparent 97%);
+  mask: radial-gradient(closest-side, transparent 80%, #000 81%, #000 96%, transparent 97%);
+}
+.eh-dial-pointer {
+  position: absolute;
+  top: -11.5%;
+  left: 50%;
+  width: max(4px, 2.6%);
+  height: 18%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--eh-amber), var(--eh-ember));
+  box-shadow: 0 0 14px rgb(255 122 47 / 0.85);
+  transform: translateX(-50%);
+}
+.eh-dial-face {
+  position: absolute;
+  inset: 27%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: calc(var(--eh-d) * 0.014);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 18%, #14273d 0%, #0a1522 100%);
+  color: var(--eh-cream);
+  text-align: center;
+  box-shadow:
+    inset 0 3px 12px rgb(0 0 0 / 0.65),
+    0 0 0 1px rgb(207 227 245 / 0.12);
+}
+.eh-dial-label,
+.eh-dial-state {
+  font-family: var(--eh-mono);
+  font-size: max(0.4375rem, calc(var(--eh-d) * 0.027));
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.eh-dial-label {
+  color: var(--eh-ice-2);
+}
+.eh-dial-state {
+  color: var(--eh-amber);
+}
+.eh-dial-read {
+  font-family: var(--eh-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+.eh-dial-read b {
+  font-size: calc(var(--eh-d) * 0.2);
+  font-weight: 500;
+}
+.eh-dial-read i {
+  color: var(--eh-amber);
+  font-size: calc(var(--eh-d) * 0.085);
+  font-style: normal;
+}
+.eh-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.eh-status .eh-chip {
+  color: var(--eh-ice-2);
+}
+.eh-status .eh-chip b {
+  min-width: 3.1em;
+  color: var(--eh-cream);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  text-align: right;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+/* The radiators: they heat in turn, nearest the boiler first. */
+.eh-rads {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1rem, 3.6vw, 3.5rem);
+  /* room above for the haze */
+  margin-top: calc(clamp(1.25rem, 3.2vw, 2.75rem) + 1.75rem);
+  padding: 0 1.25rem 0.7rem;
+  --eh-floor: 0.7rem;
+}
+.eh-rads::before {
+  /* the pipe run */
+  content: "";
+  position: absolute;
+  inset: auto 0 calc(var(--eh-floor) + 0.25rem) 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c26a2e, #e08a48 50%, #c26a2e);
+}
+.eh-rads::after {
+  /* the floor */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--eh-floor);
+  background: var(--eh-navy);
+  box-shadow: 0 -1px 0 rgb(207 227 245 / 0.22);
+}
+.eh-rad {
+  --rp: 1;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 11.5rem;
+}
+.eh-rad:nth-child(n + 4) {
+  display: none;
+}
+.eh-rad-body {
+  position: relative;
+  display: flex;
+  height: clamp(2.9rem, 7.2vw, 6.5rem);
+  gap: clamp(2px, 0.35vw, 5px);
+}
+.eh-rad-body i {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #eef5fb 0%, #b4c8db 100%);
+}
+.eh-rad-body i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--eh-amber) 0%, var(--eh-ember) 62%, #e4571a 100%);
+  opacity: var(--rp);
+}
+.eh-rad-body::before,
+.eh-rad-body::after {
+  /* top and bottom rails */
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 7%;
+  border-radius: 999px;
+  background: rgb(15 28 43 / 0.2);
+}
+.eh-rad-body::before {
+  top: 9%;
+}
+.eh-rad-body::after {
+  bottom: 9%;
+}
+.eh-rad-feet {
+  display: flex;
+  height: 0.5rem;
+  justify-content: space-between;
+  padding-inline: 8%;
+}
+.eh-rad-feet::before,
+.eh-rad-feet::after {
+  content: "";
+  width: 6%;
+  min-width: 3px;
+  background: #b4c8db;
+}
+.eh-haze {
+  position: absolute;
+  right: 6%;
+  bottom: calc(100% + 0.3rem);
+  left: 6%;
+  display: flex;
+  height: clamp(1.25rem, 3.2vw, 2.75rem);
+  justify-content: space-around;
+  opacity: var(--rp);
+}
+.eh-haze svg {
+  width: auto;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--eh-ember);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.eh-haze svg:nth-child(even) {
+  transform: translateY(-18%);
+  opacity: 0.55;
+}
+.eh-scene[data-live] .eh-haze svg {
+  animation: eh-rise 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: calc(var(--j) * -0.7s);
+}
+@keyframes eh-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(34%) scaleY(0.75);
+  }
+  35% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-58%) scaleY(1.12);
+  }
+}
+@media (min-width: 768px) {
+  /* Keep the bottom-left corner clear for the demo pill. */
+  .eh-rads {
+    padding-inline: 12rem;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-rad:nth-child(n + 4) {
+    display: block;
+  }
+  .eh-scene-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-areas: "head dial" "body dial";
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    row-gap: 0.5rem;
+  }
+  .eh-scene-head {
+    align-self: end;
+  }
+  .eh-scene-body {
+    align-self: start;
+  }
+  .eh-dial-wrap {
+    align-self: center;
+  }
+  .eh-dial {
+    --eh-d: min(36vw, 29rem);
+  }
+  .eh-scene .eh-h2 {
+    font-size: clamp(3rem, 5.4vw, 5rem);
+  }
+  .eh-moments {
+    margin-top: 1rem;
+  }
+}
+
+/* Running: the pinned stage. */
+[data-imm="on"] .eh-scene-stage {
+  padding-top: calc(var(--eh-head) + 1rem);
+}
+[data-imm="on"] .eh-rads {
+  margin-top: 0.75rem;
+}
+[data-imm="on"] .eh-rad {
+  --rp: clamp(0, calc((var(--p) - 0.2 - var(--i) * 0.07) * 5), 1);
+}
+[data-imm="on"] .eh-scene[data-step="0"] .eh-moment:nth-child(1),
+[data-imm="on"] .eh-scene[data-step="1"] .eh-moment:nth-child(2),
+[data-imm="on"] .eh-scene[data-step="2"] .eh-moment:nth-child(3) {
+  --act: 1;
+}
+@media (min-width: 1024px) {
+  [data-imm="on"] .eh-dial {
+    --eh-d: min(38vw, 52svh);
+  }
+  [data-imm="on"] .eh-moment {
+    opacity: calc(0.6 + var(--act, 0) * 0.4);
+  }
+  [data-imm="on"] .eh-moment-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.7s var(--eh-ease);
+  }
+  [data-imm="on"] .eh-scene[data-step="0"] .eh-moment:nth-child(1) .eh-moment-more,
+  [data-imm="on"] .eh-scene[data-step="1"] .eh-moment:nth-child(2) .eh-moment-more,
+  [data-imm="on"] .eh-scene[data-step="2"] .eh-moment:nth-child(3) .eh-moment-more {
+    grid-template-rows: 1fr;
+  }
+  [data-imm="on"] .eh-moment-more > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+  [data-imm="on"] .eh-scene-lead {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 1024px) and (max-height: 760px) {
+  [data-imm="on"] .eh-scene-lead {
+    display: none;
+  }
+}
+@media (max-width: 1023.98px) {
+  /* A phone's pinned stage: heading, dial, three tabs, radiators. */
+  [data-imm="on"] .eh-scene-stage {
+    padding-top: calc(var(--eh-head) + 0.8rem);
+  }
+  [data-imm="on"] .eh-scene-grid {
+    align-content: space-evenly;
+    gap: 0.5rem;
+  }
+  [data-imm="on"] .eh-scene .eh-h2 {
+    margin-top: 0.35rem;
+    font-size: clamp(1.9rem, 8.4vw, 3rem);
+  }
+  [data-imm="on"] .eh-scene-lead,
+  [data-imm="on"] .eh-scene-cta {
+    display: none;
+  }
+  [data-imm="on"] .eh-dial {
+    --eh-d: min(58vw, 31svh);
+  }
+  [data-imm="on"] .eh-dial-wrap {
+    gap: 0.55rem;
+  }
+  [data-imm="on"] .eh-moments {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding-bottom: 3.1rem;
+  }
+  [data-imm="on"] .eh-moment {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "n temp" "title title";
+    gap: 0.15rem 0.3rem;
+    border-top: 3px solid color-mix(in srgb, currentColor 20%, transparent);
+    border-bottom: 0;
+    padding-block: 0.45rem 0;
+  }
+  [data-imm="on"] .eh-scene[data-step="0"] .eh-moment:nth-child(1),
+  [data-imm="on"] .eh-scene[data-step="1"] .eh-moment:nth-child(-n + 2),
+  [data-imm="on"] .eh-scene[data-step="2"] .eh-moment {
+    border-top-color: color-mix(in srgb, var(--eh-ember-ink) calc(var(--eh-flip) * 100%), var(--eh-ember));
+  }
+  [data-imm="on"] .eh-moment-n {
+    grid-area: n;
+    padding-top: 0;
+    font-size: 0.625rem;
+  }
+  [data-imm="on"] .eh-moment-temp {
+    grid-area: temp;
+    justify-self: end;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+  [data-imm="on"] .eh-moment > div {
+    grid-area: title;
+    min-width: 0;
+  }
+  [data-imm="on"] .eh-moment h3 {
+    font-size: clamp(0.72rem, 3.5vw, 1.05rem);
+    opacity: calc(0.6 + var(--act, 0) * 0.4);
+  }
+  [data-imm="on"] .eh-moment-more {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    height: 2.6rem;
+  }
+  [data-imm="on"] .eh-scene[data-step="0"] .eh-moment:nth-child(1) .eh-moment-more,
+  [data-imm="on"] .eh-scene[data-step="1"] .eh-moment:nth-child(2) .eh-moment-more,
+  [data-imm="on"] .eh-scene[data-step="2"] .eh-moment:nth-child(3) .eh-moment-more {
+    display: block;
+  }
+  [data-imm="on"] .eh-moment-more p {
+    margin-top: 0;
+    max-width: none;
+    font-size: clamp(0.74rem, 3.5vw, 0.9rem);
+    line-height: 1.35;
+  }
+  [data-imm="on"] .eh-rads {
+    margin-top: 1.7rem;
+  }
+}
+@media (max-width: 767.98px) {
+  /* The floor runs down behind the phone bar, and the radiators sit to the
+     right of the demo pill. */
+  [data-imm="on"] .eh-rads {
+    --eh-floor: 4.7rem;
+    gap: 0.8rem;
+    padding: 0 1.25rem 4.7rem 5.9rem;
+  }
+}
+@media (max-width: 479.98px) {
+  .eh-status .eh-chip:first-child {
+    display: none;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  /* Tablets have the height for a bigger dial. */
+  [data-imm="on"] .eh-dial {
+    --eh-d: min(54vw, 38svh);
+  }
+}
+/* A phone on its side is too short to hold the stage: let the scene scroll
+   through instead of pinning and clipping. It is still taller than the
+   screen, so --p still runs from 0 to 1 across it. */
+@media (max-width: 1023.98px) and (max-height: 480px) {
+  [data-imm="on"] .eh-scene.imm-pin {
+    height: auto;
+  }
+  [data-imm="on"] .eh-scene.imm-pin > .eh-scene-stage.imm-stage {
+    position: relative;
+    height: auto;
+    padding-top: 2.5rem;
+  }
+  [data-imm="on"] .eh-scene .eh-dial {
+    --eh-d: min(44vw, 17rem);
+  }
+  [data-imm="on"] .eh-scene .eh-scene-grid {
+    gap: 1.25rem;
+  }
+}
+/* A squat desktop window: the same stage, packed tighter. */
+@media (min-width: 1024px) and (max-height: 640px) {
+  [data-imm="on"] .eh-scene .eh-dial {
+    --eh-d: min(38vw, 50svh);
+  }
+  [data-imm="on"] .eh-scene .eh-h2 {
+    font-size: clamp(2.4rem, 8svh, 3.5rem);
+  }
+  [data-imm="on"] .eh-scene-cta {
+    display: none;
+  }
+  [data-imm="on"] .eh-moments {
+    margin-top: 0.6rem;
+  }
+  [data-imm="on"] .eh-moment {
+    padding-block: 0.5rem;
+  }
+  [data-imm="on"] .eh-rads {
+    margin-top: 0.25rem;
+  }
+  [data-imm="on"] .eh-rad-body {
+    height: 3.6rem;
+  }
+  [data-imm="on"] .eh-haze {
+    height: 1.5rem;
+  }
+}
+@media (max-width: 1023.98px) and (max-height: 610px) {
+  [data-imm="on"] .eh-status {
+    display: none;
+  }
+  [data-imm="on"] .eh-dial {
+    --eh-d: min(56vw, 29svh);
+  }
+}
+
+/* ---------- Sections ---------- */
+.eh-sec {
+  position: relative;
+  padding-block: clamp(4rem, 9vw, 7.5rem);
+  scroll-margin-top: var(--eh-head);
+}
+.eh-sec--cream {
+  background: var(--eh-cream);
+  color: var(--eh-navy);
+}
+.eh-sec--peach {
+  background: var(--eh-peach);
+  color: var(--eh-navy);
+}
+.eh-sec--amber {
+  background: var(--eh-amber);
+  color: var(--eh-navy);
+}
+.eh-sec--navy {
+  background:
+    radial-gradient(90% 55% at 50% 118%, rgb(255 122 47 / 0.3), rgb(255 122 47 / 0) 72%),
+    var(--eh-navy);
+}
+.eh-sec--cream .eh-kicker,
+.eh-sec--peach .eh-kicker {
+  color: var(--eh-ember-ink);
+}
+.eh-sec--cream .eh-h2 em,
+.eh-sec--peach .eh-h2 em {
+  color: var(--eh-ember-ink);
+}
+.eh-sec--cream .eh-lead,
+.eh-sec--peach .eh-lead {
+  color: var(--eh-slate);
+}
+/* On the hot grounds the accent word is a label, not a colour. */
+.eh-sec--amber .eh-kicker,
+.eh-book .eh-kicker {
+  color: var(--eh-navy);
+}
+.eh-sec--amber .eh-h2 em,
+.eh-book .eh-h2 em {
+  display: inline-block;
+  border-radius: 0.16em;
+  background: var(--eh-navy);
+  padding: 0.02em 0.16em 0.08em;
+  color: var(--eh-amber);
+}
+.eh-sec--amber .eh-lead {
+  color: rgb(15 28 43 / 0.82);
+}
+.eh-head {
+  max-width: 46rem;
+  margin-bottom: clamp(1.75rem, 4.4vw, 3.25rem);
+}
+.eh-head--row {
+  display: flex;
+  max-width: none;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.eh-head--row > div:first-child {
+  flex: 0 1 44rem;
+  min-width: 0;
+}
+
+/* ---------- Symptom checker ---------- */
+.eh-check {
+  display: grid;
+  gap: 1rem;
+}
+.eh-sym-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.eh-sym {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.6rem 0.95rem 0.6rem 0.7rem;
+  color: var(--eh-navy);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1.5px rgb(15 28 43 / 0.16);
+  transition:
+    background-color 0.35s var(--eh-ease),
+    color 0.35s var(--eh-ease),
+    transform 0.35s var(--eh-ease),
+    box-shadow 0.35s var(--eh-ease);
+}
+.eh-sym-n {
+  display: grid;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(15 28 43 / 0.08);
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  transition:
+    background-color 0.35s var(--eh-ease),
+    color 0.35s var(--eh-ease);
+}
+.eh-sym small,
+.eh-sym-tag,
+.eh-sym-go {
+  display: none;
+}
+@media (hover: hover) {
+  .eh-sym:hover {
+    box-shadow: inset 0 0 0 1.5px var(--eh-navy);
+    transform: translateY(-1px);
+  }
+}
+.eh-sym:active {
+  transform: scale(0.97);
+}
+.eh-sym[aria-pressed="true"] {
+  background: var(--eh-navy);
+  color: var(--eh-cream);
+  box-shadow: inset 0 0 0 1.5px var(--eh-navy);
+}
+.eh-sym[aria-pressed="true"] .eh-sym-n {
+  background: var(--eh-ember);
+  color: var(--eh-navy);
+}
+.eh-dx {
+  display: grid;
+  gap: 1.1rem;
+  min-width: 0;
+  border-radius: 1.5rem;
+  background: var(--eh-navy);
+  padding: 0.9rem;
+  color: var(--eh-ice);
+  box-shadow: 0 40px 70px -44px rgb(15 28 43 / 0.75);
+}
+.eh-dx-fig {
+  position: relative;
+  border-radius: 1rem;
+  background:
+    linear-gradient(rgb(207 227 245 / 0.05) 1px, transparent 1px) 0 0 / 100% 1.5rem,
+    linear-gradient(90deg, rgb(207 227 245 / 0.05) 1px, transparent 1px) 0 0 / 1.5rem 100%,
+    var(--eh-navy-2);
+  padding: 2.3rem 0.75rem 2.6rem;
+}
+.eh-dx-where {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.95rem;
+  color: var(--eh-ice-2);
+}
+.eh-dx-suspect {
+  position: absolute;
+  right: 0.8rem;
+  bottom: 0.8rem;
+  left: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--eh-ice-2);
+}
+.eh-dx-suspect b {
+  border-radius: 999px;
+  background: var(--eh-ember);
+  padding: 0.3rem 0.65rem;
+  color: var(--eh-navy);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+.eh-dx-svg {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin-inline: auto;
+}
+.eh-part,
+.eh-part-line {
+  fill: none;
+  stroke: rgb(207 227 245 / 0.46);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    stroke 0.45s var(--eh-ease),
+    fill 0.45s var(--eh-ease);
+}
+.eh-part-line {
+  stroke: rgb(207 227 245 / 0.3);
+}
+.eh-part--solid {
+  fill: var(--eh-navy);
+}
+.eh-part[data-on="true"] {
+  fill: rgb(255 122 47 / 0.2);
+  stroke: var(--eh-ember);
+  stroke-width: 2.5;
+}
+.eh-flame {
+  fill: none;
+  stroke: var(--eh-amber);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+.eh-air {
+  fill: rgb(207 227 245 / 0.16);
+  stroke: var(--eh-ice);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  opacity: 0;
+  transition: opacity 0.45s var(--eh-ease);
+}
+.eh-air[data-on="true"] {
+  opacity: 1;
+}
+.eh-hot {
+  fill: none;
+  stroke: var(--eh-ember);
+  stroke-width: 2;
+  opacity: 0.55;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+[data-live] .eh-hot {
+  animation: eh-hot 2s var(--eh-ease) infinite;
+}
+@keyframes eh-hot {
+  from {
+    opacity: 0.85;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+.eh-dx-body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0.35rem 0.45rem 0.5rem;
+}
+.eh-dx-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  color: var(--eh-ice-2);
+}
+.eh-urg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem 0.4rem 0.7rem;
+  color: var(--eh-cream);
+  box-shadow: inset 0 0 0 1px var(--eh-line);
+}
+.eh-urg-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+.eh-urg-bars i {
+  width: 0.4rem;
+  height: 0.5rem;
+  border-radius: 2px;
+  background: rgb(207 227 245 / 0.2);
+  transition: background-color 0.4s var(--eh-ease);
+}
+.eh-urg-bars i:nth-child(2) {
+  height: 0.8rem;
+}
+.eh-urg-bars i:nth-child(3) {
+  height: 1.1rem;
+}
+.eh-urg[data-level="1"] i:nth-child(1) {
+  background: var(--eh-ice);
+}
+.eh-urg[data-level="2"] i:nth-child(-n + 2) {
+  background: var(--eh-amber);
+}
+.eh-urg[data-level="3"] i {
+  background: var(--eh-ember);
+}
+.eh-urg b {
+  font-weight: 500;
+}
+.eh-urg[data-level="2"] b {
+  color: var(--eh-amber);
+}
+.eh-urg[data-level="3"] b {
+  color: var(--eh-ember);
+}
+.eh-dx-swap {
+  animation: eh-swap 0.6s var(--eh-ease);
+}
+@keyframes eh-swap {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+.eh-dx-title {
+  margin-top: 0.9rem;
+  color: var(--eh-cream);
+  font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.eh-dx-sub {
+  margin-top: 1.15rem;
+  color: var(--eh-amber);
+}
+.eh-dx-cause {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+}
+.eh-dx-steps {
+  margin-top: 0.35rem;
+}
+.eh-dx-steps li {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  border-top: 1px solid var(--eh-line);
+  padding-block: 0.5rem;
+  font-size: 0.92rem;
+}
+.eh-dx-step-n {
+  padding-top: 0.2rem;
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.6875rem;
+}
+.eh-dx-mean {
+  margin-top: 0.4rem;
+  border-radius: 0.8rem;
+  background: var(--eh-navy-2);
+  padding: 0.7rem 0.85rem;
+  font-size: 0.86rem;
+  color: var(--eh-ice);
+}
+.eh-dx-mean b {
+  color: var(--eh-cream);
+  font-weight: 700;
+}
+.eh-dx-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.1rem;
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+.eh-dx-foot .eh-btn {
+  flex: 1 1 auto;
+}
+.eh-dx-call {
+  color: var(--eh-ice-2);
+  font-size: 0.85rem;
+}
+.eh-dx-call a {
+  display: block;
+  color: var(--eh-cream);
+  font-size: 1.05rem;
+  transition: color 0.3s var(--eh-ease);
+}
+.eh-dx-call a:hover {
+  color: var(--eh-amber);
+}
+/* Dark panels inside light sections keep a light focus ring. */
+.eh-dx :focus-visible,
+.eh-legend :focus-visible {
+  outline-color: var(--eh-amber);
+}
+/* What the three-level gauge means. Desktop only; the panel repeats it. */
+.eh-legend {
+  display: none;
+  min-width: 17rem;
+  border-radius: 1.25rem;
+  background: var(--eh-navy);
+  padding: 1rem 1.1rem 0.6rem;
+  color: var(--eh-ice-2);
+}
+.eh-legend li {
+  display: grid;
+  grid-template-columns: 1.6rem 3.6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid var(--eh-line);
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+}
+.eh-legend li:first-child {
+  display: block;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: var(--eh-amber);
+}
+.eh-legend .eh-urg {
+  display: contents;
+}
+.eh-legend b {
+  color: var(--eh-cream);
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .eh-legend {
+    display: block;
+  }
+}
+.eh-gas {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
+  font-size: 0.875rem;
+  color: var(--eh-slate);
+  box-shadow: inset 0 0 0 1.5px rgb(15 28 43 / 0.14);
+}
+.eh-gas b {
+  color: var(--eh-navy);
+}
+.eh-gas-mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--eh-navy);
+  stroke: var(--eh-navy);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.eh-gas-mark path + path {
+  stroke: var(--eh-amber);
+  stroke-width: 2.2;
+}
+@media (min-width: 720px) {
+  .eh-dx {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 1.25rem;
+    padding: 1rem;
+  }
+  .eh-dx-fig {
+    display: grid;
+    align-items: center;
+  }
+  .eh-dx-body {
+    padding: 0.75rem 0.85rem 0.75rem 0.25rem;
+  }
+  .eh-dx-foot .eh-btn {
+    flex: 0 0 auto;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-check {
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+  .eh-sym-list {
+    display: grid;
+    grid-auto-rows: 1fr;
+    gap: 0.5rem;
+  }
+  .eh-sym {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    border-radius: 1.1rem;
+    padding: 0.85rem 0.9rem;
+    font-size: 1rem;
+  }
+  .eh-sym-n {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.6875rem;
+  }
+  .eh-sym small {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    opacity: 0.7;
+  }
+  .eh-sym-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.6rem;
+    font-size: 0.625rem;
+    color: var(--eh-slate);
+  }
+  .eh-sym-tag::before {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .eh-sym-tag[data-level="2"] {
+    color: #8a5a00;
+  }
+  .eh-sym-tag[data-level="3"] {
+    color: var(--eh-ember-ink);
+  }
+  .eh-sym[aria-pressed="true"] .eh-sym-tag {
+    color: var(--eh-ice-2);
+  }
+  .eh-sym[aria-pressed="true"] .eh-sym-tag[data-level="2"] {
+    color: var(--eh-amber);
+  }
+  .eh-sym[aria-pressed="true"] .eh-sym-tag[data-level="3"] {
+    color: var(--eh-ember);
+  }
+  .eh-sym-go {
+    display: block;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition:
+      opacity 0.35s var(--eh-ease),
+      transform 0.35s var(--eh-ease);
+  }
+  .eh-sym:hover .eh-sym-go,
+  .eh-sym[aria-pressed="true"] .eh-sym-go {
+    opacity: 1;
+    transform: none;
+  }
+  .eh-sym[aria-pressed="true"] .eh-sym-go {
+    color: var(--eh-ember);
+  }
+}
+
+/* ---------- Services: spec cards ---------- */
+.eh-cards {
+  display: grid;
+  gap: 1rem;
+}
+.eh-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: var(--eh-navy-2);
+  box-shadow: inset 0 0 0 1px var(--eh-line);
+}
+.eh-card::after {
+  /* a heat line along the bottom on hover */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--eh-ice), var(--eh-amber) 55%, var(--eh-ember));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s var(--eh-ease);
+}
+.eh-card:hover::after {
+  transform: scaleX(1);
+}
+.eh-card-img,
+.eh-card-fig {
+  position: relative;
+  flex: none;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.eh-card-img img {
+  object-fit: cover;
+  transition: transform 1.3s var(--eh-ease);
+}
+.eh-card:hover .eh-card-img img {
+  transform: scale(1.06);
+}
+.eh-card-tag {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+}
+.eh-card-body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  padding: 1.3rem 1.3rem 1.4rem;
+}
+.eh-card-body h3 {
+  color: var(--eh-cream);
+  font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.eh-card-body > p {
+  margin-top: 0.6rem;
+  font-size: 0.94rem;
+  color: var(--eh-ice-2);
+}
+.eh-spec {
+  margin-block: 1.1rem 1.2rem;
+}
+.eh-spec div {
+  display: grid;
+  grid-template-columns: 6.2rem minmax(0, 1fr);
+  gap: 0.6rem;
+  border-top: 1px solid var(--eh-line);
+  padding-block: 0.5rem;
+}
+.eh-spec dt {
+  padding-top: 0.2rem;
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.eh-spec dd {
+  color: var(--eh-cream);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.eh-card-body .eh-link {
+  margin-top: auto;
+  align-self: flex-start;
+  color: var(--eh-cream);
+}
+/* The install card also carries the day itself, hour by hour. */
+.eh-day {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1.3rem;
+}
+.eh-day li {
+  border-radius: 0.8rem;
+  background: var(--eh-navy-3);
+  padding: 0.65rem 0.8rem 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--eh-ice);
+}
+.eh-day li:first-child {
+  grid-column: 1 / -1;
+  background: none;
+  padding: 0;
+  color: var(--eh-ice-2);
+}
+.eh-day .eh-num {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--eh-amber);
+  font-size: 0.95rem;
+}
+/* The servicing card has a gauge where the others have a photograph. */
+.eh-card-fig {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.1rem;
+  background:
+    radial-gradient(80% 90% at 0% 100%, rgb(255 122 47 / 0.24), rgb(255 122 47 / 0) 70%),
+    var(--eh-navy-3);
+  padding: 2.6rem 1.2rem 1rem;
+}
+.eh-gauge {
+  position: relative;
+  width: clamp(6.5rem, 30vw, 8.25rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--eh-navy);
+  box-shadow: 0 0 0 1px rgb(207 227 245 / 0.2);
+}
+.eh-gauge::before {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border-radius: 50%;
+  background: conic-gradient(from 225deg, rgb(207 227 245 / 0.6) 0 66deg, var(--eh-ember) 68deg 135deg, rgb(207 227 245 / 0.2) 137deg 270deg, transparent 270deg);
+  -webkit-mask: radial-gradient(closest-side, transparent 78%, #000 80%);
+  mask: radial-gradient(closest-side, transparent 78%, #000 80%);
+}
+.eh-gauge-needle {
+  position: absolute;
+  bottom: 50%;
+  left: calc(50% - 1.5px);
+  width: 3px;
+  height: 34%;
+  border-radius: 3px;
+  background: var(--eh-cream);
+  transform: rotate(-40deg);
+  transform-origin: 50% 100%;
+  transition: transform 1.6s var(--eh-ease) 0.25s;
+}
+.eh-gauge::after {
+  content: "";
+  position: absolute;
+  inset: 44%;
+  border-radius: 50%;
+  background: var(--eh-amber);
+}
+.eh-gauge b {
+  position: absolute;
+  right: 0;
+  bottom: 13%;
+  left: 0;
+  color: var(--eh-cream);
+  font-family: var(--eh-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+}
+[data-imm="on"] .eh-card:not(.is-in) .eh-gauge-needle {
+  transform: rotate(-135deg);
+}
+.eh-checks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  border-top: 1px solid var(--eh-line);
+  padding-block: 0.38rem;
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.eh-checks li b {
+  color: var(--eh-cream);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .eh-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .eh-card--a {
+    grid-column: 1 / -1;
+    flex-direction: row;
+  }
+  .eh-card--a .eh-card-img {
+    width: 44%;
+    aspect-ratio: auto;
+    min-height: 23rem;
+  }
+  .eh-card--a .eh-card-img img {
+    object-position: 62% 50%;
+  }
+  .eh-card--a .eh-card-body {
+    padding: 1.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-cards {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .eh-card--a {
+    grid-column: span 7;
+  }
+  .eh-card--b {
+    grid-column: span 5;
+  }
+  .eh-card--c {
+    grid-column: span 4;
+  }
+}
+
+/* ---------- Care plan: a small product ---------- */
+.eh-plan-grid {
+  display: grid;
+  gap: 2rem;
+}
+.eh-plan-copy {
+  min-width: 0;
+}
+.eh-switch {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  margin-top: 1.6rem;
+  border-radius: 999px;
+  background: rgb(15 28 43 / 0.09);
+  padding: 0.25rem;
+}
+.eh-switch button {
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  color: var(--eh-navy);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.4s var(--eh-ease),
+    color 0.4s var(--eh-ease),
+    transform 0.3s var(--eh-ease);
+}
+.eh-switch button:hover {
+  background: rgb(15 28 43 / 0.08);
+}
+.eh-switch button:active {
+  transform: scale(0.96);
+}
+.eh-switch button[aria-pressed="true"] {
+  background: var(--eh-navy);
+  color: var(--eh-cream);
+}
+.eh-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 1.3rem;
+}
+.eh-price b {
+  font-family: var(--eh-mono);
+  font-size: clamp(3.4rem, 8vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.eh-price span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--eh-slate);
+}
+.eh-incl {
+  display: grid;
+  gap: 0.1rem;
+  margin-block: 1.1rem 1.5rem;
+  max-width: 28rem;
+}
+.eh-incl li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: start;
+  border-top: 1px solid var(--eh-line-ink);
+  padding-block: 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.eh-incl li::before {
+  content: "";
+  width: 0.62rem;
+  height: 0.34rem;
+  margin-top: 0.42rem;
+  border: solid var(--eh-ember-ink);
+  border-width: 0 0 2.5px 2.5px;
+  transform: rotate(-45deg);
+}
+.eh-plan-note {
+  margin-top: 0.9rem;
+  color: var(--eh-slate);
+}
+/* The service report: twelve checks, ticked as it scrolls in. */
+.eh-report {
+  --p: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: var(--eh-navy);
+  color: var(--eh-ice);
+  box-shadow: 0 50px 80px -46px rgb(15 28 43 / 0.9);
+}
+.eh-report-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 1px solid var(--eh-line);
+  padding: 0.85rem 1.1rem;
+  color: var(--eh-ice-2);
+}
+.eh-report-dots {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+.eh-report-dots i {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgb(207 227 245 / 0.22);
+}
+.eh-report-bar .eh-mono {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.eh-report-pass {
+  background: rgb(255 179 71 / 0.16);
+  color: var(--eh-amber);
+}
+.eh-read {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--eh-line);
+}
+.eh-read div {
+  min-width: 0;
+  padding: 0.95rem 1.1rem 1rem;
+}
+.eh-read div + div {
+  border-left: 1px solid var(--eh-line);
+}
+.eh-read dt {
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.eh-read dd {
+  margin-top: 0.35rem;
+  color: var(--eh-cream);
+  font-family: var(--eh-mono);
+  font-size: clamp(1.05rem, 4.6vw, 1.6rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.eh-read dd small {
+  margin-left: 0.2rem;
+  color: var(--eh-ice-2);
+  font-size: 0.6875rem;
+  letter-spacing: 0;
+}
+.eh-meter {
+  display: block;
+  height: 4px;
+  margin-top: 0.6rem;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgb(207 227 245 / 0.16);
+}
+.eh-meter i {
+  display: block;
+  width: var(--v);
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--eh-amber), var(--eh-ember));
+  transform: scaleX(clamp(0, calc(var(--p) * 1.6), 1));
+  transform-origin: left;
+}
+.eh-ticks {
+  display: grid;
+  padding: 0.5rem 1.1rem;
+}
+.eh-ticks li {
+  --on: clamp(0, calc(var(--p) * 13.5 - var(--i)), 1);
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid rgb(207 227 245 / 0.09);
+  padding-block: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--eh-cream) calc(40% + var(--on) * 60%), transparent);
+}
+.eh-tickbox {
+  position: relative;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 0.3rem;
+  background: color-mix(in srgb, var(--eh-ember) calc(var(--on) * 100%), transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--eh-ember) calc(var(--on) * 100%), rgb(207 227 245 / 0.35));
+}
+.eh-tickbox::after {
+  content: "";
+  position: absolute;
+  top: 0.28rem;
+  left: 0.24rem;
+  width: 0.6rem;
+  height: 0.32rem;
+  border: solid var(--eh-navy);
+  border-width: 0 0 2.2px 2.2px;
+  opacity: var(--on);
+  transform: rotate(-45deg) scale(calc(0.4 + var(--on) * 0.6));
+}
+.eh-ticks li span:last-child {
+  color: var(--eh-ice-2);
+  font-family: var(--eh-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: var(--on);
+}
+.eh-report-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  border-top: 1px solid var(--eh-line);
+  background: var(--eh-navy-2);
+  padding: 0.85rem 1.1rem;
+  color: var(--eh-ice-2);
+}
+.eh-report-count {
+  color: var(--eh-cream);
+  font-family: var(--eh-mono);
+  font-size: 1.05rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.eh-report-count small {
+  margin-left: 0.4rem;
+  color: var(--eh-ice-2);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@media (min-width: 560px) {
+  .eh-ticks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .eh-plan-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+}
+
+/* ---------- Promises and a callout, timed ---------- */
+.eh-promises {
+  display: grid;
+  gap: 0.75rem;
+}
+.eh-promise {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-radius: 1.25rem;
+  background: var(--eh-cream);
+  padding: 1.2rem 1.25rem 1.3rem;
+  transition:
+    transform 0.5s var(--eh-ease),
+    box-shadow 0.5s var(--eh-ease);
+}
+@media (hover: hover) {
+  .eh-promise:hover {
+    box-shadow: 0 26px 40px -26px rgb(15 28 43 / 0.55);
+    transform: translateY(-4px);
+  }
+}
+.eh-promise-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--eh-ember-ink);
+}
+.eh-promise-top .eh-chip {
+  background: var(--eh-navy);
+  color: var(--eh-amber);
+}
+.eh-promise h3 {
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+.eh-promise p {
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+  color: var(--eh-slate);
+}
+.eh-run {
+  --p: 1;
+  margin-top: 1rem;
+  border-radius: 1.5rem;
+  background: var(--eh-navy);
+  padding: 1.3rem 1.25rem 1.5rem;
+  color: var(--eh-ice);
+}
+.eh-run-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  color: var(--eh-ice-2);
+}
+.eh-run-head .eh-mono:first-child {
+  color: var(--eh-amber);
+}
+.eh-run-steps {
+  position: relative;
+  display: grid;
+  gap: 1.35rem;
+  margin-top: 1.5rem;
+  padding-left: 2.2rem;
+}
+.eh-run-line {
+  position: absolute;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  left: 0.45rem;
+  width: 3px;
+  border-radius: 2px;
+  background: rgb(207 227 245 / 0.16);
+}
+.eh-run-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--eh-ice), var(--eh-amber) 55%, var(--eh-ember));
+  clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0);
+}
+.eh-run-step {
+  --on: clamp(0, calc(var(--p) * 4.4 - var(--i)), 1);
+  position: relative;
+  min-width: 0;
+}
+.eh-run-dot {
+  position: absolute;
+  top: 0.2rem;
+  left: -2.2rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) calc(var(--on) * 100%), var(--eh-navy-3));
+  box-shadow: 0 0 0 4px var(--eh-navy);
+}
+.eh-run-time {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--eh-cream);
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+.eh-run-time small {
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  color: color-mix(in srgb, var(--c) calc(var(--on) * 100%), var(--eh-ice-2));
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.eh-run-step h3 {
+  margin-top: 0.45rem;
+  color: var(--eh-cream);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.eh-run-step p {
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  color: var(--eh-ice-2);
+}
+@media (min-width: 640px) {
+  .eh-promises {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .eh-promises {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .eh-promise h3 {
+    margin-top: 2.6rem;
+  }
+  .eh-run {
+    padding: 1.6rem 2rem 2rem;
+  }
+  .eh-run-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+    margin-top: 1.6rem;
+    padding: 2.2rem 0 0;
+  }
+  .eh-run-line {
+    top: 0.45rem;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 3px;
+  }
+  .eh-run-line::after {
+    background: linear-gradient(90deg, var(--eh-ice), var(--eh-amber) 55%, var(--eh-ember));
+    clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0);
+  }
+  .eh-run-dot {
+    top: -2.2rem;
+    left: 0;
+  }
+}
+
+/* ---------- Reviews ---------- */
+.eh-reviews {
+  display: grid;
+  gap: 1rem;
+}
+.eh-review {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-radius: 1.5rem;
+  background: #fff;
+  padding: 1.5rem;
+  box-shadow: inset 0 0 0 1.5px rgb(15 28 43 / 0.1);
+  transition:
+    transform 0.5s var(--eh-ease),
+    box-shadow 0.5s var(--eh-ease);
+}
+@media (hover: hover) {
+  .eh-review:hover {
+    box-shadow:
+      inset 0 0 0 1.5px var(--eh-navy),
+      0 26px 40px -30px rgb(15 28 43 / 0.5);
+    transform: translateY(-4px);
+  }
+}
+.eh-review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.eh-stars {
+  color: var(--eh-ember-ink);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+}
+.eh-review-top .eh-chip {
+  background: var(--eh-peach);
+  color: var(--eh-navy);
+}
+.eh-review blockquote {
+  margin-block: 1.1rem 1.4rem;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+}
+.eh-review-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin-top: auto;
+  border-top: 1px solid var(--eh-line-ink);
+  padding-top: 0.9rem;
+  color: var(--eh-slate);
+}
+.eh-review-temp {
+  color: var(--eh-navy);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+.eh-review-temp i {
+  margin-inline: 0.2rem;
+  color: var(--eh-ember-ink);
+  font-style: normal;
+}
+/* Where the thermostat sits when we leave. A readout, not a rating. */
+.eh-leave {
+  display: grid;
+  grid-template-columns: auto minmax(0, 11rem);
+  align-items: center;
+  gap: 1rem;
+  border-radius: 1.25rem;
+  background: var(--eh-navy);
+  padding: 0.9rem 1.3rem 0.9rem 1.1rem;
+  color: var(--eh-ice-2);
+}
+.eh-leave b {
+  color: var(--eh-cream);
+  font-family: var(--eh-mono);
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+.eh-leave b i {
+  color: var(--eh-amber);
+  font-style: normal;
+}
+.eh-leave span {
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+@media (min-width: 900px) {
+  .eh-reviews {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Book an engineer: the warm end ---------- */
+.eh-book {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, #ff7a2f 0%, #ff9038 46%, #ffb347 100%);
+  padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(4rem, 9vw, 7.5rem);
+  color: var(--eh-navy);
+  scroll-margin-top: var(--eh-head);
+}
+.eh-book .eh-ruler {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  padding-block: 0;
+  color: var(--eh-navy);
+}
+.eh-book .eh-ruler span {
+  color: var(--eh-navy);
+}
+.eh-book .eh-ruler i {
+  opacity: 0.6;
+}
+.eh-book-grid {
+  display: grid;
+  gap: 2.25rem;
+}
+.eh-book-copy {
+  min-width: 0;
+}
+.eh-book-title {
+  font-size: clamp(2.9rem, 10.5vw, 6.5rem);
+  line-height: 0.94;
+}
+.eh-book-sub {
+  margin-top: 1.2rem;
+  max-width: 32rem;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  font-weight: 500;
+  color: rgb(15 28 43 / 0.86);
+}
+.eh-book-phone {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 1.6rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  transition: transform 0.4s var(--eh-ease);
+}
+.eh-book-phone:hover {
+  transform: translateX(4px);
+}
+.eh-book-phone .eh-mono {
+  letter-spacing: 0.12em;
+}
+.eh-book-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+}
+.eh-book-chips .eh-chip {
+  color: var(--eh-navy);
+  box-shadow: inset 0 0 0 1.5px rgb(15 28 43 / 0.45);
+}
+.eh-form {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+  border-radius: 1.5rem;
+  background: var(--eh-cream);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  color: var(--eh-navy);
+  box-shadow: 0 50px 80px -44px rgb(92 30 0 / 0.8);
+}
+.eh-form-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--eh-ember-ink);
+}
+.eh-form-head .eh-chip {
+  background: var(--eh-navy);
+  color: var(--eh-amber);
+}
+.eh-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.eh-field input,
+.eh-field select {
+  width: 100%;
+  height: 3.1rem;
+  border: 1.5px solid rgb(15 28 43 / 0.2);
+  border-radius: 0.8rem;
+  background: #fff;
+  padding-inline: 0.9rem;
+  color: var(--eh-navy);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  transition:
+    border-color 0.25s var(--eh-ease),
+    box-shadow 0.25s var(--eh-ease);
+}
+.eh-field input::placeholder {
+  color: rgb(15 28 43 / 0.58);
+}
+.eh-field input:hover,
+.eh-field select:hover {
+  border-color: rgb(15 28 43 / 0.45);
+}
+.eh-field input:focus,
+.eh-field select:focus {
+  border-color: var(--eh-navy);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgb(255 122 47 / 0.4);
+}
+.eh-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.eh-when {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+.eh-when legend {
+  margin-bottom: 0.35rem;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.eh-when-opts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+.eh-when label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.eh-when input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.eh-when span {
+  display: grid;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: inset 0 0 0 1.5px rgb(15 28 43 / 0.2);
+  transition:
+    background-color 0.3s var(--eh-ease),
+    color 0.3s var(--eh-ease),
+    box-shadow 0.3s var(--eh-ease),
+    transform 0.3s var(--eh-ease);
+}
+.eh-when label:hover span {
+  box-shadow: inset 0 0 0 1.5px var(--eh-navy);
+}
+.eh-when label:active span {
+  transform: scale(0.97);
+}
+.eh-when input:checked + span {
+  background: var(--eh-navy);
+  color: var(--eh-cream);
+  box-shadow: inset 0 0 0 1.5px var(--eh-navy);
+}
+.eh-when input:focus-visible + span {
+  outline: 2px solid var(--eh-navy);
+  outline-offset: 3px;
+}
+.eh-form-note {
+  color: var(--eh-slate);
+  text-align: center;
+}
+.eh-form--done {
+  align-content: center;
+  min-height: 20rem;
+}
+.eh-form--done .eh-mono {
+  color: var(--eh-ember-ink);
+}
+.eh-form-done-title {
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+@media (min-width: 900px) {
+  .eh-book-grid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+}
+
+/* ---------- Footer and the phone bar ---------- */
+.eh-footer {
+  background: var(--eh-navy);
+  padding-block: 2.5rem 7rem;
+}
+.eh-footer-grid {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+}
+.eh-footer-note {
+  max-width: 54ch;
+  font-size: 0.875rem;
+  color: var(--eh-ice-2);
+}
+.eh-footer-rows {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--eh-ice-2);
+}
+.eh-footer-rows b {
+  color: var(--eh-cream);
+  font-weight: 500;
+}
+.eh-footer .eh-link {
+  color: var(--eh-cream);
+}
+.eh-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 45;
+  display: flex;
+  gap: 0.5rem;
+  background: rgb(15 28 43 / 0.97);
+  padding: 0.5rem 0.75rem max(0.5rem, env(safe-area-inset-bottom));
+  box-shadow: 0 -1px 0 var(--eh-line);
+}
+.eh-bar .eh-btn {
+  min-height: 3rem;
+}
+.eh-bar .eh-btn--ember {
+  flex: 1;
+}
+.eh-bar .eh-btn--ghost {
+  color: var(--eh-cream);
+}
+/* Lift the demo pill above the phone bar. */
+@media (max-width: 767.98px) {
+  .imm:has(.eh) {
+    --imm-bar: 4rem;
+  }
+}
+@media (min-width: 768px) {
+  .eh-bar {
+    display: none;
+  }
+  .eh-footer {
+    padding-bottom: 4.75rem;
+  }
+  .eh-footer-grid {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 3rem;
+  }
+}

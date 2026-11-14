@@ -4,6 +4,7 @@ import BuildSection from "@/components/web-design-portal/build-section";
 import FaqSection from "@/components/web-design-portal/faq-section";
 import FrontBackSection from "@/components/web-design-portal/front-back-section";
 import Hero from "@/components/web-design-portal/hero";
+import ImmersiveSection from "@/components/web-design-portal/immersive-section";
 import PricingSection from "@/components/web-design-portal/pricing-section";
 import SectorSection from "@/components/web-design-portal/sector-section";
 import SiteFooter from "@/components/web-design-portal/site-footer";
@@ -26,6 +27,7 @@ export default function WebDesignPortal() {
         <BuildSection />
         <WorkSection />
         <SectorSection />
+        <ImmersiveSection />
         <AnyBusinessSection />
         <AppSection />
         <PricingSection />

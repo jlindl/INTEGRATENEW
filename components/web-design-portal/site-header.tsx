@@ -14,6 +14,7 @@ import { ArrowUpRight, LogoMark } from "@/components/web-design-portal/icons";
 const NAV_LINKS = [
   { label: "Work", href: "#work" },
   { label: "Sectors", href: "#sectors" },
+  { label: "Immersive", href: "#immersive" },
   { label: "Pricing", href: "#pricing" },
   { label: "Studio", href: "#studio" },
   { label: "FAQ", href: "#faq" },
