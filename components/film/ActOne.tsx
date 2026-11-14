@@ -48,11 +48,10 @@ export function Hero() {
   const c = HERO.cards;
   return (
     <section data-film="hero" data-beat="01|Cold open" data-tone="dark" className="film-hero bg-carbon text-ivory">
-      {/* The brand's silver limb, blown up into the set: the one big object. */}
+      {/* The set: a faint grid and a soft light behind the phone. */}
       <div className="film-hero-set" aria-hidden="true">
         <div className="film-hero-grid" />
-        <div className="film-hero-limb" />
-        <div className="film-hero-limb film-hero-limb--ink" />
+        <div className="film-hero-glow" />
       </div>
 
       <div className="container-x film-hero-layout">
