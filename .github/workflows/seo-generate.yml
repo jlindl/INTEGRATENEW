@@ -1,7 +1,9 @@
 name: SEO generate
 
-# Writes three blog posts a week: a service article on Monday and Friday, a
-# location article on Wednesday. Quality over volume: Google ignores large
+# Writes three blog posts a week, all national service articles (Monday,
+# Wednesday, Friday). Town-by-town location posts stopped on 14 Nov 2026:
+# Integrate targets the whole UK, not single areas (run --only location by
+# hand if ever needed). Quality over volume: Google ignores large
 # batches of similar pages, so every post must earn its place. Articles only:
 # nothing is posted to social media. Run it by hand (workflow_dispatch) for
 # extra posts.
@@ -20,7 +22,7 @@ name: SEO generate
 on:
   schedule:
     - cron: "0 5 * * 1" # Monday: service article
-    - cron: "0 5 * * 3" # Wednesday: location article
+    - cron: "0 5 * * 3" # Wednesday: service article
     - cron: "0 5 * * 5" # Friday: service article
   workflow_dispatch:
     inputs:
@@ -52,7 +54,7 @@ jobs:
       PUBLISH_MODE: ${{ vars.PUBLISH_MODE || 'pr' }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ONLY: ${{ inputs.only || (github.event.schedule == '0 5 * * 3' && 'location') || (github.event_name == 'schedule' && 'service') || 'both' }}
+      ONLY: ${{ inputs.only || (github.event.schedule == '0 5 * * 3' && 'service') || (github.event_name == 'schedule' && 'service') || 'both' }}
     steps:
       - uses: actions/checkout@v7
         with:
