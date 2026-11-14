@@ -102,6 +102,19 @@
       transform: rotate(360deg);
     }
   }
+
+  /* Web Design CTA — the purple line's lap of the pill's outline. Each dash
+     sets its own start and end offsets (--wd-from, --wd-to), one lap apart. */
+  --animate-wd-run: wd-run 3.2s linear infinite;
+
+  @keyframes wd-run {
+    from {
+      stroke-dashoffset: var(--wd-from);
+    }
+    to {
+      stroke-dashoffset: var(--wd-to);
+    }
+  }
 }
 
 /* Web design portal palette — app/web-design/(portal). Registered here only so
