@@ -9,13 +9,15 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { WebDesignCta } from "@/components/ui/WebDesignCta";
 import { CONTACT } from "@/lib/film/content";
 
+/* Web design is not in this list: it has its own button (WebDesignCta), in
+   the bar from tablet width up and at the foot of the phone menu. */
 const LINKS = [
   { label: "Systems", href: "#services" },
   { label: "Work", href: "#case-studies" },
   { label: "Process", href: "#process" },
-  { label: "Web design", href: "/web-design" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -93,6 +95,7 @@ export function FilmNav() {
         </ul>
 
         <div className="film-nav-actions">
+          <WebDesignCta label="Web design" className="film-nav-wd hidden md:inline-flex" />
           <a href={CONTACT.bookHref} className="film-nav-cta">
             {CONTACT.bookLabel}
           </a>
@@ -129,6 +132,9 @@ export function FilmNav() {
             </a>
           </li>
         </ul>
+        <div className="film-menu-wd">
+          <WebDesignCta size="lg" className="flex w-full" onClick={() => setOpen(false)} />
+        </div>
       </div>
     </header>
 
