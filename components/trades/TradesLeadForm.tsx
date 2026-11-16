@@ -41,7 +41,7 @@ const STEPS = [
   { title: "Where should we call you?", hint: "We'll ring within one business day for a free 20-minute chat." },
 ];
 
-type Contact = { name: string; phone: string; email: string; area: string };
+type Contact = { name: string; business: string; phone: string; email: string; area: string };
 type Status = "idle" | "submitting" | "success" | "error";
 
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -96,7 +96,7 @@ export function TradesLeadForm() {
   const [step, setStep] = useState(0);
   const [trade, setTrade] = useState("");
   const [jobValue, setJobValue] = useState("");
-  const [contact, setContact] = useState<Contact>({ name: "", phone: "", email: "", area: "" });
+  const [contact, setContact] = useState<Contact>({ name: "", business: "", phone: "", email: "", area: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
@@ -142,7 +142,7 @@ export function TradesLeadForm() {
 
   const set = (key: keyof Contact, value: string) => setContact((c) => ({ ...c, [key]: value }));
 
-  const valid = !!contact.name.trim() && isPhone(contact.phone) && isEmail(contact.email.trim());
+  const valid = !!contact.name.trim() && !!contact.business.trim() && isPhone(contact.phone) && isEmail(contact.email.trim());
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -158,6 +158,7 @@ export function TradesLeadForm() {
     const name = contact.name.trim().replace(/\s+/g, " ");
     const [firstName, ...rest] = name.split(" ");
     const message = [
+      `Business: ${contact.business.trim()}`,
       `Trade: ${trade || "not given"}`,
       `Typical job value: ${jobValue || "not given"}`,
       `Area covered: ${contact.area.trim() || "not given"}`,
@@ -177,6 +178,7 @@ export function TradesLeadForm() {
           name,
           firstName,
           lastName: rest.join(" ") || undefined,
+          company: contact.business.trim(),
           email: contact.email.trim(),
           phone: contact.phone.trim(),
           industry: trade,
@@ -293,6 +295,11 @@ export function TradesLeadForm() {
                 <label htmlFor="tl-name" className={label}>Your name</label>
                 <input id="tl-name" className={field} autoComplete="name" enterKeyHint="next" value={contact.name} onChange={(e) => set("name", e.target.value)} />
                 {showErrors && !contact.name.trim() && <FieldError>Please enter your name.</FieldError>}
+              </div>
+              <div>
+                <label htmlFor="tl-business" className={label}>Business name</label>
+                <input id="tl-business" className={field} autoComplete="organization" enterKeyHint="next" value={contact.business} onChange={(e) => set("business", e.target.value)} />
+                {showErrors && !contact.business.trim() && <FieldError>Please enter your business name.</FieldError>}
               </div>
               <div>
                 <label htmlFor="tl-phone" className={label}>Mobile number</label>
