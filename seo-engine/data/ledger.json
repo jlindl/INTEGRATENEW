@@ -387,6 +387,15 @@
       "slug": "marketing-for-painters-and-decorators-in-wigan",
       "title": "Marketing for painters and decorators in Wigan",
       "targetKeyword": "marketing for painters and decorators in Wigan"
+    },
+    {
+      "date": "2026-11-16",
+      "type": "service",
+      "key": "service:missed-call-text-back:tilers",
+      "status": "generated",
+      "slug": "missed-call-text-back-for-tilers-stop-losing-jobs",
+      "title": "Missed call text back for tilers: stop losing jobs",
+      "targetKeyword": "missed call text back for tilers"
     }
   ]
 }
