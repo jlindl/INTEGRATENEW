@@ -22,12 +22,18 @@ import { LEGAL_DOCS } from "@/lib/legalData";
  * Copy is drawn from the lead generation hub (lib/serviceHubs.ts) and the VSL.
  * Don't add numbers or testimonials here unless they are real and approved.
  *
- * The video is public/Integrate_VSL.mp4 (16:9), with a poster frame at
- * public/Integrate_VSL-poster.jpg. The page checks for them at build time.
+ * The video is public/Integrate_VSL-720.mp4 (16:9, 720p H.264 with faststart,
+ * about 8 MB), with a poster frame at public/Integrate_VSL-poster-720.jpg. The
+ * page checks for them at build time. Keep the video small: ad visitors are
+ * mostly on mobile data in the Facebook in-app browser. If you replace it, give
+ * it a new file name, because next.config caches these files for a year.
+ *
+ * The hero (headline, video and form) is not wrapped in <Reveal>: it must paint
+ * from the server HTML, not wait for JavaScript to fade it in.
  */
 
-const VIDEO_FILE = "Integrate_VSL.mp4";
-const POSTER_FILE = "Integrate_VSL-poster.jpg";
+const VIDEO_FILE = "Integrate_VSL-720.mp4";
+const POSTER_FILE = "Integrate_VSL-poster-720.jpg";
 const inPublic = (file: string) => fs.existsSync(path.join(process.cwd(), "public", file));
 
 export const metadata: Metadata = {
@@ -141,7 +147,7 @@ export default function TradesPage() {
       <section aria-labelledby="hero-title" className="relative mx-auto max-w-6xl px-5 pb-14 pt-10 sm:px-8 sm:pt-14 lg:pb-20">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12">
           <div>
-            <Reveal>
+            <div>
               <p className={eyebrow}>For UK trades and construction firms</p>
               <h1 id="hero-title" className="font-display-tuned mt-4 text-[clamp(2.4rem,8vw,4.4rem)] font-medium leading-[1.02] tracking-[-0.01em] text-ink">
                 A diary full of jobs <br />
@@ -159,9 +165,9 @@ export default function TradesPage() {
                   miss, we keep working without charging our fee until you have them.
                 </span>
               </p>
-            </Reveal>
-  
-            <Reveal delay={0.08} className="mt-9 lg:mt-10">
+            </div>
+
+            <div className="mt-9 lg:mt-10">
               {hasVideo ? (
                 <>
                   <AdVideo src={`/${VIDEO_FILE}`} poster={poster} />
@@ -182,16 +188,16 @@ export default function TradesPage() {
                   ))}
                 </ul>
               )}
-            </Reveal>
+            </div>
           </div>
 
           {/* On desktop the form starts level with the headline and stays in
               view while the visitor scrolls past the video. */}
-          <Reveal delay={0.16} className="lg:sticky lg:top-6">
+          <div className="lg:sticky lg:top-6">
             <div id="get-started" className="scroll-mt-6">
               <TradesLeadForm />
             </div>
-          </Reveal>
+          </div>
         </div>
 
         {/* Promises */}

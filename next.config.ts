@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
   },
   // The four launch-era sample posts were removed when the blog moved to MDX;
   // send anyone (or any search engine) still holding those URLs to the blog.
+  // The /trades VSL and poster are versioned by file name, so browsers and
+  // Vercel's edge can keep them for a year instead of revalidating every visit.
+  async headers() {
+    return ["/Integrate_VSL-720.mp4", "/Integrate_VSL-poster-720.jpg"].map((source) => ({
+      source,
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    }));
+  },
   async redirects() {
     return [
       "hidden-cost-of-manual-operations",
