@@ -5,6 +5,7 @@
  */
 import Link from "next/link";
 import { LogoMark } from "@/components/ui/LogoMark";
+import { PreferredSourceButton } from "@/components/ui/PreferredSourceButton";
 import { NICHES } from "@/lib/webDesignData";
 
 function FooterLink({ href, children, external }: { href: string; children: string; external?: boolean }) {
@@ -87,10 +88,16 @@ export function WebDesignFooter() {
           <p className="font-mono text-[0.75rem] text-mist-2">
             © 2026 Integrate. All rights reserved.
           </p>
-          <p className="flex items-center gap-2.5 rounded-full border border-graphite bg-carbon px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-mist">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#22c55e] motion-safe:animate-pulse" />
-            Taking new projects
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <PreferredSourceButton
+              domain="integrate-tech.co.uk"
+              className="text-mist transition-colors duration-300 hover:text-ivory"
+            />
+            <p className="flex items-center gap-2.5 rounded-full border border-graphite bg-carbon px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-mist">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#22c55e] motion-safe:animate-pulse" />
+              Taking new projects
+            </p>
+          </div>
         </div>
       </div>
 

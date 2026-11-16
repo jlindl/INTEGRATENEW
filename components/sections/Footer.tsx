@@ -8,6 +8,7 @@
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { LEGAL_DOCS } from "@/lib/legalData";
 import { CookieSettingsLink } from "@/components/analytics/CookieBanner";
+import { PreferredSourceButton } from "@/components/ui/PreferredSourceButton";
 
 type LinkItem = { label: string; href: string };
 
@@ -125,13 +126,19 @@ export function Footer() {
               <CookieSettingsLink className="inline-block py-3 text-left text-[0.75rem] text-ink-3 transition-colors duration-300 hover:text-ink sm:py-0" />
             </nav>
           </div>
-          <p className="hairline flex w-fit items-center gap-2.5 rounded-full bg-card px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-2">
-            <span
-              aria-hidden="true"
-              className="h-1.5 w-1.5 rounded-full bg-[#22c55e] motion-safe:animate-pulse"
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <PreferredSourceButton
+              domain="integrate-tech.co.uk"
+              className="text-ink-2 transition-colors duration-300 hover:text-ink"
             />
-            Accepting New Clients
-          </p>
+            <p className="hairline flex w-fit items-center gap-2.5 rounded-full bg-card px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-2">
+              <span
+                aria-hidden="true"
+                className="h-1.5 w-1.5 rounded-full bg-[#22c55e] motion-safe:animate-pulse"
+              />
+              Accepting New Clients
+            </p>
+          </div>
         </div>
       </div>
 

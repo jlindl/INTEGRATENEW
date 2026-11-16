@@ -1,4 +1,5 @@
 import FooterWordmark from "@/components/web-design-portal/footer-wordmark";
+import { PreferredSourceButton } from "@/components/ui/PreferredSourceButton";
 import Frame from "@/components/web-design-portal/frame";
 import Magnetic from "@/components/web-design-portal/magnetic";
 import Reveal from "@/components/web-design-portal/reveal";
@@ -207,6 +208,10 @@ export default function SiteFooter() {
           <p className="max-w-[90ch]">
             {COMPANY.legalName}. {COMPANY.registration}
           </p>
+          <PreferredSourceButton
+            domain="integrate-tech.co.uk"
+            className="mt-5 text-white/65 transition-colors hover:text-white"
+          />
           <div className="mt-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <p>
               &copy; {new Date().getFullYear()} {COMPANY.legalName}. All rights
