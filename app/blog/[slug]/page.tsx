@@ -7,6 +7,7 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { ContactCta } from "@/components/blog/ContactCta";
 import { PostBody } from "@/components/blog/mdx";
 import { PostJsonLd } from "@/components/blog/PostJsonLd";
+import { PreferredSourceCard } from "@/components/blog/PreferredSourceCard";
 import { allPostSlugs, getPost, getRelatedPosts } from "@/lib/blog";
 import { hubForService, getHub } from "@/lib/serviceHubs";
 
@@ -119,6 +120,8 @@ export default async function BlogPost({
           <Reveal delay={0.16} className="mt-4">
             <PostBody source={post.body} />
           </Reveal>
+
+          <PreferredSourceCard name="Integrate" domain="integrate-tech.co.uk" className="mt-10 text-ink" />
 
           {/* Up-link to the service hub this post belongs to */}
           {hub && (
