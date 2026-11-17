@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Pages rendered per request (e.g. /black-friday, which checks the offer
+  // deadline on every request) would otherwise stream their <title>, meta
+  // description and Open Graph tags into the <body> for everyone except a
+  // short list of known crawlers. Matching every user agent keeps them in the
+  // <head>, where link previews, SEO tools and Lighthouse look for them.
+  htmlLimitedBots: /.*/,
   // Verification builds set NEXT_DISTDIR to a throwaway dir so a prod build
   // never overwrites the running `next dev` server's shared `.next` chunks.
   distDir: process.env.NEXT_DISTDIR || ".next",

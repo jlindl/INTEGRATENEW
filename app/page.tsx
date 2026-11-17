@@ -9,6 +9,8 @@ import { FilmStickyCta } from "@/components/film/FilmStickyCta";
 import { Hero, Noise, Turn } from "@/components/film/ActOne";
 import { System, Trades } from "@/components/film/ActTwo";
 import { Proof, Process, Payoff } from "@/components/film/ActThree";
+import { HomeBanner } from "@/components/black-friday/HomeBanner";
+import { DEADLINE_MS, PRICE_MONTHLY, offerState } from "@/lib/blackFriday";
 import "./film.css";
 
 /* Headlines are Instrument Sans (loaded by the root layout). Their one accent
@@ -28,6 +30,10 @@ const frauncesItalic = localFont({
    staging builds stay out of search. */
 const isProduction = process.env.VERCEL_ENV === "production";
 
+/* Re-rendered at most once a minute, so the Black Friday banner leaves the
+   homepage by server time once the offer ends. */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Integrate | AI automation and websites for UK trades",
   description:
@@ -42,12 +48,13 @@ export const metadata: Metadata = {
  * scroll choreography after first paint. The running order lives here.
  */
 export default function Home() {
+  const blackFriday = offerState() === "live";
   return (
     <div className={`film ${frauncesItalic.variable}`}>
       <JsonLd data={organizationGraph()} />
       <FilmNav />
       <main id="main">
-        <Hero />
+        <Hero announcement={blackFriday ? <HomeBanner deadline={DEADLINE_MS} price={PRICE_MONTHLY} /> : null} />
         <Noise />
         <Turn />
         <System />

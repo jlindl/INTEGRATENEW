@@ -1,10 +1,13 @@
 "use client";
 
 /**
- * StickyCta — the phone-only "Book my free call" bar on /trades. It slides in
- * once the visitor has scrolled away from the top, and hides while the form
- * or the closing call to action is on screen (it would only cover them) and
- * while the cookie banner is still waiting for an answer (same spot).
+ * StickyCta — the phone-only call to action bar on /trades and
+ * /black-friday. It slides in once the visitor has scrolled away from the
+ * top, and hides while any of the `watch` elements (the form, the closing
+ * call to action) is on screen, since it would only cover them, and while the
+ * cookie banner is still waiting for an answer (same spot).
+ *
+ * The defaults are the /trades bar.
  */
 import { useEffect, useState } from "react";
 import { CONSENT_KEY } from "@/lib/gtag";
@@ -19,8 +22,24 @@ function consentAnswered() {
   }
 }
 
-export function StickyCta() {
+export function StickyCta({
+  href = "#get-started",
+  label = "Book my free call",
+  note = "· 30 seconds",
+  watch = WATCH,
+  buttonClassName = "bg-ink text-paper",
+  noteClassName = "text-paper/60",
+}: {
+  href?: string;
+  label?: string;
+  note?: string;
+  /** Ids of elements that hide the bar while they are on screen. */
+  watch?: string[];
+  buttonClassName?: string;
+  noteClassName?: string;
+} = {}) {
   const [show, setShow] = useState(false);
+  const watchKey = watch.join(",");
 
   useEffect(() => {
     const onScreen = new Set<string>();
@@ -34,8 +53,8 @@ export function StickyCta() {
       }
       update();
     });
-    WATCH.forEach((id) => {
-      const el = document.getElementById(id);
+    watchKey.split(",").forEach((id) => {
+      const el = id && document.getElementById(id);
       if (el) io.observe(el);
     });
 
@@ -50,7 +69,7 @@ export function StickyCta() {
       window.removeEventListener("scroll", update);
       window.removeEventListener("cookie-consent-change", onConsent);
     };
-  }, []);
+  }, [watchKey]);
 
   return (
     <div
@@ -60,12 +79,12 @@ export function StickyCta() {
       }`}
     >
       <a
-        href="#get-started"
+        href={href}
         tabIndex={show ? 0 : -1}
-        className="flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full bg-ink px-6 text-base font-medium text-paper"
+        className={`flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full px-6 text-base font-medium ${buttonClassName}`}
       >
-        Book my free call
-        <span className="font-normal text-paper/60">· 30 seconds</span>
+        {label}
+        {note ? <span className={`font-normal ${noteClassName}`}>{note}</span> : null}
       </a>
     </div>
   );
