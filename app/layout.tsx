@@ -17,6 +17,11 @@ const fraunces = localFont({
   ],
   variable: "--font-fraunces",
   display: "swap",
+  // Not preloaded: the two variable files are ~270 kB together, and with
+  // preload on, every page (including ones that never use Fraunces, or only
+  // the 15 kB homepage subset) downloads them before its headline can paint.
+  // Pages that use Fraunces still load it as soon as their CSS asks for it.
+  preload: false,
 });
 
 /* Clean, highly legible body face */
