@@ -33,7 +33,7 @@ export function HomeBanner({ deadline, price }: { deadline: number; price: numbe
         Black Friday
       </span>
       <span className="min-w-0 truncate">
-        <span className="sm:hidden">Website, SEO and stories for £{price}/mo</span>
+        <span className="sm:hidden">£{price}/mo: website, SEO, stories</span>
         <span className="hidden sm:inline">A new website, full SEO and 30 stories a month for £{price}/mo</span>
       </span>
       <span aria-hidden="true" className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
