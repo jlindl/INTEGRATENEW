@@ -6,7 +6,7 @@
  * adding `film-on` to <html> and feeding each section a scroll progress.
  */
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { CONTACT, HERO, LOOPS, MEDIA, NOISE, TURN } from "@/lib/film/content";
 import { scribblePath } from "@/lib/film/scribble";
@@ -44,7 +44,8 @@ function HeroPhone() {
   );
 }
 
-export function Hero() {
+/** `announcement` is an optional small banner above the eyebrow (e.g. a time-limited offer). */
+export function Hero({ announcement }: { announcement?: ReactNode } = {}) {
   const c = HERO.cards;
   return (
     <section data-film="hero" data-beat="01|Cold open" data-tone="dark" className="film-hero bg-carbon text-ivory">
@@ -56,6 +57,7 @@ export function Hero() {
 
       <div className="container-x film-hero-layout">
         <div className="film-hero-body min-w-0">
+          {announcement}
           <p className="film-eyebrow text-halo">{HERO.eyebrow}</p>
           <h1 className="film-h1">
             {HERO.h1.map((line, i) => (
