@@ -3,15 +3,19 @@ import localFont from "next/font/local";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationGraph } from "@/lib/schema";
 import { Footer } from "@/components/sections/Footer";
-import { FilmNav } from "@/components/film/FilmNav";
-import { FilmDirector } from "@/components/film/FilmDirector";
-import { FilmStickyCta } from "@/components/film/FilmStickyCta";
-import { Hero, Noise, Turn } from "@/components/film/ActOne";
-import { System, Trades } from "@/components/film/ActTwo";
-import { Proof, Process, Payoff } from "@/components/film/ActThree";
+import { StickyCta } from "@/components/trades/StickyCta";
 import { HomeBanner } from "@/components/black-friday/HomeBanner";
+import { HomeNav } from "@/components/home/HomeNav";
+import { Hero } from "@/components/home/Hero";
+import { DayLedger } from "@/components/home/DayLedger";
+import { Systems } from "@/components/home/Systems";
+import { Trades } from "@/components/home/Trades";
+import { Proof } from "@/components/home/Proof";
+import { Process } from "@/components/home/Process";
+import { Book } from "@/components/home/Book";
+import { CONTACT } from "@/lib/film/content";
 import { DEADLINE_MS, PRICE_MONTHLY, offerState } from "@/lib/blackFriday";
-import "./film.css";
+import "./home.css";
 
 /* Headlines are Instrument Sans (loaded by the root layout). Their one accent
    word is Fraunces italic at a single setting (opsz 90, weight 400), so the
@@ -43,31 +47,38 @@ export const metadata: Metadata = {
 };
 
 /**
- * The homepage is one film in eight beats (see direction.md). Each beat is a
- * server component that renders its finished state; FilmDirector adds the
- * scroll choreography after first paint. The running order lives here.
+ * The homepage: seven rooms, alternating carbon and paper, each built around
+ * one real-looking product object. Copy and every fact come from
+ * lib/film/content.ts (its honesty rules still apply). No pinned or
+ * scroll-scrubbed scenes; the one orchestrated moment is the hero
+ * conversation. Design notes, contrast figures and the review behind this
+ * layout are in app/home.css and components/home/.
  */
 export default function Home() {
   const blackFriday = offerState() === "live";
   return (
-    <div className={`film ${frauncesItalic.variable}`}>
+    <div className={`home ${frauncesItalic.variable}`}>
       <JsonLd data={organizationGraph()} />
-      <FilmNav />
+      <HomeNav />
       <main id="main">
         <Hero announcement={blackFriday ? <HomeBanner deadline={DEADLINE_MS} price={PRICE_MONTHLY} /> : null} />
-        <Noise />
-        <Turn />
-        <System />
+        <DayLedger />
+        <Systems />
         <Trades />
         <Proof />
         <Process />
-        <Payoff />
+        <Book />
       </main>
-      <div className="film-footer" data-tone="light">
+      <div data-tone="light">
         <Footer />
       </div>
-      <FilmStickyCta />
-      <FilmDirector />
+      <StickyCta
+        href="#book-call"
+        label={CONTACT.bookLabel}
+        note=""
+        watch={["hero-actions", "book-call"]}
+        buttonClassName="bg-carbon text-ivory"
+      />
     </div>
   );
 }

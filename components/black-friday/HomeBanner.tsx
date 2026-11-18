@@ -27,9 +27,9 @@ export function HomeBanner({ deadline, price }: { deadline: number; price: numbe
     <a
       href="/black-friday"
       onClick={() => track("cta_click", { place: "home_black_friday_banner" })}
-      className="group mb-5 inline-flex max-w-full items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] py-1.5 pl-1.5 pr-3.5 text-[0.8rem] text-ivory transition-colors duration-300 hover:border-halo/60 hover:bg-white/[0.07] sm:text-[0.84rem]"
+      className="group mb-5 inline-flex min-h-11 max-w-full items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] py-1.5 pl-1.5 pr-3.5 text-[0.8rem] text-ivory transition-colors duration-300 hover:border-halo/60 hover:bg-white/[0.07] sm:text-[0.84rem]"
     >
-      <span className="shrink-0 rounded-full bg-ivory px-2 py-0.5 font-mono text-[0.62rem] font-medium uppercase tracking-[0.12em] text-carbon">
+      <span className="shrink-0 rounded-full bg-ivory px-2 py-1 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-carbon">
         Black Friday
       </span>
       <span className="min-w-0 truncate">
