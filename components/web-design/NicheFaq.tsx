@@ -1,9 +1,8 @@
 /**
  * NicheFaq — the search-facing half of a niche page: what a website for this
  * trade includes, what it costs, the common questions, and links into the
- * related guides. Every fact here matches the pricing page (£200 build fee
- * from, £30/month with hosting and up to 30 minutes of edits) so the copy and
- * the FAQ schema never promise more than the business offers.
+ * related guides. The price matches the current offer on /web-design (£299 a
+ * month: website, SEO and 30 social story creatives).
  */
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
@@ -27,7 +26,7 @@ export function nicheFaqItems(niche: Niche): NicheFaqItem[] {
   return [
     {
       q: `How much does a website for ${trade} cost?`,
-      a: `Integrate websites start from a £200 build fee, then a flat £30 a month that covers hosting, SSL, backups, updates and up to 30 minutes of edits. The exact build fee depends on how many pages and features your ${one} business needs, and anything beyond the monthly minutes is quoted up front, so there are no surprise charges.`,
+      a: `Integrate's current offer is £299 a month, covering your ${one} website, SEO and 30 story creatives for your socials. Bigger builds with portals, apps or integrations are quoted per project.`,
     },
     {
       q: `What should a ${one} website include?`,
@@ -90,11 +89,7 @@ export function NicheFaq({
             ))}
           </ul>
           <p className="mt-6 leading-relaxed text-mist">
-            From a £200 build fee plus £30 a month.{" "}
-            <Link href="/web-design/pricing" className="text-ivory underline underline-offset-4 hover:text-halo">
-              See full pricing
-            </Link>{" "}
-            or{" "}
+            £299 a month for your website, SEO and 30 social story creatives.{" "}
             <Link href="/contact" className="text-ivory underline underline-offset-4 hover:text-halo">
               get a quote for your {niche.singular.toLowerCase()} website
             </Link>

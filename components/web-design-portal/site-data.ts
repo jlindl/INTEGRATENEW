@@ -1,8 +1,8 @@
 /**
  * Every fact the page states, in one place.
  *
- * Source of truth: the live Integrate site (read 11 November 2026) —
- * the /web-design portal, /web-design/pricing, the sector pages, /contact and
+ * Source of truth: the live Integrate site (read 11 November 2026):
+ * the /web-design portal, the sector pages, /contact and
  * the company details in the site footer. Nothing here is invented: if a
  * figure, client or sentence is not published there, it is not on this page.
  *
@@ -45,41 +45,62 @@ export const COMPANY = {
   ],
 } as const;
 
-/* ------------------------------------------------------------------ Pricing */
+/* -------------------------------------------------------------------- Offer */
 
-export const PRICING = {
-  buildFrom: 200,
-  monthly: 30,
-  editMinutes: 30,
-  build: [
-    "A design built around how your business actually sells",
-    "Works properly on phones, and loads quickly",
-    "A hand with the words and layout so it reads well from day one",
-    "Set up, launched, and handed over ready to go",
+/** The one current offer. Change the figure or the list here and every
+ *  mention on the page follows. */
+export const OFFER = {
+  monthly: 299,
+  included: [
+    {
+      title: "Your website",
+      body: "Designed around how your business wins work, built to load fast on a phone, hosted and looked after.",
+    },
+    {
+      title: "SEO",
+      body: "Set up so Google understands every page, with a page for each service and area you cover.",
+    },
+    {
+      title: "30 story creatives",
+      body: "Ready-to-post stories for your socials, so your accounts stay active without you making them.",
+    },
   ],
-  care: [
-    "Fast, secure hosting, with SSL, backups and updates included",
-    "Up to 30 minutes of edits every month",
-    "Small changes done for you: new hours, prices, photos, text",
-    "Someone on hand when something needs updating",
-  ],
-  finePrint:
-    "The £200 is a starting point; the exact build fee depends on how many pages and features you need. Anything beyond the 30 monthly minutes is always quoted up front, so there are never surprise charges.",
-  bigger: [
-    {
-      title: "Mobile apps",
-      body: "Native iOS & Android or installable web apps for ordering, loyalty, booking and live tracking.",
-    },
-    {
-      title: "Client portals",
-      body: "Secure logins, dashboards, documents and payments for your customers or your team.",
-    },
-    {
-      title: "Integrated systems & complex sites",
-      body: "Bookings, CRMs, stock, payments and automations wired together into one place.",
-    },
+  whyNow: [
+    "Every week without a site that ranks is a week of enquiries going to whoever does show up.",
+    "SEO compounds. The pages that go live this month are the ones ranking months from now. Start later, rank later.",
+    "Quiet socials look like a quiet business. Thirty stories keep you in front of people while you are out on the job.",
   ],
 } as const;
+
+/* ---------------------------------------------------------------------- SEO */
+
+/** What the SEO section says. Each point is something the build itself does. */
+export const SEO = [
+  {
+    title: "Technical foundations",
+    body: "Clean page structure, proper titles and descriptions, schema markup and a sitemap, so Google can read every page without guessing.",
+  },
+  {
+    title: "Fast on a phone",
+    body: "Built to pass Core Web Vitals. Speed is part of how Google ranks pages, and it is what stops people giving up before the page loads.",
+  },
+  {
+    title: "A page for every service",
+    body: "Each service and each area you cover gets its own page, written around what people actually type into Google when they need you.",
+  },
+  {
+    title: "Local search",
+    body: "Your business name, address and phone number set out consistently, with the local detail that helps you show up for searches near you.",
+  },
+  {
+    title: "Rebuilds that keep your rankings",
+    body: "Moving from an old site? Old addresses are redirected to the new pages, so the search visibility you already have comes with you.",
+  },
+  {
+    title: "Content that keeps working",
+    body: "Guides and articles that answer the questions your customers ask before they pick up the phone, and link them straight to your services.",
+  },
+] as const;
 
 /* ------------------------------------------------------- Live client builds */
 
@@ -98,6 +119,34 @@ export type ClientBuild = {
 };
 
 export const CLIENTS: ClientBuild[] = [
+  {
+    name: "FunSmile",
+    sector: "Oral care brand",
+    service: "Web design",
+    domain: "funsmilelab.com",
+    href: "https://funsmilelab.com/",
+    image: "/media/proof/funsmile.webp",
+    blurb:
+      "A launch site for a flavoured toothpaste brand, bright enough to make brushing look like a treat.",
+  },
+  {
+    name: "CloudKicks",
+    sector: "Footwear",
+    service: "E-commerce",
+    domain: "cloudkicks.store",
+    href: "https://www.cloudkicks.store/",
+    image: "/media/proof/cloudkicks.webp",
+    blurb: "An e-commerce storefront for a streetwear and footwear brand.",
+  },
+  {
+    name: "PoundMart",
+    sector: "Value retail",
+    service: "E-commerce + automation",
+    domain: "poundmart.co.uk",
+    href: "https://www.poundmart.co.uk/",
+    image: "/media/proof/poundmart.webp",
+    blurb: "E-commerce and automation for a value retailer.",
+  },
   {
     name: "Allied Insurance",
     sector: "Commercial insurance",
@@ -119,6 +168,26 @@ export const CLIENTS: ClientBuild[] = [
       "An instant-quote flow that lets cleaners price and buy cover in minutes, at any hour.",
   },
   {
+    name: "A La Parrilla",
+    sector: "Hospitality",
+    service: "Web design",
+    domain: "alaparrilla.co.uk",
+    href: "https://www.alaparrilla.co.uk/",
+    image: "/media/proof/a-la-parrilla.webp",
+    blurb:
+      "Makes the food impossible to resist, then sends hungry people straight to the order button.",
+  },
+  {
+    name: "FV Joinery",
+    sector: "Joinery & building",
+    service: "Web design",
+    domain: "fvjoinery.co.uk",
+    href: "https://www.fvjoinery.co.uk/",
+    image: "/media/proof/fv-joinery.webp",
+    blurb:
+      "Fitted joinery and building work across Leicestershire, shown off so the craftsmanship does the selling.",
+  },
+  {
     name: "Ramsay Timber",
     sector: "Timber supply",
     service: "Web design",
@@ -127,24 +196,6 @@ export const CLIENTS: ClientBuild[] = [
     image: "/media/proof/ramsay-timber.webp",
     blurb:
       "Gave forty years of trade a shopfront to match, where trade buyers find the exact product fast.",
-  },
-  {
-    name: "CloudKicks",
-    sector: "Footwear",
-    service: "E-commerce",
-    domain: "cloudkicks.store",
-    href: "https://www.cloudkicks.store/",
-    image: "/media/proof/cloudkicks.webp",
-    blurb: "An e-commerce storefront for a streetwear and footwear brand.",
-  },
-  {
-    name: "PoundMart",
-    sector: "Value retail",
-    service: "E-commerce + automation",
-    domain: "poundmart.co.uk",
-    href: "https://www.poundmart.co.uk/",
-    image: "/media/proof/poundmart.webp",
-    blurb: "E-commerce and automation for a value retailer.",
   },
   {
     name: "ModelMentions",
@@ -195,7 +246,7 @@ const demo = (slug: string) => ({
   address: `integrate-tech.co.uk/web-design/demo/${slug}`,
   href: `${LIVE_SITE}/web-design/demo/${slug}`,
   brief: `${LIVE_SITE}/web-design/${slug}`,
-  image: `/portfolio/${slug}.jpg`,
+  image: `/portfolio/${slug}-v2.jpg`,
 });
 
 export const SECTOR_BUILDS: SectorBuild[] = [
@@ -257,11 +308,11 @@ export const SECTOR_BUILDS: SectorBuild[] = [
     name: "A La Parrilla",
     kind: "Kitchen website",
     group: "Hospitality",
-    status: "demo",
+    status: "client",
     pitch:
       "Makes the food impossible to resist, then takes the order direct, so the kitchen keeps the margin a delivery app would have skimmed.",
-    address: "a-la-parrilla-kitchen.vercel.app",
-    href: "https://a-la-parrilla-kitchen.vercel.app/",
+    address: "alaparrilla.co.uk",
+    href: "https://www.alaparrilla.co.uk/",
     brief: `${LIVE_SITE}/web-design/kitchens`,
     image: "/portfolio/kitchens.jpg",
   },
@@ -270,7 +321,7 @@ export const SECTOR_BUILDS: SectorBuild[] = [
     kind: "Streetwear & footwear store",
     group: "Clothing",
     status: "client",
-    pitch: "A live e-commerce store — the one client build in this set.",
+    pitch: "A live e-commerce store for a streetwear and footwear brand.",
     address: "cloudkicks.store",
     href: "https://www.cloudkicks.store/",
     image: "/portfolio/cloud-kicks.jpg",
@@ -390,11 +441,11 @@ export const STUDIO = [
 export const FAQ = [
   {
     q: "How much does a website cost?",
-    a: "From a £200 one-off build fee, then £30 a month. The exact build fee depends on how many pages and features you need. Bigger builds with portals or integrations are quoted per project.",
+    a: "Right now it is £299 a month, and that covers your website, SEO and 30 story creatives for your socials. Bigger builds with portals, apps or integrations are quoted per project.",
   },
   {
-    q: "What does the £30 a month cover?",
-    a: "Fast, secure hosting with SSL, backups and updates, plus up to 30 minutes of edits every month — new hours, prices, photos, text. Anything beyond the 30 minutes is always quoted up front.",
+    q: "Will my site show up on Google?",
+    a: "Every site is built SEO-ready: fast, properly structured, with a page for each service and area you cover. Nobody can honestly promise the top spot, but you start from foundations Google rewards.",
   },
   {
     q: "Can you work with my existing domain?",

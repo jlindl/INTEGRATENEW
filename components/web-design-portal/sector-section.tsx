@@ -56,7 +56,7 @@ export default function SectorSection() {
           <Reveal>
             <span className="badge-glow relative inline-flex items-center gap-2 rounded-full border border-neon-400/40 bg-white/[0.04] px-5 py-2.5 text-[15px] text-white/90 backdrop-blur-sm">
               <SparkIcon className="h-4 w-4 text-neon-200" />
-              Browse by Sector
+              Working Demos
             </span>
           </Reveal>
 
@@ -66,8 +66,7 @@ export default function SectorSection() {
             parts={[
               "The Websites",
               "\n",
-              "We Build,",
-              { text: "by Sector", className: "text-shine inline-block" },
+              { text: "We Build", className: "text-shine inline-block" },
             ]}
           />
 

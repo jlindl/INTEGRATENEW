@@ -162,7 +162,7 @@ export default function LinksPage() {
         <Reveal className="flex flex-col items-center text-center">
           <a
             href="/"
-            aria-label="Integrate — home"
+            aria-label="Integrate home"
             className="inline-flex items-center gap-3 transition-opacity duration-300 hover:opacity-80"
           >
             <LogoMark className="h-9 w-9" />
@@ -180,7 +180,7 @@ export default function LinksPage() {
           </h1>
 
           <p className="mt-4 max-w-[38ch] text-[0.98rem] leading-relaxed text-ink-2">
-            We design, deploy, and manage bespoke AI systems — and the websites
+            We design, deploy, and manage bespoke AI systems, and the websites
             that feed them.
           </p>
 

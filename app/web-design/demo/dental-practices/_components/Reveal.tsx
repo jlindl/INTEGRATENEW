@@ -5,8 +5,8 @@ import { useEffect, useRef, type ReactNode } from "react";
 /**
  * Gentle scroll reveal, safe by default. Content is fully visible unless
  * JavaScript has run, the user allows motion, AND the element starts below
- * the fold. Only then do we add the animating class, so nothing ever
- * flashes or stays hidden without JS.
+ * the fold. Only then is the animating class added, so nothing is ever
+ * hidden without JS.
  */
 export function Reveal({
   children,
@@ -23,7 +23,6 @@ export function Reveal({
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
     if (el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
 
     el.classList.add("bw-motion");
@@ -36,7 +35,7 @@ export function Reveal({
           }
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
     io.observe(el);
     return () => io.disconnect();

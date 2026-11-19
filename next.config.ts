@@ -32,6 +32,8 @@ const nextConfig: NextConfig = {
         { source: "/about", destination: "/", permanent: true },
         { source: "/insights", destination: "/blog", permanent: true },
         { source: "/insights/:path*", destination: "/blog", permanent: true },
+        // Prices are no longer published; the old pricing page goes to the portal.
+        { source: "/web-design/pricing", destination: "/web-design", permanent: true },
       ]);
   },
 };

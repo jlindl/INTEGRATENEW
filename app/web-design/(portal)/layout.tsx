@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Inter_Tight } from "next/font/google";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import Cursor from "@/components/web-design-portal/cursor";
 import ScrollProgress from "@/components/web-design-portal/scroll-progress";
 import SmoothScroll from "@/components/web-design-portal/smooth-scroll";
@@ -10,7 +11,7 @@ import "./portal.css";
  * The /web-design portal: one long, scroll-driven showcase of the work.
  *
  * It sits in its own route group so it can bring its own chrome (header,
- * footer, cursor, intro, smooth scroll), while the sector pages and pricing
+ * footer, cursor, intro, smooth scroll), while the sector pages
  * under (hub) keep the hub layout they already have. Everything it styles is
  * scoped to `.wdp` — see portal.css.
  */
@@ -58,6 +59,10 @@ export default function WebDesignPortalLayout({
           for good ~1.5s in. */}
       <div aria-hidden className="intro">
         <div className="intro-panel intro-panel-ink">
+          <div className="intro-lockup">
+          <span className="intro-logo">
+            <BrandLogo variant="mark" tone="light" height={96} alt="" priority className="intro-logo-img" />
+          </span>
           <p className="intro-mark text-white">
             {"Integrate".split("").map((char, i) => (
               <span key={i} style={{ "--i": i } as React.CSSProperties}>
@@ -65,6 +70,7 @@ export default function WebDesignPortalLayout({
               </span>
             ))}
           </p>
+          </div>
         </div>
         <div className="intro-panel intro-panel-neon" />
       </div>

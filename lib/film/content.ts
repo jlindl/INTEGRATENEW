@@ -15,7 +15,7 @@
  *    Higgsfield and is a STAND-IN for atmosphere only (tools, materials, a
  *    bench). None of it shows real work, a real client or a real result.
  *  - REAL MEDIA: everything under /media/proof/ is a real screenshot of a live
- *    client site, captured 2026-11-10. /portfolio/plumbers.jpg is Integrate's
+ *    client site, captured 2026-11-10. /portfolio/plumbers-v2.jpg is Integrate's
  *    own published demo build, labelled as a demo.
  */
 
@@ -181,7 +181,6 @@ export const SYSTEM = {
       linkLabel: "Websites for trades",
       more: [
         { label: "Integrate Web Design", href: "/web-design" },
-        { label: "Web design pricing", href: "/web-design/pricing" },
       ],
     },
   ],
@@ -217,8 +216,8 @@ export const SYSTEM = {
   },
   /** SYS.03 example: an Integrate demo build already published on the site. */
   site: {
-    src: "/portfolio/plumbers.jpg",
-    label: "Demo build: plumbers",
+    src: "/portfolio/plumbers-v2.jpg",
+    label: "Six working demo builds",
     href: "/web-design/plumbers",
     toast: { kind: "New enquiry", text: "Sent to your assistant" },
     tags: ["Fast on phones", "Every enquiry routed"],
@@ -271,15 +270,17 @@ export const TRADES = {
 export const PROOF = {
   eyebrow: "Real builds",
   title: "Live now, for *real* businesses.",
-  body: "These are sites and systems we have built for UK businesses, across insurance, retail, timber supply and more. Each one opens the live site.",
+  body: "Websites we have built for UK businesses, from oral care and streetwear to insurance, hospitality and joinery. Each one opens the live site.",
   clients: [
-    { name: "Allied Insurance", industry: "Commercial insurance", built: "Web design and automation", url: "https://www.alliedinsurance.co.uk/", host: "alliedinsurance.co.uk", img: "/media/proof/allied-insurance.webp" },
-    { name: "Polished Insurance", industry: "Insurance broking", built: "Web design", url: "https://www.polished-insurance.co.uk/", host: "polished-insurance.co.uk", img: "/media/proof/polished-insurance.webp" },
-    { name: "Ramsay Timber", industry: "Timber supply", built: "Web design", url: "https://www.ramsaytimber.co.uk/", host: "ramsaytimber.co.uk", img: "/media/proof/ramsay-timber.webp" },
+    { name: "FunSmile", industry: "Oral care brand", built: "Web design", url: "https://funsmilelab.com/", host: "funsmilelab.com", img: "/media/proof/funsmile.webp" },
     { name: "CloudKicks", industry: "Footwear", built: "E-commerce", url: "https://www.cloudkicks.store/", host: "cloudkicks.store", img: "/media/proof/cloudkicks.webp" },
     { name: "PoundMart", industry: "Value retail", built: "E-commerce and automation", url: "https://www.poundmart.co.uk/", host: "poundmart.co.uk", img: "/media/proof/poundmart.webp" },
+    { name: "Allied Insurance", industry: "Commercial insurance", built: "Web design and automation", url: "https://www.alliedinsurance.co.uk/", host: "alliedinsurance.co.uk", img: "/media/proof/allied-insurance.webp" },
+    { name: "Polished Insurance", industry: "Insurance broking", built: "Web design", url: "https://www.polished-insurance.co.uk/", host: "polished-insurance.co.uk", img: "/media/proof/polished-insurance.webp" },
+    { name: "A La Parrilla", industry: "Hospitality", built: "Web design", url: "https://www.alaparrilla.co.uk/", host: "alaparrilla.co.uk", img: "/media/proof/a-la-parrilla.webp" },
+    { name: "FV Joinery", industry: "Joinery and building", built: "Web design", url: "https://www.fvjoinery.co.uk/", host: "fvjoinery.co.uk", img: "/media/proof/fv-joinery.webp" },
+    { name: "Ramsay Timber", industry: "Timber supply", built: "Web design", url: "https://www.ramsaytimber.co.uk/", host: "ramsaytimber.co.uk", img: "/media/proof/ramsay-timber.webp" },
     { name: "ModelMentions", industry: "AI analytics", built: "Web design", url: "https://www.modelmentions.co.uk/", host: "modelmentions.co.uk", img: "/media/proof/modelmentions.webp" },
-    { name: "Golden Days", industry: "Benefits advisory", built: "Outbound SMS and email hosting", url: "https://www.golden-days.co.uk/", host: "golden-days.co.uk", img: "/media/proof/golden-days.webp" },
   ],
   allHref: "/testimonials",
   allLabel: "All client work",
@@ -320,8 +321,8 @@ export const PROCESS = {
   questions: [
     {
       q: "What does it cost?",
-      a: "It depends on what you need. Web design pricing is published on the site. For automation and lead generation, we talk through cost on the call once we know the job.",
-      link: { label: "Web design pricing", href: "/web-design/pricing" },
+      a: "Web design is £299 a month right now, covering your website, SEO and 30 story creatives for your socials. For automation and lead generation, we talk through cost on the call once we know the job.",
+      link: { label: "See the £299 offer", href: "/web-design#offer" },
     },
     {
       q: "How long does it take?",

@@ -7,7 +7,7 @@ import { FilmNav } from "@/components/film/FilmNav";
 import { FilmDirector } from "@/components/film/FilmDirector";
 import { FilmStickyCta } from "@/components/film/FilmStickyCta";
 import { Hero, Noise, Turn } from "@/components/film/ActOne";
-import { System, Trades } from "@/components/film/ActTwo";
+import { System } from "@/components/film/ActTwo";
 import { Proof, Process, Payoff } from "@/components/film/ActThree";
 import { HomeBanner } from "@/components/black-friday/HomeBanner";
 import { DEADLINE_MS, PRICE_MONTHLY, offerState } from "@/lib/blackFriday";
@@ -58,7 +58,6 @@ export default function Home() {
         <Noise />
         <Turn />
         <System />
-        <Trades />
         <Proof />
         <Process />
         <Payoff />

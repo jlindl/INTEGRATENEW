@@ -82,22 +82,13 @@ export default function Hero() {
           className="halo-breathe pointer-events-none absolute left-1/2 top-[56%] -z-10 h-[36svh] w-[min(900px,72vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(160,43,255,0.34),transparent_72%)] blur-[56px]"
         />
 
-        <a
-          href="#work"
-          className="badge-glow rise relative inline-flex items-center gap-2 rounded-full border border-neon-400/40 bg-white/[0.04] px-5 py-2.5 text-[15px] text-white/90 backdrop-blur-sm transition-colors hover:bg-white/[0.09]"
-          style={{ animationDelay: `${INTRO}ms` }}
-        >
-          <SparkIcon className="h-4 w-4 text-neon-200" />
-          Integrate Web Design
-        </a>
-
         {/* The live portal's own headline, word for word. */}
         <RevealText
           as="h1"
           trigger="load"
           delay={INTRO + 100}
           stagger={75}
-          className="display display-hero mt-6 text-white lg:mt-7"
+          className="display display-hero text-white"
           parts={[
             "Web",
             // A hairline ampersand against the heavy caps either side of it.
@@ -116,7 +107,7 @@ export default function Hero() {
           style={{ animationDelay: `${INTRO + 560}ms` }}
         >
           We build websites and mobile apps that look sharp and pull their
-          weight. Everything below is live — client sites and working demos.
+          weight. Everything below is live: client sites and working demos.
           Click into any of it.
         </p>
 

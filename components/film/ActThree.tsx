@@ -18,14 +18,14 @@ import { Arrow, ArtImage, Em, Slate, Tick, WhatsAppGlyph } from "./parts";
 
 export function Proof() {
   return (
-    <section id="case-studies" data-film="proof" data-beat="06|Real builds" data-tone="light" className="film-proof bg-paper text-ink">
+    <section id="case-studies" data-film="proof" data-beat="06|Real builds" data-tone="dark" className="film-proof film-proof--dark bg-carbon text-ivory">
       <div className="container-x film-proof-head">
         <header className="film-head min-w-0">
           <Slate n="06" label="integrate/work" />
           <h2 className="film-h2">
             <Em text={PROOF.title} />
           </h2>
-          <p className="film-lead text-ink-2">{PROOF.body}</p>
+          <p className="film-lead text-mist">{PROOF.body}</p>
         </header>
         {/* Counts of what is on this page, nothing more. */}
         <dl className="film-counts">
@@ -77,11 +77,11 @@ export function Proof() {
       <div className="film-strip-rail" aria-hidden="true" />
 
       <div className="container-x film-proof-foot">
-        <Link href={PROOF.allHref} className="film-link film-link--dark">
+        <Link href={PROOF.allHref} className="film-link film-link--light">
           <span>{PROOF.allLabel}</span>
           <Arrow />
         </Link>
-        <FilmCta href={CONTACT.bookHref} tone="dark" place="proof">
+        <FilmCta href={CONTACT.bookHref} tone="light" place="proof">
           {CONTACT.bookLabel}
         </FilmCta>
       </div>

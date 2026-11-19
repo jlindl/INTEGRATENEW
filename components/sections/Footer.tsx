@@ -32,7 +32,6 @@ const SERVICE_LINKS: LinkItem[] = [
   { label: "AI Website Chatbot", href: "/services/ai-chatbot" },
   { label: "Websites for Trades", href: "/services/websites-for-trades" },
   { label: "AI Automation", href: "/services/ai-automation" },
-  { label: "Web Design Pricing", href: "/web-design/pricing" },
 ];
 
 const CONNECT_LINKS: LinkItem[] = [

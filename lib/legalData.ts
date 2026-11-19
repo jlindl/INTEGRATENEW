@@ -82,9 +82,9 @@ const privacy: LegalDoc = {
       blocks: [
         p("We collect and process the following categories of personal data:"),
         ul([
-          "Information you give us — such as your name, email address, telephone number, company name, and the contents of any message you send us through our contact form, by email, or via WhatsApp.",
-          "Information we collect automatically — such as your IP address, browser type and version, device information, and how you use our website, collected through cookies and similar technologies (see our Cookie Policy).",
-          "Information from third parties — occasionally we may receive information about you from analytics providers, or from publicly available sources where you have made your business contact details public.",
+          "Information you give us, such as your name, email address, telephone number, company name, and the contents of any message you send us through our contact form, by email, or via WhatsApp.",
+          "Information we collect automatically, such as your IP address, browser type and version, device information, and how you use our website, collected through cookies and similar technologies (see our Cookie Policy).",
+          "Information from third parties: occasionally we may receive information about you from analytics providers, or from publicly available sources where you have made your business contact details public.",
         ]),
         p(
           "We do not intentionally collect any special category (sensitive) personal data through our website. Please do not send us such information unless we specifically ask for it.",
@@ -98,11 +98,11 @@ const privacy: LegalDoc = {
           "We only use your personal data where the law allows us to. The lawful bases we rely on are:",
         ),
         ul([
-          "To respond to your enquiries and provide quotes — on the basis of taking steps at your request prior to entering into a contract, and our legitimate interests in running our business.",
-          "To provide our services and manage our relationship with you — on the basis of performing a contract with you.",
-          "To send you updates or marketing about our services — on the basis of your consent, or our legitimate interests where you are an existing client (you can opt out at any time).",
-          "To operate, secure, and improve our website — on the basis of our legitimate interests in maintaining a safe and effective website.",
-          "To comply with our legal and regulatory obligations — on the basis of legal obligation.",
+          "To respond to your enquiries and provide quotes, on the basis of taking steps at your request prior to entering into a contract, and our legitimate interests in running our business.",
+          "To provide our services and manage our relationship with you, on the basis of performing a contract with you.",
+          "To send you updates or marketing about our services, on the basis of your consent, or our legitimate interests where you are an existing client (you can opt out at any time).",
+          "To operate, secure, and improve our website, on the basis of our legitimate interests in maintaining a safe and effective website.",
+          "To comply with our legal and regulatory obligations, on the basis of legal obligation.",
         ]),
       ],
     },
@@ -119,8 +119,8 @@ const privacy: LegalDoc = {
       blocks: [
         p("We may share your personal data with:"),
         ul([
-          "Service providers who help us run our business and website — for example hosting, email, analytics, and communication providers (including messaging platforms such as WhatsApp) — who process data on our behalf under contract.",
-          "Advertising platforms — with your consent, Meta Platforms Ireland Limited (Facebook and Instagram) receives information about your visit through the Meta Pixel, so we can measure our ads and show them to relevant people. If you arrive on our trades page (/trades) from one of our Facebook or Instagram ads and have not made a cookie choice, our server tells Meta that the ad click reached the page, using only the ad click reference in the page address and your device's IP address and browser type, without any cookies. When you send an enquiry through the form on our trades page (/trades), we also send Meta your email address, phone number and name in hashed (scrambled) form, together with the ad click reference in the page address, so we can measure which ads produce enquiries. We do this in our legitimate interest in measuring our advertising, and we do not do it if you have rejected cookies. Meta also uses this information under its own privacy policy.",
+          "Service providers who help us run our business and website (for example hosting, email, analytics, and communication providers, including messaging platforms such as WhatsApp), who process data on our behalf under contract.",
+          "Advertising platforms: with your consent, Meta Platforms Ireland Limited (Facebook and Instagram) receives information about your visit through the Meta Pixel, so we can measure our ads and show them to relevant people. If you arrive on our trades page (/trades) from one of our Facebook or Instagram ads and have not made a cookie choice, our server tells Meta that the ad click reached the page, using only the ad click reference in the page address and your device's IP address and browser type, without any cookies. When you send an enquiry through the form on our trades page (/trades), we also send Meta your email address, phone number and name in hashed (scrambled) form, together with the ad click reference in the page address, so we can measure which ads produce enquiries. We do this in our legitimate interest in measuring our advertising, and we do not do it if you have rejected cookies. Meta also uses this information under its own privacy policy.",
           "Professional advisers such as accountants and lawyers, where necessary.",
           "Regulators, law enforcement, or other authorities where we are legally required to do so.",
         ]),
@@ -245,7 +245,7 @@ const terms: LegalDoc = {
       heading: "3. Intellectual property",
       blocks: [
         p(
-          "All content on this website — including text, graphics, logos, designs, images, and code — is owned by or licensed to Integrate AI Solutions Limited and is protected by copyright and other intellectual property laws. You may not use it without our prior written consent, except as permitted for normal viewing of the site.",
+          "All content on this website, including text, graphics, logos, designs, images, and code, is owned by or licensed to Integrate AI Solutions Limited and is protected by copyright and other intellectual property laws. You may not use it without our prior written consent, except as permitted for normal viewing of the site.",
         ),
       ],
     },
@@ -344,10 +344,10 @@ const cookies: LegalDoc = {
       blocks: [
         p("We use cookies for the following purposes:"),
         ul([
-          "Strictly necessary cookies — required for the website to function and to keep it secure. These cannot be switched off in our systems.",
-          "Performance and analytics cookies — help us understand how visitors use the site so we can improve it. The information collected is aggregated and used to measure and improve performance.",
-          "Functional cookies — remember choices you make to give you a better, more personalised experience.",
-          "Advertising cookies — with your consent, help us measure how our Facebook and Instagram ads perform and show our ads to people who have visited the site.",
+          "Strictly necessary cookies: required for the website to function and to keep it secure. These cannot be switched off in our systems.",
+          "Performance and analytics cookies: help us understand how visitors use the site so we can improve it. The information collected is aggregated and used to measure and improve performance.",
+          "Functional cookies: remember choices you make to give you a better, more personalised experience.",
+          "Advertising cookies: with your consent, help us measure how our Facebook and Instagram ads perform and show our ads to people who have visited the site.",
         ]),
         p(
           "Analytics: we use Vercel Web Analytics to understand how the site is used, for example which pages are visited and how visitors found us. It does not use cookies. Visitors are counted using a hash of the incoming request, which is discarded after 24 hours, and page views are recorded anonymously and reported only as aggregated statistics, not linked to any individual or IP address.",

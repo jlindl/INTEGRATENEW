@@ -1,142 +1,138 @@
 import Image from "next/image";
-import { ArrowRightIcon, CheckIcon } from "./icons";
+import type { ReactNode } from "react";
+import { BathIcon, CheckIcon, DrainIcon, DropIcon, FlameIcon } from "./icons";
 import { Reveal } from "./Reveal";
-import { container, displayFont, eyebrowLight, focusLight, h2Light, linkTeal } from "./theme";
+import { display, focusRing, h2, kicker, mono, wrap } from "./theme";
 
 type Service = {
-  kicker: string;
-  title: string;
-  standfirst: string;
-  body: string;
+  no: string;
+  icon: ReactNode;
+  name: string;
+  line: string;
   points: string[];
-  image: { src: string; alt: string };
+  from: string;
+  img: string;
+  alt: string;
+  span: string;
+  imgPos?: string;
 };
 
 const SERVICES: Service[] = [
   {
-    kicker: "01 · Emergency repairs",
-    title: "Emergencies, with you within 2 hours across Leeds",
-    standfirst: "Burst pipes, live leaks and blocked drains, made safe fast.",
-    body: "A burst pipe does not wait for opening hours, so neither do we. Call the emergency line and the nearest engineer heads your way, isolates the problem, makes everything safe, then quotes the permanent fix on the spot.",
-    points: [
-      "24/7, including weekends and bank holidays",
-      "Live arrival time sent by text",
-      "Leak found, stopped and made safe first",
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=1200&q=70",
-      alt: "Water running at full pressure from a kitchen mixer tap",
-    },
+    no: "01",
+    icon: <DropIcon />,
+    name: "Leaks and bursts",
+    line: "We trace the leak with thermal imaging before lifting a single floorboard, make it safe, then fix it properly.",
+    points: ["Thermal and acoustic leak detection", "Burst pipes, stopcocks and cisterns", "Insurer-ready photo report"],
+    from: "£95",
+    img: "/web-design/demo/plumbers/drip.webp",
+    alt: "Water dripping from the spout of a chrome tap",
+    span: "lg:col-span-7",
+    imgPos: "object-[50%_40%]",
   },
   {
-    kicker: "02 · Boilers & heating",
-    title: "Boilers serviced, repaired and replaced",
-    standfirst: "Annual service from £75. New installs with warranties up to 10 years.",
-    body: "From a rattling radiator to a full combi swap, our Gas Safe engineers keep West Yorkshire homes warm. We size the boiler to the house, register the warranty for you, and set up smart controls so the heating only runs when it should.",
-    points: [
-      "Annual service from £75, warranty kept valid",
-      "New boilers with warranties up to 10 years",
-      "Power flushes, radiators and smart thermostats",
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1545259741-2ea3ebf61fa3?auto=format&fit=crop&w=1200&q=70",
-      alt: "Smart heating thermostat mounted on a living room wall",
-    },
+    no: "02",
+    icon: <FlameIcon />,
+    name: "Boilers and heating",
+    line: "Breakdowns, annual services and new combis, from the same team that picks up at 6am in January.",
+    points: ["Worcester, Vaillant, Ideal and Baxi", "Annual service £85, warranty kept valid", "New combi from £2,195 fitted"],
+    from: "£85",
+    img: "/web-design/demo/plumbers/boiler-valves.webp",
+    alt: "Isolation valves and flexible gas pipe underneath a wall-hung combi boiler",
+    span: "lg:col-span-5",
   },
   {
-    kicker: "03 · Bathrooms",
-    title: "Bathrooms, full fit-outs managed start to finish",
-    standfirst: "One project manager, one schedule, one tidy handover.",
-    body: "We handle the whole job: strip-out, first fix, tiling, electrics and the final polish, coordinated by one project manager who calls you every evening with progress. Most full refits are done inside three weeks.",
-    points: [
-      "Design help and a fixed written quote",
-      "Tiling, electrics and plastering coordinated for you",
-      "Typical full refit finished in three weeks",
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=70",
-      alt: "Newly renovated bathroom with a glass walk-in shower",
-    },
+    no: "03",
+    icon: <DrainIcon />,
+    name: "Drains",
+    line: "Slow sinks to blocked outside gullies. We clear it, then show you on camera why it happened.",
+    points: ["High-pressure jetting", "CCTV surveys with recorded footage", "Gullies and soil stacks"],
+    from: "£85",
+    img: "/web-design/demo/plumbers/drain.webp",
+    alt: "Close-up of a stainless steel sink plughole",
+    span: "lg:col-span-5",
   },
   {
-    kicker: "04 · General plumbing",
-    title: "General plumbing, taps, leaks, tanks and everything between",
-    standfirst: "No job too small, priced from a fixed menu before we start.",
-    body: "Dripping tap, slow drain, noisy tank, outside tap for the garden. The small jobs other firms turn down are half of what we do, and every one is priced from a fixed menu before a tool comes out of the van.",
-    points: [
-      "Fixed menu pricing, agreed up front",
-      "Taps, toilets, tanks, pumps and pipework",
-      "Same-day slots most weekdays",
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=1200&q=70",
-      alt: "Polished chrome bath taps in a finished bathroom",
-    },
+    no: "04",
+    icon: <BathIcon />,
+    name: "Bathrooms",
+    line: "One team, one fixed price, finished on the date we gave you. Plumbing, tiling and electrics all in-house.",
+    points: ["Design visit and 3D layout", "No subcontractor hand-offs", "Typical refit: 10 to 14 working days"],
+    from: "£6,800",
+    img: "/web-design/demo/plumbers/bathroom-finished.webp",
+    alt: "A bright, newly fitted bathroom with a double vanity, freestanding bath and heated towel rail",
+    span: "lg:col-span-7",
   },
 ];
 
 export function Services() {
   return (
-    <section id="services" aria-labelledby="services-heading" className="scroll-mt-24 bg-[#f6f9fb] py-20 sm:py-28">
-      <div className={container}>
-        <div className="max-w-2xl">
-          <p className={eyebrowLight}>What we do</p>
-          <h2 id="services-heading" className={`${h2Light} mt-3`}>
-            One number for every pipe, drip and radiator.
-          </h2>
-          <p className="mt-4 text-[1.02rem] leading-relaxed text-[#4e6274]">
-            Four teams, one standard. Whatever the job, you get a fixed quote first, a named engineer, and a home left
-            cleaner than we found it.
+    <section id="services" aria-labelledby="services-title" className="scroll-mt-20 bg-[#f3f6f5] py-20 sm:py-28">
+      <div className={wrap}>
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <p className={kicker}>What we do, all day, every day</p>
+            <h2 id="services-title" className={`${h2} mt-5 text-[#0b1a28]`}>
+              Four trades.
+              <br />
+              One van that turns up.
+            </h2>
+          </div>
+          <p className="max-w-md text-[1.08rem] leading-relaxed text-[#33475a] lg:col-span-4 lg:justify-self-end">
+            Every engineer carries stock for the 200 most common repairs, so nine jobs in ten are finished on the first
+            visit. No second trip for a part.
           </p>
         </div>
 
-        <div className="mt-14 flex flex-col gap-16 sm:mt-16 sm:gap-20">
-          {SERVICES.map((service, index) => {
-            const flip = index % 2 === 1;
-            return (
-              <Reveal key={service.kicker}>
-                <article className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-                  <div
-                    className={`relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[0_24px_50px_-30px_rgba(2,12,22,0.45)] ${
-                      flip ? "lg:order-2" : ""
-                    }`}
-                  >
+        <ul className="mt-14 grid gap-4 lg:grid-cols-12">
+          {SERVICES.map((sv, i) => (
+            <li key={sv.no} className={sv.span}>
+              <Reveal delay={(i % 2) * 90} className="h-full">
+                <article className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white ring-1 ring-[#d8e1e3] transition-shadow duration-300 hover:shadow-[0_30px_60px_-30px_rgba(11,26,40,0.35)]">
+                  <div className="relative h-[220px] overflow-hidden sm:h-[280px]">
                     <Image
-                      src={service.image.src}
-                      alt={service.image.alt}
+                      src={sv.img}
+                      alt={sv.alt}
                       fill
-                      sizes="(min-width: 1024px) 544px, (min-width: 640px) 90vw, 100vw"
-                      className="object-cover"
+                      sizes="(min-width: 1024px) 55vw, 100vw"
+                      className={`object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04] ${sv.imgPos ?? ""}`}
                     />
+                    <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0b1a28]/40 to-transparent" />
+                    <span className={`${mono} absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-[0.78rem] text-[#0b1a28]`}>
+                      {sv.no}
+                    </span>
+                    <span className="absolute bottom-5 right-5 rounded-full bg-[#1ed3b0] px-4 py-2 text-[0.88rem] font-bold text-[#0b1a28]">
+                      from {sv.from}
+                    </span>
                   </div>
-
-                  <div className={flip ? "lg:order-1" : ""}>
-                    <p className={eyebrowLight}>{service.kicker}</p>
-                    <h3
-                      className={`${displayFont} mt-3 text-[1.4rem] font-bold leading-[1.18] tracking-[-0.01em] text-[#12212e] sm:text-[1.6rem]`}
-                    >
-                      {service.title}
-                    </h3>
-                    <p className="mt-2 font-semibold text-[#0d6e5d]">{service.standfirst}</p>
-                    <p className="mt-3 leading-relaxed text-[#4e6274]">{service.body}</p>
-                    <ul className="mt-5 space-y-2.5">
-                      {service.points.map((point) => (
-                        <li key={point} className="flex items-start gap-2.5 text-[0.95rem] text-[#12212e]">
-                          <CheckIcon className="mt-1 h-3.5 w-3.5 shrink-0 text-[#0d6e5d]" />
-                          {point}
+                  <div className="flex flex-1 flex-col p-6 sm:p-8">
+                    <div className="flex items-center gap-3 text-[#0a7a66]">
+                      {sv.icon}
+                      <h3 className={`${display} text-[1.6rem] font-extrabold tracking-[-0.03em] text-[#0b1a28] sm:text-[1.85rem]`}>
+                        {sv.name}
+                      </h3>
+                    </div>
+                    <p className="mt-3 max-w-[34rem] leading-relaxed text-[#33475a]">{sv.line}</p>
+                    <ul className="mt-6 grid gap-2.5 border-t border-[#e4ebec] pt-5 text-[0.95rem] text-[#0b1a28] sm:grid-cols-1">
+                      {sv.points.map((p) => (
+                        <li key={p} className="flex items-start gap-2.5">
+                          <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-[#0a7a66]" />
+                          {p}
                         </li>
                       ))}
                     </ul>
-                    <a href="#contact" className={`${linkTeal} mt-6 rounded-md ${focusLight}`}>
-                      Book this job
-                      <ArrowRightIcon className="h-4 w-4" />
+                    <a
+                      href="#prices"
+                      className={`${focusRing} mt-auto inline-flex w-fit items-center gap-2 rounded pt-6 text-[0.95rem] font-bold text-[#0a7a66] underline decoration-2 underline-offset-[6px] hover:text-[#0b1a28]`}
+                    >
+                      See {sv.name.toLowerCase()} prices
                     </a>
                   </div>
                 </article>
               </Reveal>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

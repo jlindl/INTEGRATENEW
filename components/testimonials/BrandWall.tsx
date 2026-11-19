@@ -25,7 +25,7 @@ function BrandLockup({ client }: { client: Client }) {
       target="_blank"
       rel="noopener noreferrer"
       className="group flex items-center justify-center gap-3 px-5 py-4 text-ink-3 transition-colors duration-500 [transition-timing-function:var(--ease-out-expo)] hover:text-ink"
-      aria-label={`${client.name}, ${client.industry} — visit website (opens in a new tab)`}
+      aria-label={`${client.name}, ${client.industry}. Visit website (opens in a new tab)`}
     >
       <Mark
         mark={client.mark}

@@ -6,7 +6,8 @@ import Reveal from "@/components/web-design-portal/reveal";
 import RevealText from "@/components/web-design-portal/reveal-text";
 import SpinBadge from "@/components/web-design-portal/spin-badge";
 import { COMPANY, CONTACT, LIVE_SITE } from "@/components/web-design-portal/site-data";
-import { ArrowUpRight, LogoMark, SparkIcon } from "@/components/web-design-portal/icons";
+import { ArrowUpRight, SparkIcon } from "@/components/web-design-portal/icons";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
@@ -15,8 +16,9 @@ const FOOTER_NAV: { heading: string; links: FooterLink[] }[] = [
     heading: "Explore",
     links: [
       { label: "Client work", href: "#work" },
-      { label: "Builds by sector", href: "#sectors" },
-      { label: "Pricing", href: "#pricing" },
+      { label: "Working demos", href: "#sectors" },
+      { label: "SEO", href: "#seo" },
+      { label: "The £299 offer", href: "#offer" },
       { label: "The studio", href: "#studio" },
       { label: "FAQ", href: "#faq" },
     ],
@@ -168,7 +170,13 @@ export default function SiteFooter() {
               href="#top"
               className="group flex items-center gap-2.5 text-[17px] font-medium tracking-[-0.01em] text-white"
             >
-              <LogoMark className="h-6 w-6 drop-shadow-[0_0_10px_rgba(160,43,255,0.85)] transition-transform duration-300 group-hover:-translate-y-0.5" />
+              <BrandLogo
+                variant="mark"
+                tone="light"
+                height={26}
+                alt=""
+                className="transition-transform duration-300 group-hover:-translate-y-0.5"
+              />
               Integrate Web Design
             </a>
             <p className="mt-4 max-w-[36ch] text-[15px] leading-[1.6] text-white/50">
@@ -179,7 +187,7 @@ export default function SiteFooter() {
               href={CONTACT.mainSite}
               className="underline-grow mt-6 inline-flex items-center gap-1.5 text-[15px] text-white/70 transition-colors hover:text-white"
             >
-              Integrate AI &mdash; main site
+              Integrate AI main site
               <ArrowUpRight className="h-3.5 w-3.5 text-neon-300" />
             </a>
           </div>

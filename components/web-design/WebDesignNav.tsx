@@ -14,10 +14,9 @@ import { BackToIntegrate } from "./BackToIntegrate";
 import { MagneticLink } from "./interactions/MagneticLink";
 
 /* Nav links. Section anchors use absolute hub paths so they resolve from any
-   sub-page (e.g. /pricing) too; `route: true` marks a real page navigation. */
+   sub-page too; `route: true` marks a real page navigation. */
 const LINKS: { label: string; href: string; route?: boolean }[] = [
   { label: "Work", href: "/web-design#work" },
-  { label: "Pricing", href: "/web-design/pricing", route: true },
   { label: "About", href: "/web-design#studio" },
   { label: "Contact", href: "/web-design#contact" },
 ];

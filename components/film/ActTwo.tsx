@@ -9,6 +9,7 @@ import type { CSSProperties } from "react";
 import { CONTACT, MEDIA, SYSTEM, TRADES } from "@/lib/film/content";
 import { FilmCta } from "./FilmCta";
 import { Arrow, ArtImage, Chip, Em, Slate, Tick, WhatsAppGlyph } from "./parts";
+import { WebDemoReel } from "./WebDemoReel";
 
 /* ------------------------------------------------------------------ */
 /*  04. The system                                                     */
@@ -109,22 +110,7 @@ function SceneWeb() {
   const s = SYSTEM.site;
   return (
     <div className="film-scene">
-      <Link href={s.href} className="film-browser" aria-label={`${s.label}: open the page`}>
-        <span className="film-browser-bar" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-          <span className="film-browser-url">integrate demo · plumbers</span>
-        </span>
-        <Image
-          src={s.src}
-          alt="Homepage of an Integrate demo website for a plumbing business"
-          width={1200}
-          height={750}
-          sizes="(min-width: 1024px) 560px, 90vw"
-          className="film-browser-img"
-        />
-      </Link>
+      <WebDemoReel />
       <div className="film-sat film-sat--toast">
         <Chip kind={s.toast.kind} text={s.toast.text} icon="form" className="film-chip--ink" />
       </div>
@@ -159,14 +145,18 @@ export function System() {
           {SYSTEM.stations.map((s, i) => {
             const Scene = SCENES[i];
             return (
-              <article key={s.id} className="film-station" data-flip={i % 2 === 1 ? "" : undefined}>
+              <article
+                key={s.id}
+                className={`film-station${s.id === "SYS.03" ? " film-station--web" : ""}`}
+                data-flip={i % 2 === 1 ? "" : undefined}
+              >
                 <span className="film-node" aria-hidden="true" />
                 <div className="film-station-text min-w-0" data-reveal>
                   <Slate n={s.id} label={s.slug} />
                   <h3 className="film-h3">
                     <Em text={s.name} />
                   </h3>
-                  <p className="film-body text-ink-2">{s.body}</p>
+                  <p className={`film-body ${s.id === "SYS.03" ? "text-mist" : "text-ink-2"}`}>{s.body}</p>
                   <ul className="film-tags" aria-label="Includes">
                     {s.tags.map((t) => (
                       <li key={t} className="film-tag">
@@ -174,17 +164,35 @@ export function System() {
                       </li>
                     ))}
                   </ul>
-                  <Link href={s.href} className="film-link film-link--dark mt-5">
-                    <span>{s.linkLabel}</span>
-                    <Arrow />
-                  </Link>
-                  <ul className="film-more">
-                    {s.more.map((m) => (
-                      <li key={m.href}>
-                        <Link href={m.href}>{m.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
+                  {s.id === "SYS.03" ? (
+                    <div className="film-web-ctas">
+                      {/* The way into the web design portal. */}
+                      <Link href="/web-design" className="film-web-cta">
+                        Explore Integrate Web Design
+                        <span className="film-web-cta-icon" aria-hidden="true">
+                          <Arrow />
+                        </span>
+                      </Link>
+                      <Link href={s.href} className="film-link film-link--light">
+                        <span>{s.linkLabel}</span>
+                        <Arrow />
+                      </Link>
+                    </div>
+                  ) : (
+                    <>
+                      <Link href={s.href} className="film-link film-link--dark mt-5">
+                        <span>{s.linkLabel}</span>
+                        <Arrow />
+                      </Link>
+                      <ul className="film-more">
+                        {s.more.map((m) => (
+                          <li key={m.href}>
+                            <Link href={m.href}>{m.label}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
                 <div className="film-station-demo min-w-0">
                   <Scene />

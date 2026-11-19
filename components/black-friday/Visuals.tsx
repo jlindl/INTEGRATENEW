@@ -8,8 +8,6 @@
  *   alp-site-desktop.webp  real screenshot of alaparrilla.co.uk, 1440x900
  *   alp-map.webp           drawn from OpenStreetMap data around Windsor
  *                          Street, Birmingham (960x420)
- *   alp-story-1..3.webp    PLACEHOLDERS: swap for three real story designs,
- *                          9:16, e.g. 540x960 or 1080x1920
  * The map must keep its "© OpenStreetMap contributors" credit. Never swap in
  * Google or Apple map imagery, and never hotlink an image.
  *
@@ -24,7 +22,7 @@ export const IMG = {
   siteMobile: "/black-friday/alp-site-mobile.webp",
   siteDesktop: "/black-friday/alp-site-desktop.webp",
   map: "/black-friday/alp-map.webp",
-  stories: ["/black-friday/alp-story-1.webp", "/black-friday/alp-story-2.webp", "/black-friday/alp-story-3.webp"],
+  stories: ["/black-friday/alp-story-1-v2.webp", "/black-friday/alp-story-2-v2.webp", "/black-friday/alp-story-3-v2.webp"],
 } as const;
 
 /* ----------------------------------------------------------------- Phone */

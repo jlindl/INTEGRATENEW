@@ -147,6 +147,8 @@ export const config = {
     "we have seen",
     "the sites we see",
     "in our experience",
+    // Integrate no longer publishes prices; the pricing page redirects to /web-design.
+    "/web-design/pricing",
   ],
 
   /** Publishing mode for the scheduled job: "pr" opens a pull request, "auto" commits to main. */

@@ -3228,3 +3228,271 @@
 .film-footer .text-ink-3 {
   color: var(--color-ink-2);
 }
+
+/* Real builds, dark and in colour: the homepage's web design section takes on
+   the /web-design portal's look (ink ground, purple light, full-colour
+   screenshots). Unlayered so it wins over the light component rules above. */
+.film-proof--dark {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 45% at 50% 58%, rgba(160, 43, 255, 0.28), transparent 72%),
+    radial-gradient(40% 30% at 85% 10%, rgba(103, 11, 178, 0.3), transparent 70%),
+    var(--color-carbon);
+}
+.film-proof--dark .film-slug,
+.film-proof--dark .film-counts dt,
+.film-proof--dark .film-frame-num {
+  color: #c98fff;
+}
+.film-proof--dark .film-h2 em,
+.film-proof--dark .film-h2 i {
+  color: #c98fff;
+}
+.film-proof--dark .film-frame-shot {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #14101c;
+  box-shadow: 0 30px 80px -40px rgba(160, 43, 255, 0.65);
+}
+.film-proof--dark .film-frame-img,
+.film-proof--dark .film-frame-link .film-frame-img {
+  filter: none;
+}
+.film-proof--dark .film-frame-built {
+  color: var(--color-mist);
+}
+.film-proof--dark .film-frame-open {
+  color: #e2c2ff;
+}
+.film-proof--dark .film-strip-rail {
+  background: linear-gradient(90deg, #670bb2, #a02bff, #e2c2ff);
+}
+.film-proof--dark .film-frame-tag {
+  background: #a02bff;
+  color: #fff;
+}
+@media (hover: hover) {
+  .film-proof--dark .film-frame-link:hover .film-frame-shot {
+    border-color: rgba(178, 93, 255, 0.7);
+    box-shadow: 0 0 90px -22px rgba(160, 43, 255, 0.95);
+  }
+}
+.film-proof--dark .film-browser-bar {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+.film-proof--dark .film-browser-url {
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* SYS.03 Web design: a dark, purple-lit panel on the light system page, with
+   the six working demos cycling in full colour. */
+.film-station--web {
+  isolation: isolate;
+  border-radius: 28px;
+  padding: clamp(1.75rem, 4vw, 3.5rem);
+  padding-left: calc(2.25rem + clamp(1rem, 3vw, 2rem));
+  color: var(--color-ivory);
+  background:
+    radial-gradient(55% 60% at 75% 50%, rgba(160, 43, 255, 0.35), transparent 72%),
+    radial-gradient(40% 50% at 10% 10%, rgba(103, 11, 178, 0.35), transparent 70%),
+    #0b0812;
+  box-shadow: 0 40px 120px -50px rgba(103, 11, 178, 0.9);
+}
+.film-station--web .film-node {
+  left: 1.25rem;
+  top: calc(clamp(1.75rem, 4vw, 3.5rem) + 0.2rem);
+  background: #a02bff;
+  box-shadow:
+    inset 0 0 0 1.5px #e2c2ff,
+    0 0 0 5px rgba(160, 43, 255, 0.25),
+    0 0 18px 2px rgba(160, 43, 255, 0.8);
+}
+@media (min-width: 1024px) {
+  .film-station--web {
+    padding-left: clamp(1.75rem, 4vw, 3.5rem);
+  }
+  .film-station--web .film-node {
+    top: 50%;
+    left: 50%;
+  }
+}
+.film-station--web .film-slug {
+  color: #c98fff;
+}
+.film-station--web .film-h3 {
+  color: var(--color-ivory);
+}
+.film-station--web .film-h3 em {
+  color: #c98fff;
+}
+.film-station--web .film-tag {
+  color: #e2c2ff;
+  box-shadow: inset 0 0 0 1px rgba(178, 93, 255, 0.5);
+  background: rgba(160, 43, 255, 0.12);
+}
+.film-station--web .film-more a {
+  color: var(--color-mist);
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+}
+.film-station--web .film-more a:hover {
+  color: var(--color-ivory);
+  text-decoration-color: var(--color-ivory);
+}
+.film-station--web .film-scene-note {
+  color: #c98fff;
+}
+.film-station--web .film-browser {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: #14101c;
+  box-shadow: 0 30px 90px -30px rgba(160, 43, 255, 0.8);
+}
+.film-station--web .film-browser-bar {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+.film-station--web .film-browser-url {
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* The reel: six demo screenshots stacked, one shown at a time. */
+.film-reel-browser {
+  display: block;
+}
+.film-reel-stage {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.film-reel-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0;
+  transform: scale(1.03);
+  transition:
+    opacity 0.7s ease,
+    transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.film-reel-img[data-on] {
+  opacity: 1;
+  transform: none;
+}
+.film-reel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.film-reel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.25);
+  transition:
+    width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s;
+}
+.film-reel-dot[aria-pressed="true"] {
+  width: 24px;
+  background: #a02bff;
+  box-shadow: 0 0 12px rgba(160, 43, 255, 0.9);
+}
+.film-reel-dot:focus-visible {
+  outline: 2px solid #c98fff;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-reel-img {
+    transition: none;
+  }
+}
+/* Dots sit in the browser bar, so nothing below the frame can collide. */
+.film-reel {
+  position: relative;
+}
+.film-reel-dots {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  height: 30px;
+  align-items: center;
+  margin-top: 0;
+  z-index: 2;
+}
+.film-station--web .film-h3 .film-em {
+  color: #c98fff;
+}
+.film-station--web .film-em {
+  color: #c98fff;
+  background-image: linear-gradient(118deg, #a02bff 0%, #e2c2ff 30%, #b25dff 55%, #f1e1ff 78%, #a02bff 100%);
+}
+
+/* SYS.03 call to action: straight into the web design portal. */
+.film-web-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+  margin-top: 1.75rem;
+}
+.film-web-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-radius: 9999px;
+  padding: 0.55rem 0.55rem 0.55rem 1.4rem;
+  background: linear-gradient(180deg, #b25dff, #8a1fe0);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 44px -8px rgba(160, 43, 255, 0.95);
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.film-web-cta-icon {
+  display: flex;
+  height: 2.1rem;
+  width: 2.1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #fff;
+  color: #0b0812;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.film-web-cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 64px -6px rgba(160, 43, 255, 1);
+}
+.film-web-cta:hover .film-web-cta-icon {
+  transform: rotate(-45deg);
+}
+.film-web-cta:focus-visible {
+  outline: 2px solid #e2c2ff;
+  outline-offset: 3px;
+}
+/* The enquiry toast covers the bar's right end, so the dots sit just under
+   the frame instead. The tag chips give way to them on small screens. */
+.film-reel-dots {
+  top: calc(100% + 0.75rem);
+  height: auto;
+  right: 0.25rem;
+}
+@media (max-width: 639px) {
+  .film-station--web .film-sat--tags {
+    display: none;
+  }
+}

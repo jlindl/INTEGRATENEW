@@ -167,7 +167,7 @@ export function BookCallForm({ source = "Website — Book a call" }: { source?: 
           </svg>
         </span>
         <h3 className="font-display-tuned mt-5 text-2xl font-medium text-ink">
-          Thanks, {data.firstName || "there"} — that&apos;s in.
+          Thanks, {data.firstName || "there"}, that&apos;s in.
         </h3>
         <p className="mx-auto mt-3 max-w-sm leading-relaxed text-ink-2">
           We&apos;ll give you a call within one business day to talk through

@@ -1,133 +1,92 @@
-/**
- * Northline demo: tiny inline SVG icon set, hand-drawn paths only.
- * All icons are decorative (aria-hidden) unless wrapped with a labelled role.
- */
+type P = { className?: string };
 
-type IconProps = { className?: string };
+const base = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.8,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+};
 
-export function DropIcon({ className }: IconProps) {
+export function PhoneIcon({ className = "h-5 w-5" }: P) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M12 2.4c3.7 4.6 6.5 8.2 6.5 11.7a6.5 6.5 0 1 1-13 0C5.5 10.6 8.3 7 12 2.4Z" />
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11.5 11.5 0 0 0 7.2 7.2l1.4-2.1 4.2 1.6V19a1.8 1.8 0 0 1-1.9 1.8C10.4 20.3 3.7 13.6 3.2 5.4A1.8 1.8 0 0 1 5 3.5Z" />
     </svg>
   );
 }
 
-export function CheckIcon({ className }: IconProps) {
+export function ArrowIcon({ className = "h-4 w-4" }: P) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M4.5 12.8l4.9 4.7L19.5 6.6" />
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={2}>
+      <path d="M4 12h15M13 6l6 6-6 6" />
     </svg>
   );
 }
 
-export function StarIcon({ className }: IconProps) {
+export function CheckIcon({ className = "h-4 w-4" }: P) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M12 2.2l2.94 6.14 6.76.86-4.97 4.66 1.29 6.68L12 17.27l-6.02 3.27 1.29-6.68L2.3 9.2l6.76-.86L12 2.2Z" />
+    <svg viewBox="0 0 24 24" className={className} {...base} strokeWidth={2.4}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
     </svg>
   );
 }
 
-export function PhoneIcon({ className }: IconProps) {
+export function StarIcon({ className = "h-4 w-4" }: P) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M6.8 3.2h2.9a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.35 1.1L9.6 10.05a13.2 13.2 0 0 0 4.35 4.35l1.47-1.9a1 1 0 0 1 1.1-.35l3.6 1.2a1 1 0 0 1 .68.95v2.9a2.6 2.6 0 0 1-2.85 2.6C9.9 19.94 4.06 14.1 3.2 6.05A2.6 2.6 0 0 1 5.8 3.2h1Z" />
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="currentColor">
+      <path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.1l-5.7 3.2 1.2-6.4-4.7-4.4 6.4-.8L12 2.8Z" />
     </svg>
   );
 }
 
-export function FlameIcon({ className }: IconProps) {
+export function DropIcon({ className = "h-5 w-5" }: P) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M12.2 2s5.6 4.7 5.6 10a5.9 5.9 0 0 1-11.8 0c0-2.1 1-4.1 2.3-5.8.3 1.3 1.1 2.3 2.2 2.8-.6-2.4 0-5 1.7-7Z" />
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M12 3s6.5 7 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10 12 3 12 3Z" />
     </svg>
   );
 }
 
-export function ClockIcon({ className }: IconProps) {
+export function FlameIcon({ className = "h-5 w-5" }: P) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7.2V12l3.2 2" />
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2 2-3 3.5-3 5.5-1-1-1.5-2-1.5-3C7 9.5 6 12 6 15a6 6 0 0 0 6 6Z" />
     </svg>
   );
 }
 
-export function PinIcon({ className }: IconProps) {
+export function BathIcon({ className = "h-5 w-5" }: P) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
-      <path d="M12 2.5a7 7 0 0 1 7 7c0 4.9-5.4 10.4-6.6 11.6a.57.57 0 0 1-.8 0C10.4 19.9 5 14.4 5 9.5a7 7 0 0 1 7-7Zm0 4.3a2.7 2.7 0 1 0 0 5.4 2.7 2.7 0 0 0 0-5.4Z" />
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2ZM6 12V5.5A2.5 2.5 0 0 1 8.5 3c1.3 0 2.3.9 2.5 2M7 19l-1 2M17 19l1 2" />
     </svg>
   );
 }
 
-export function MailIcon({ className }: IconProps) {
+export function DrainIcon({ className = "h-5 w-5" }: P) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <rect x="3" y="5" width="18" height="14" rx="2.5" />
-      <path d="m4 7.5 8 5.8 8-5.8" />
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M8 9h8M7.5 12h9M8 15h8" />
     </svg>
   );
 }
 
-export function ArrowRightIcon({ className }: IconProps) {
+/** Northline mark: a single pipe run bent into an N */
+export function NorthlineMark({ className = "h-9 w-9" }: P) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M4.5 12h15m0 0-5.5-5.5M19.5 12 14 17.5" />
+    <svg viewBox="0 0 40 40" className={className} aria-hidden="true">
+      <rect width="40" height="40" rx="11" fill="#1ed3b0" />
+      <path
+        d="M12 29V14.5a3.5 3.5 0 0 1 6.2-2.2l3.6 15.4a3.5 3.5 0 0 0 6.2-2.2V11"
+        fill="none"
+        stroke="#0b1a28"
+        strokeWidth="4.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
-  );
-}
-
-/** Five amber stars with an accessible label. */
-export function Stars({
-  starClassName = "h-4 w-4",
-  label = "Rated 4.9 out of 5",
-}: {
-  starClassName?: string;
-  label?: string;
-}) {
-  return (
-    <span role="img" aria-label={label} className="inline-flex items-center gap-0.5 text-[#f0a11b]">
-      {[0, 1, 2, 3, 4].map((i) => (
-        <StarIcon key={i} className={starClassName} />
-      ))}
-    </span>
   );
 }

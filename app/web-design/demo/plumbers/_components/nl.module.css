@@ -1,0 +1,77 @@
+/* Northline motion. Everything here is opt-in under no-preference, so
+   reduced-motion visitors (and anyone with CSS animations off) get the
+   finished, static state. None of it depends on JavaScript. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: nlRise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .fade {
+    animation: nlFade 1.2s ease-out both;
+  }
+  .live::after {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 9999px;
+    border: 2px solid currentColor;
+    animation: nlPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  .wave {
+    animation: nlWave 3.2s linear infinite;
+  }
+  .bob {
+    animation: nlBob 6s ease-in-out infinite;
+  }
+}
+
+.live {
+  position: relative;
+}
+
+@keyframes nlRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes nlFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes nlPing {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@keyframes nlWave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes nlBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

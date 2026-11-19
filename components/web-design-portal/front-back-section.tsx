@@ -6,12 +6,13 @@ import Reveal from "@/components/web-design-portal/reveal";
 import RevealText from "@/components/web-design-portal/reveal-text";
 import ScrubText from "@/components/web-design-portal/scrub-text";
 import {
+  ANY_BUSINESS,
   BACKEND,
   CLIENTS,
   FRONTEND,
-  PRICING,
   SECTOR_BUILDS,
 } from "@/components/web-design-portal/site-data";
+import { IMMERSIVE_DEMOS } from "@/lib/immersiveDemos";
 
 // Counted from the data rather than typed in, so they cannot drift from what
 // the page actually shows further down.
@@ -29,16 +30,16 @@ const FIGURES = [
     label: "Working sector demos to click through",
   },
   {
-    value: PRICING.buildFrom,
-    pad: 0,
-    prefix: "£",
-    label: "From, as a one-off build fee",
+    value: IMMERSIVE_DEMOS.length,
+    pad: 2,
+    prefix: "",
+    label: "Immersive trade homepages to scroll through",
   },
   {
-    value: PRICING.monthly,
-    pad: 0,
-    prefix: "£",
-    label: "A month, hosted and looked after",
+    value: ANY_BUSINESS.flat().length,
+    pad: 2,
+    prefix: "",
+    label: "Kinds of business we build for",
   },
 ];
 
@@ -103,7 +104,7 @@ export default function FrontBackSection() {
   return (
     <section
       id="approach"
-      /* No top border here — the hero fades into flat ink, and a rule would put
+      /* No top border here: the hero fades into flat ink, and a rule would put
          a hard seam back exactly where the fade was meant to remove it.
          `overflow-clip` (not hidden) so the sticky column below still sticks. */
       className="relative isolate overflow-clip bg-abyss"
@@ -156,7 +157,7 @@ export default function FrontBackSection() {
             <div className="lg:sticky lg:top-28">
               <Reveal>
                 <p className="label-mono text-center text-neon-300 lg:pl-3 lg:text-left">
-                  (01) &mdash; Front to back
+                  (01) Front to back
                 </p>
               </Reveal>
               <Reveal direction="zoom" delay={100}>

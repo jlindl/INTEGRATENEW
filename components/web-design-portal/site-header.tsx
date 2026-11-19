@@ -9,13 +9,15 @@ import {
 } from "framer-motion";
 import { useEffect, useState } from "react";
 import Magnetic from "@/components/web-design-portal/magnetic";
-import { ArrowUpRight, LogoMark } from "@/components/web-design-portal/icons";
+import { ArrowRight, ArrowUpRight } from "@/components/web-design-portal/icons";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const NAV_LINKS = [
   { label: "Work", href: "#work" },
-  { label: "Sectors", href: "#sectors" },
+  { label: "Demos", href: "#sectors" },
   { label: "Immersive", href: "#immersive" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "SEO", href: "#seo" },
+  { label: "Offer", href: "#offer" },
   { label: "Studio", href: "#studio" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -85,7 +87,14 @@ export default function SiteHeader() {
             onClick={closeMenu}
             className="group flex items-center gap-2.5 text-[17px] font-medium tracking-[-0.01em]"
           >
-            <LogoMark className="h-6 w-6 text-white drop-shadow-[0_0_10px_rgba(160,43,255,0.85)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" />
+            <BrandLogo
+              variant="mark"
+              tone="light"
+              height={26}
+              alt=""
+              priority
+              className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-0.5"
+            />
             <span>
               Integrate
               <span className="ml-1.5 text-white/55 max-sm:hidden">
@@ -125,6 +134,18 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* Back to the main Integrate site. Hidden at lg only, where the
+                centred nav needs the room; it is in the menu below lg. */}
+            <a
+              href="/"
+              className="group hidden items-center gap-2 rounded-full border border-neon-400/60 bg-neon-500/20 py-2 pl-3 pr-4 text-[15px] font-medium text-white shadow-[0_0_28px_-8px_rgba(160,43,255,0.9)] transition-all duration-300 hover:border-neon-300 hover:bg-neon-500/35 hover:shadow-[0_0_38px_-6px_rgba(160,43,255,1)] sm:inline-flex lg:hidden xl:inline-flex"
+            >
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-abyss transition-transform duration-300 group-hover:-translate-x-0.5">
+                <ArrowRight className="h-3.5 w-3.5 rotate-180" />
+              </span>
+              Back to Integrate
+            </a>
+
             <Magnetic strength={0.25} className="hidden sm:inline-block">
               <a
                 href="#contact"
@@ -210,6 +231,18 @@ export default function SiteHeader() {
               >
                 Book a Call
                 <ArrowUpRight className="h-4 w-4" />
+              </motion.a>
+
+              <motion.a
+                href="/"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: EASE, delay: 0.56 }}
+                className="mt-4 inline-flex items-center gap-2 self-start rounded-full border border-neon-400/60 bg-neon-500/20 px-7 py-4 text-[16px] font-medium text-white"
+              >
+                <ArrowRight className="h-4 w-4 rotate-180" />
+                Back to Integrate
               </motion.a>
             </nav>
           </motion.div>

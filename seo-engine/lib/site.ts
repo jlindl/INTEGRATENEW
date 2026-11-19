@@ -27,7 +27,6 @@ export function sitePages(): LinkTarget[] {
     { path: config.site.contactPath, label: "Contact page (enquiry form, email, WhatsApp)" },
     { path: "/book", label: "Book a call with Integrate" },
     { path: "/web-design", label: "Integrate Web Design: websites and apps" },
-    { path: "/web-design/pricing", label: "Web design pricing" },
     ...NICHES.map((n) => ({ path: `/web-design/${n.slug}`, label: `Web design for ${n.name.toLowerCase()}` })),
     { path: "/services", label: "All Integrate services" },
     ...SERVICE_HUBS.map((h) => ({ path: `/services/${h.id}`, label: `Service guide: ${h.name.toLowerCase()} (link here when the article is about this service)` })),

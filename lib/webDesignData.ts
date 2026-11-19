@@ -145,7 +145,7 @@ export const NICHES: Niche[] = [
     featured: true,
     accentName: "Signal Amber",
     demo: "/web-design/demo/electricians",
-    cover: { src: "/portfolio/electricians.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/electricians-v2.jpg", width: 1440, height: 900 },
     archetype: "spotlight",
     palette: {
       light: false,
@@ -217,7 +217,7 @@ export const NICHES: Niche[] = [
     featured: true,
     accentName: "Ember Coral",
     demo: "/web-design/demo/recruiters",
-    cover: { src: "/portfolio/recruiters.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/recruiters-v2.jpg", width: 1440, height: 900 },
     archetype: "editorial",
     palette: {
       light: true,
@@ -289,7 +289,7 @@ export const NICHES: Niche[] = [
     featured: true,
     accentName: "Ledger Green",
     demo: "/web-design/demo/accountants",
-    cover: { src: "/portfolio/accountants.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/accountants-v2.jpg", width: 1440, height: 900 },
     archetype: "split",
     palette: {
       light: true,
@@ -361,7 +361,7 @@ export const NICHES: Niche[] = [
     featured: false,
     accentName: "Mains Teal",
     demo: "/web-design/demo/plumbers",
-    cover: { src: "/portfolio/plumbers.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/plumbers-v2.jpg", width: 1440, height: 900 },
     archetype: "spotlight",
     palette: {
       light: false,
@@ -428,7 +428,7 @@ export const NICHES: Niche[] = [
     featured: false,
     accentName: "Oxblood",
     demo: "/web-design/demo/law-firms",
-    cover: { src: "/portfolio/law-firms.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/law-firms-v2.jpg", width: 1440, height: 900 },
     archetype: "editorial",
     palette: {
       light: true,
@@ -495,7 +495,7 @@ export const NICHES: Niche[] = [
     featured: false,
     accentName: "Clinic Teal",
     demo: "/web-design/demo/dental-practices",
-    cover: { src: "/portfolio/dental-practices.jpg", width: 1440, height: 900 },
+    cover: { src: "/portfolio/dental-practices-v2.jpg", width: 1440, height: 900 },
     archetype: "split",
     palette: {
       light: true,
@@ -561,7 +561,7 @@ export const NICHES: Niche[] = [
       "Makes the food impossible to resist, then takes the order direct, so the kitchen keeps the margin a delivery app would have skimmed.",
     featured: false,
     accentName: "Ember",
-    demo: "https://a-la-parrilla-kitchen.vercel.app/",
+    demo: "https://www.alaparrilla.co.uk/",
     cover: { src: "/portfolio/kitchens.jpg", width: 1440, height: 900 },
     archetype: "spotlight",
     palette: {

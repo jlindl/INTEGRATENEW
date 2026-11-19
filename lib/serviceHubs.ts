@@ -168,7 +168,7 @@ export const SERVICE_HUBS: ServiceHub[] = [
       "You can see how many enquiries the site brings in.",
     ],
     faqs: [
-      { q: "How much does a trade website cost?", a: "See our web design pricing page for current packages. Bigger builds with portals or integrations are quoted per project." },
+      { q: "How much does a trade website cost?", a: "Our current offer is £299 a month for your website, SEO and 30 story creatives for your socials. Bigger builds with portals or integrations are quoted per project." },
       { q: "Can you work with my existing domain?", a: "Yes. We can rebuild on your current domain and redirect old pages so you keep any search visibility you already have." },
       { q: "Do you write the content?", a: "We help shape it from what you tell us about your work, and use your real photos wherever possible." },
     ],

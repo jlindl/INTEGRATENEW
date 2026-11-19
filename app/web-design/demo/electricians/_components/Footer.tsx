@@ -1,99 +1,95 @@
-import {
-  HazardStripe,
-  PhoneIcon,
-  Wordmark,
-  container,
-  display,
-  focusRing,
-} from "./ui";
+import Image from "next/image";
+import { LiveDot, PHONE, PhoneIcon, TEL, Wordmark, display, focusRing, mono, wrap } from "./ui";
 
-const footerLink = `rounded-sm px-0.5 text-sm text-[#93a0b1] transition-colors hover:text-[#f4f7fb] ${focusRing}`;
-
-const colHeading = `${display} text-sm font-semibold uppercase tracking-[0.18em] text-[#f4f7fb]`;
-
-const exploreLinks = [
-  { href: "#services", label: "Services" },
-  { href: "#emergency", label: "Emergency" },
-  { href: "#areas", label: "Areas" },
+const nav = [
+  { href: "#triage", label: "Power cut triage" },
+  { href: "#services", label: "Services and prices" },
+  { href: "#callout", label: "Emergency call-outs" },
+  { href: "#team", label: "Accreditations" },
+  { href: "#areas", label: "Areas we cover" },
   { href: "#reviews", label: "Reviews" },
-  { href: "#quote", label: "Get a fast quote" },
+  { href: "#quote", label: "Get a fixed price" },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#232a35]">
-      {/* Signature hazard stripe, use two of two */}
-      <HazardStripe tone="amber" />
+    <footer className="relative bg-[#0a0c0f]">
+      {/* Final call to action over Salford Quays at night */}
+      <div className="relative isolate overflow-hidden border-t border-white/10">
+        <Image
+          src="/web-design/demo/electricians/salford-quays.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="-z-10 object-cover object-[70%_60%] brightness-[1.05] saturate-[1.1]"
+        />
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#0a0c0f_0%,rgba(10,12,15,.25)_55%,#0a0c0f_100%)]" />
+        <div className={`${wrap} py-24 sm:py-32`}>
+          <p className={`${mono} flex items-center gap-2.5 text-[0.75rem] uppercase tracking-[0.18em] text-[#f3f5f8]`}>
+            <LiveDot /> Someone is on call right now
+          </p>
+          <p className={`${display} mt-6 text-[clamp(3rem,9vw,8rem)] font-black uppercase leading-[0.85] text-[#f3f5f8]`}>
+            Still in the dark?
+          </p>
+          <a
+            href={TEL}
+            className={`group mt-4 inline-flex max-w-full items-center gap-3 sm:gap-5 ${display} text-[clamp(2.6rem,11.5vw,10.5rem)] font-black leading-[0.9] tracking-[-0.01em] text-[#ffb020] transition-[text-shadow] hover:[text-shadow:0_0_40px_rgba(255,176,32,.55)] ${focusRing}`}
+          >
+            <PhoneIcon className="h-[0.42em] w-[0.42em] shrink-0" />
+            <span className="whitespace-nowrap">{PHONE}</span>
+          </a>
+        </div>
+      </div>
 
-      <div className={`${container} pb-28 pt-14 sm:pb-24`}>
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <div>
-            <Wordmark />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[#93a0b1]">
-              Wired right the first time. Certified electricians for homes and
-              small business across Greater Manchester.
-            </p>
-          </div>
-
-          <nav aria-label="Footer">
-            <h2 className={colHeading}>Explore</h2>
-            <ul className="mt-4 space-y-2.5">
-              {exploreLinks.map((link) => (
-                <li key={link.href}>
-                  <a href={link.href} className={footerLink}>
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div>
-            <h2 className={colHeading}>Contact</h2>
-            <ul className="mt-4 space-y-2.5 text-sm text-[#93a0b1]">
-              <li>
-                <a
-                  href="tel:01614960100"
-                  className={`inline-flex items-center gap-2 rounded-sm px-0.5 font-semibold text-[#f4f7fb] transition-colors hover:text-[#ffb020] ${focusRing}`}
-                >
-                  <PhoneIcon className="h-3.5 w-3.5 text-[#ffb020]" />
-                  0161 496 0100
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:hello@voltedge.co.uk"
-                  className={footerLink}
-                >
-                  hello@voltedge.co.uk
-                </a>
-              </li>
-              <li>
-                Unit 7, Fentonbridge Works,
-                <br />
-                Manchester M4 5FE
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className={colHeading}>Hours</h2>
-            <p className="mt-4 text-sm leading-relaxed text-[#93a0b1]">
-              Emergencies 24/7 · Office Mon-Fri 8-6
-            </p>
-          </div>
+      <div className={`${wrap} grid gap-12 border-t border-white/10 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]`}>
+        <div>
+          <Wordmark />
+          <p className="mt-5 max-w-sm leading-relaxed text-[#9aa4b2]">
+            Domestic and light commercial electricians for Greater Manchester.
+            Emergency line answered by an electrician, every hour of every day.
+          </p>
+          <address className={`${mono} mt-6 not-italic text-[0.78rem] uppercase leading-relaxed tracking-[0.1em] text-[#9aa4b2]`}>
+            Unit 4, Brinksway Trade Park
+            <br />
+            Stockport SK3 0BZ
+          </address>
         </div>
 
-        <div className="mt-12 space-y-2 border-t border-[#232a35] pt-6 text-xs leading-relaxed text-[#93a0b1]">
-          <p>
-            Voltedge Electrical Ltd, registered in England and Wales, company
-            no. 08841377. Registered office: Unit 7, Fentonbridge Works,
-            Manchester M4 5FE.
-          </p>
-          <p>
-            Voltedge is a representative demo site by Integrate Web Design.
-          </p>
+        <nav aria-label="Footer">
+          <p className={`${mono} text-[0.7rem] uppercase tracking-[0.16em] text-[#9aa4b2]`}>On this page</p>
+          <ul className="mt-4 grid gap-2.5">
+            {nav.map((l) => (
+              <li key={l.href}>
+                <a href={l.href} className={`text-[#f3f5f8] transition-colors hover:text-[#ffb020] ${focusRing}`}>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          <p className={`${mono} text-[0.7rem] uppercase tracking-[0.16em] text-[#9aa4b2]`}>Hours</p>
+          <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2.5 text-[#f3f5f8]">
+            <dt className="text-[#9aa4b2]">Emergencies</dt>
+            <dd>24/7, 365 days</dd>
+            <dt className="text-[#9aa4b2]">Planned work</dt>
+            <dd>Mon to Sat, 7:30am to 6pm</dd>
+            <dt className="text-[#9aa4b2]">Office</dt>
+            <dd>Mon to Fri, 8am to 5pm</dd>
+          </dl>
+          <a
+            href="mailto:jobs@voltedge.co.uk"
+            className={`mt-6 inline-block text-[#f3f5f8] underline decoration-white/30 underline-offset-4 hover:decoration-[#ffb020] ${focusRing}`}
+          >
+            jobs@voltedge.co.uk
+          </a>
         </div>
+      </div>
+
+      <div className={`${wrap} flex flex-col gap-3 border-t border-white/10 pb-24 pt-6 text-[0.8rem] text-[#9aa4b2] sm:flex-row sm:justify-between sm:pb-8`}>
+        <p>© 2026 Voltedge Electrical Ltd. Registered in England, no. 07714392.</p>
+        <p>NICEIC Approved Contractor · TrustMark · Part P registered</p>
       </div>
     </footer>
   );

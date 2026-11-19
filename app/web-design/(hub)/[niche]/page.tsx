@@ -10,10 +10,10 @@ import { webDesignServiceGraph } from "@/lib/schema";
 import { NicheFaq, nicheFaqItems, nicheFaqJsonLd } from "@/components/web-design/NicheFaq";
 import { getAllPosts } from "@/lib/blog";
 
-/** Search-led meta description, built only from pricing-page facts. */
+/** Search-led meta description. */
 function nicheDescription(name: string, hasDemo: boolean): string {
   const trade = name.toLowerCase();
-  return `Web design for ${trade} across the UK. Mobile-first websites from a £200 build fee plus £30 a month, hosting and edits included.${hasDemo ? " See the live demo." : ""}`;
+  return `Web design for ${trade} across the UK. Website, SEO and 30 social story creatives for £299 a month.${hasDemo ? " See the live demo." : ""}`;
 }
 
 /** Blog guides written for this trade, e.g. "websites-for-electricians-...". */
@@ -50,9 +50,9 @@ export async function generateMetadata({
   if (!niche) return { title: "Not found | Integrate Web Design" };
 
   const base = `Web design for ${niche.name.toLowerCase()}`;
-  const long = `${base} | Websites from £200 | Integrate`;
+  const long = `${base} | Websites that win work | Integrate`;
   return {
-    // Keyword-first title, e.g. "Web design for plumbers | Websites from £200 | Integrate".
+    // Keyword-first title, e.g. "Web design for plumbers | Websites that win work | Integrate".
     title: { absolute: long.length <= 62 ? long : `${base} | Integrate` },
     description: nicheDescription(niche.name, Boolean(niche.demo)),
     alternates: { canonical: `/web-design/${niche.slug}` },

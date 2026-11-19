@@ -418,6 +418,25 @@ html.lenis body {
     text-transform: uppercase;
   }
 
+  /* Logo mark + wordmark, rising together. */
+  .intro-lockup {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 1.6vw, 1.5rem);
+    overflow: hidden;
+  }
+
+  .intro-logo {
+    display: inline-block;
+    animation: wdp-rt-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .intro-logo-img {
+    display: block;
+    height: clamp(2rem, 6vw, 5.25rem);
+    width: auto;
+  }
+
   .intro-mark span {
     display: inline-block;
     animation: wdp-rt-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) both;

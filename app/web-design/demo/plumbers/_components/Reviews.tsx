@@ -1,72 +1,106 @@
-import { Stars } from "./icons";
+import { StarIcon } from "./icons";
 import { Reveal } from "./Reveal";
-import { container, displayFont, eyebrowLight, h2Light } from "./theme";
+import { display, h2, kicker, mono, wrap } from "./theme";
 
 const REVIEWS = [
   {
-    name: "Sarah",
-    area: "Chapel Allerton",
-    job: "Burst pipe repair",
-    quote:
-      "A pipe burst behind the washing machine at six in the morning. Northline answered first ring, arrived by half seven and the leak was stopped before the school run. Calm, kind and quick.",
+    q: "Quoted £2,340 for the new combi and charged £2,340. Fitted in a day, moved the flue without any fuss, and showed me how to use the app before he left.",
+    who: "Graham T.",
+    where: "Horsforth",
+    job: "New boiler",
   },
   {
-    name: "Mark",
-    area: "Horsforth",
-    job: "New combi boiler",
-    quote:
-      "New combi quoted on the Tuesday, fitted on the Friday. The price never moved a penny and they registered the ten year warranty for us before they left. The house has never been warmer.",
-  },
-  {
-    name: "Priya",
-    area: "Roundhay",
+    q: "Eleven days for the bathroom, exactly as promised. We were both at work, so the daily photos meant we never had to chase anyone.",
+    who: "Priya and Tom",
+    where: "Headingley",
     job: "Bathroom refit",
-    quote:
-      "They managed our whole bathroom refit, tiling and all, in under three weeks. Dust sheets everywhere, hoovered every single evening. It looks like a hotel now.",
+  },
+  {
+    q: "I manage six rentals. Gas certificates come back the same day, every time, and the tenants say the engineers are polite. That is all I want.",
+    who: "Marcus O.",
+    where: "Wakefield",
+    job: "Landlord certificates",
   },
 ];
 
+function Stars({ size = "h-4 w-4" }: { size?: string }) {
+  return (
+    <span className="flex text-[#e8a317]" aria-hidden="true">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <StarIcon key={i} className={size} />
+      ))}
+    </span>
+  );
+}
+
 export function Reviews() {
   return (
-    <section id="reviews" aria-labelledby="reviews-heading" className="scroll-mt-24 border-y border-[#dde8ee] bg-white py-20 sm:py-28">
-      <div className={container}>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div>
-            <p className={eyebrowLight}>Reviews</p>
-            <h2 id="reviews-heading" className={`${h2Light} mt-3`}>
-              Rated by the people next door.
+    <section id="reviews" aria-labelledby="reviews-title" className="scroll-mt-20 bg-[#f3f6f5] py-20 sm:py-28">
+      <div className={wrap}>
+        <div className="grid gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <p className={kicker}>Reviews</p>
+            <h2 id="reviews-title" className={`${h2} mt-5 text-[#0b1a28]`}>
+              What 412 neighbours said.
             </h2>
-          </div>
-          <div className="flex items-center gap-5 lg:justify-end">
-            <p className={`${displayFont} text-[3.4rem] font-extrabold leading-none tracking-[-0.02em] text-[#12212e] sm:text-[4rem]`}>
-              4.9
-            </p>
-            <div>
-              <Stars starClassName="h-5 w-5" label="Rated 4.9 out of 5 on Google" />
-              <p className="mt-1.5 text-sm font-semibold text-[#12212e]">212 Google reviews</p>
-              <p className="text-sm text-[#4e6274]">Every one from a genuine local job.</p>
+            <div className="mt-8 flex items-center gap-4">
+              <p className={`${display} text-[4.5rem] font-extrabold leading-none tracking-[-0.05em] text-[#0b1a28]`}>4.9</p>
+              <div>
+                <Stars size="h-5 w-5" />
+                <p className="mt-1.5 text-[0.9rem] text-[#4b5d6b]">
+                  Google, 412 reviews
+                  <span className="sr-only">, rated 4.9 out of 5</span>
+                </p>
+              </div>
             </div>
           </div>
+
+          <Reveal className="lg:col-span-8">
+            <figure className="relative rounded-[30px] bg-white p-7 ring-1 ring-[#d8e1e3] sm:p-11">
+              <span
+                aria-hidden="true"
+                className={`${display} absolute -top-7 left-7 grid h-14 w-14 place-items-center rounded-full bg-[#1ed3b0] text-[2.4rem] font-extrabold leading-none text-[#0b1a28] sm:left-11`}
+              >
+                &ldquo;
+              </span>
+              <blockquote>
+                <p className={`${display} text-[clamp(1.15rem,2.3vw,1.9rem)] font-semibold leading-[1.28] tracking-[-0.02em] text-[#0b1a28]`}>
+                  Water was coming through the kitchen ceiling at half ten on a Sunday night. Jo answered on the second ring,
+                  talked me through finding the stopcock, and Callum was here by quarter past twelve. Fixed price, no drama,
+                  and he hoovered up after himself.
+                </p>
+              </blockquote>
+              <figcaption className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#e4ebec] pt-6">
+                <span>
+                  <span className="block font-bold text-[#0b1a28]">Hannah R., Chapel Allerton</span>
+                  <span className={`${mono} text-[0.82rem] text-[#4b5d6b]`}>Burst pipe, Sunday 22:31</span>
+                </span>
+                <Stars />
+              </figcaption>
+            </figure>
+          </Reveal>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {REVIEWS.map((review, index) => (
-            <Reveal key={review.name} delay={index * 90}>
-              <figure className="flex h-full flex-col rounded-2xl border border-[#dde8ee] bg-[#f6f9fb] p-6">
-                <Stars starClassName="h-3.5 w-3.5" label="Rated 5 out of 5" />
-                <blockquote className="mt-4 flex-1 leading-relaxed text-[#12212e]">
-                  <p>&ldquo;{review.quote}&rdquo;</p>
-                </blockquote>
-                <figcaption className="mt-5 border-t border-[#dde8ee] pt-4">
-                  <p className={`${displayFont} text-sm font-bold text-[#12212e]`}>
-                    {review.name}, {review.area}
-                  </p>
-                  <p className="mt-0.5 text-sm text-[#4e6274]">{review.job}</p>
-                </figcaption>
-              </figure>
-            </Reveal>
+        <ul className="mt-6 grid gap-4 md:grid-cols-3">
+          {REVIEWS.map((r, i) => (
+            <li key={r.who}>
+              <Reveal delay={i * 90} className="h-full">
+                <figure className="flex h-full flex-col rounded-[26px] bg-white p-7 ring-1 ring-[#d8e1e3]">
+                  <Stars />
+                  <blockquote className="mt-4 flex-1 leading-relaxed text-[#1f3243]">
+                    <p>{r.q}</p>
+                  </blockquote>
+                  <figcaption className="mt-6 border-t border-[#e4ebec] pt-4">
+                    <span className="block font-bold text-[#0b1a28]">
+                      {r.who}, {r.where}
+                    </span>
+                    <span className={`${mono} text-[0.8rem] text-[#4b5d6b]`}>{r.job}</span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
