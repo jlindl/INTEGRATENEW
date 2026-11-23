@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-/** Link back to integrate-tech.co.uk, tagged per business page for attribution. */
+/** Link to the review plates page, tagged per business page for attribution. */
 function poweredByHref(slug: string) {
   const q = new URLSearchParams({
     utm_source: "integrate-tap",
@@ -36,7 +36,7 @@ function poweredByHref(slug: string) {
     utm_campaign: "powered-by",
     utm_content: slug,
   });
-  return `${SITE}/?${q}`;
+  return `${SITE}/review-plates?${q}`;
 }
 
 function LinkButton({ link, primary }: { link: BusinessLink; primary: boolean }) {

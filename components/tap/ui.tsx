@@ -52,11 +52,12 @@ export function TapShell({
   );
 }
 
-/** Every Tap page links back to the main site. */
+/** Every Tap page links back to the main site: to the Integrate Tap page
+    (/review-plates), not the agency homepage. */
 export function TapFooter() {
   return (
     <footer className="mt-16 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line pt-5 text-[0.8rem] text-ink-3">
-      <a href={SITE} className="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-ink">
+      <a href={`${SITE}/review-plates`} className="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-ink">
         <LogoMark className="h-4 w-4" />
         Integrate Tap is made by Integrate
       </a>
