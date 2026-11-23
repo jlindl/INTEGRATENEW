@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { copyText } from "./clipboard";
 
 /**
  * Copies a list of plate links to the clipboard, one per line, for writing
@@ -10,23 +11,7 @@ export function CopyLinks({ links, label, className = "" }: { links: string[]; l
   const [done, setDone] = useState<"ok" | "fail" | null>(null);
 
   async function copy() {
-    const text = links.join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      setDone("ok");
-    } catch {
-      // Older browsers / non-secure contexts: fall back to a hidden textarea.
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand("copy");
-      ta.remove();
-      setDone(ok ? "ok" : "fail");
-    }
+    setDone((await copyText(links.join("\n"))) ? "ok" : "fail");
     setTimeout(() => setDone(null), 2500);
   }
 

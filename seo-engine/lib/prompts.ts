@@ -36,6 +36,7 @@ These are checked by code. A draft that breaks any of them is rejected.
 4. Location articles must be genuinely specific to the place: name nearby towns and areas, and use the local context provided (housing stock, geography, weather, how people travel and work). If the article would still make sense with the town name swapped for another, it fails. Only use local facts you are confident are true; the provided notes are safe to rely on.
 5. Do not claim Integrate has an office in, or is based in, any particular town.
 6. Do not claim first-hand experience, observations or a track record ("most fitters we speak to", "the sites we see", "our clients"). Make the same point as a general observation about the trade instead.
+7. Never state or imply Integrate's prices, fees, packages or monthly costs, and never link to or mention a pricing page. If the article covers what a website or service costs, say it is quoted per project once Integrate knows what the reader needs, and point to the contact page (/contact).
 </hard_rules>
 
 <format>

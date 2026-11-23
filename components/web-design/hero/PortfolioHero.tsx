@@ -17,9 +17,9 @@ import { MagneticLink } from "@/components/web-design/interactions/MagneticLink"
 /* Three columns of real screenshots (niche demos + rendered mockups). Chosen
    for a light/dark mix so the collage stays lively through the scrim. */
 const COLUMNS: string[][] = [
-  ["/mockups/fintech-saas.jpg", "/portfolio/law-firms.jpg", "/portfolio/dental-practices.jpg"],
-  ["/portfolio/kitchens.jpg", "/mockups/luxe-fashion.jpg", "/portfolio/electricians.jpg"],
-  ["/portfolio/recruiters.jpg", "/mockups/wellness-retreat.jpg", "/portfolio/accountants.jpg"],
+  ["/mockups/fintech-saas.jpg", "/portfolio/law-firms-v2.jpg", "/portfolio/dental-practices-v2.jpg"],
+  ["/portfolio/kitchens.jpg", "/mockups/luxe-fashion.jpg", "/portfolio/electricians-v2.jpg"],
+  ["/portfolio/recruiters-v2.jpg", "/mockups/wellness-retreat.jpg", "/portfolio/accountants-v2.jpg"],
 ];
 
 function MontageColumn({

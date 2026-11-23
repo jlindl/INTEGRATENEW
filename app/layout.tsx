@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { CookieBanner } from "@/components/analytics/CookieBanner";
 import { ContactClickTracker } from "@/components/analytics/ContactClickTracker";
 import { SITE_URL } from "@/lib/site";
@@ -16,6 +17,11 @@ const fraunces = localFont({
   ],
   variable: "--font-fraunces",
   display: "swap",
+  // Not preloaded: the two variable files are ~270 kB together, and with
+  // preload on, every page (including ones that never use Fraunces, or only
+  // the 15 kB homepage subset) downloads them before its headline can paint.
+  // Pages that use Fraunces still load it as soon as their CSS asks for it.
+  preload: false,
 });
 
 /* Clean, highly legible body face */
@@ -40,9 +46,9 @@ const plexMono = localFont({
 export const metadata: Metadata = {
   // Resolves relative OG images and canonicals to absolute URLs.
   metadataBase: new URL(SITE_URL),
-  title: "Integrate | The strategic AI partner for high-growth B2B",
+  title: "Integrate | AI automation and websites for UK trades",
   description:
-    "We design, deploy, and manage bespoke AI systems that automate revenue operations, so your team can focus on what only humans can do.",
+    "Integrate builds AI automation, lead generation and websites for UK trades and service businesses. Missed calls answered, quotes sent, jobs booked.",
 };
 
 export default function RootLayout({
@@ -69,10 +75,12 @@ export default function RootLayout({
         <Script
           src="https://integrate-analytics.vercel.app/t.js"
           data-site="892b3a06-e0c2-4688-9e5b-9f037534165e"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         {/* Google Analytics 4: Consent Mode v2, cookies only after "Accept" in the banner. */}
         <GoogleAnalytics />
+        {/* Meta Pixel: only loaded after "Accept" in the banner (see the Cookie Policy). */}
+        <MetaPixel />
         <ContactClickTracker />
         <CookieBanner />
       </body>

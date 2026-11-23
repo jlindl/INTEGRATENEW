@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { LinkIcon } from "@/components/tap/LinkIcon";
 import { SITE } from "@/components/tap/ui";
 import { LogoMark } from "@/components/ui/LogoMark";
+import { currentBusiness } from "@/lib/tap/auth";
 import { getStore, storeReady } from "@/lib/tap/store";
 import type { BusinessLink } from "@/lib/tap/types";
 
@@ -61,6 +62,8 @@ function LinkButton({ link, primary }: { link: BusinessLink; primary: boolean })
 export default async function BusinessPage({ params }: { params: Promise<{ slug: string }> }) {
   const b = await load((await params).slug);
   if (!b) notFound();
+  // The owner, if logged in on this phone, gets "Edit this page" instead of "Log in".
+  const isOwner = (await currentBusiness())?.id === b.id;
 
   // Review links lead; everything else keeps the owner's order.
   const review = b.links.filter((l) => l.kind === "google" || l.kind === "tripadvisor");
@@ -109,6 +112,16 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
               </span>
               <span className="underline decoration-line-2 underline-offset-2">Get a review plate for your business</span>
             </a>
+            {/* Tiny way back in for the owner to change their setup. */}
+            <p className="mt-1">
+              <a
+                href={isOwner ? "/tap/dashboard" : "/tap/login?next=/tap/dashboard"}
+                rel="nofollow"
+                className="inline-flex min-h-11 items-center rounded-lg px-3 text-[0.7rem] text-ink-3/80 transition-colors hover:text-ink"
+              >
+                {isOwner ? "Edit this page" : "Owner? Log in"}
+              </a>
+            </p>
           </footer>
         </div>
       </section>

@@ -57,7 +57,7 @@ export async function generatePlates(_: FormState, fd: FormData): Promise<FormSt
     });
   }
   await store.insertPlates(plates);
-  revalidatePath("/tap/admin");
+  revalidatePath("/tap/admin", "layout");
   return { ok: `Created ${count} plates in "${batch}".` };
 }
 
@@ -75,7 +75,9 @@ export async function plateAction(fd: FormData) {
     // Detach from the business so it can be claimed again (e.g. resold or wrong account).
     await store.updatePlate(code, { status: settled, businessId: null, label: "", claimedAt: null, failedClaims: 0 });
   } else if (action === "unlock-claims") await store.updatePlate(code, { failedClaims: 0 });
-  revalidatePath("/tap/admin");
+  else if (action === "amazon-on") await store.updatePlate(code, { sentToAmazonAt: new Date().toISOString() });
+  else if (action === "amazon-off") await store.updatePlate(code, { sentToAmazonAt: null });
+  revalidatePath("/tap/admin", "layout");
 }
 
 /* ------------------------------------------------------------- encoder -- */
@@ -119,4 +121,41 @@ export async function lookupScanned(url: string | null, serial: string | null) {
   if (!plate) return null;
   const business = plate.businessId ? await store.getBusiness(plate.businessId) : null;
   return { code: plate.code, status: plate.status, batch: plate.batch, business: business?.name ?? null, taps: plate.taps };
+}
+
+/**
+ * Remove a customer (wrong sign-up, refund, or they asked to be deleted).
+ * Their plates go back to unclaimed stock first, then the account, page,
+ * links and contact details are deleted. Their login stops working.
+ */
+export async function deleteCustomerAction(fd: FormData) {
+  await requireAdmin();
+  const id = String(fd.get("id") ?? "");
+  const store = getStore();
+  if (!id || !(await store.getBusiness(id))) return;
+  for (const p of await store.listPlates({ businessId: id })) {
+    const settled = p.encodedAt ? "ready" : "unencoded";
+    await store.updatePlate(p.code, {
+      status: p.status === "disabled" ? "disabled" : settled,
+      businessId: null,
+      label: "",
+      claimedAt: null,
+      failedClaims: 0,
+    });
+  }
+  await store.deleteBusiness(id);
+  revalidatePath("/tap/admin", "layout");
+}
+
+/** Tick "Sent to Amazon" on every plate in a list (the ones currently shown). */
+export async function bulkAmazonAction(fd: FormData) {
+  await requireAdmin();
+  const codes = String(fd.get("codes") ?? "").split(",").map(normaliseCode).filter(Boolean).slice(0, 500);
+  const store = getStore();
+  const now = new Date().toISOString();
+  for (const code of codes) {
+    const p = await store.getPlate(code);
+    if (p && !p.sentToAmazonAt) await store.updatePlate(code, { sentToAmazonAt: now });
+  }
+  revalidatePath("/tap/admin", "layout");
 }

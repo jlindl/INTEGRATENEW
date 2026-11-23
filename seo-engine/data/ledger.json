@@ -368,6 +368,52 @@
       "slug": "facebook-ads-for-heating-engineers-that-bring-in-real-enquiries",
       "title": "Facebook ads for heating engineers that bring in real enquiries",
       "targetKeyword": "facebook ads for heating engineers"
+    },
+    {
+      "date": "2026-11-09",
+      "type": "service",
+      "key": "service:websites:painters-decorators",
+      "status": "generated",
+      "slug": "websites-for-painters-and-decorators-that-win-more-work",
+      "title": "Websites for painters and decorators that win more work",
+      "targetKeyword": "websites for painters and decorators"
+    },
+    {
+      "date": "2026-11-11",
+      "type": "location",
+      "key": "location:wigan:painters-decorators",
+      "status": "generated",
+      "angle": "marketing",
+      "slug": "marketing-for-painters-and-decorators-in-wigan",
+      "title": "Marketing for painters and decorators in Wigan",
+      "targetKeyword": "marketing for painters and decorators in Wigan"
+    },
+    {
+      "date": "2026-11-16",
+      "type": "service",
+      "key": "service:missed-call-text-back:tilers",
+      "status": "generated",
+      "slug": "missed-call-text-back-for-tilers-stop-losing-jobs",
+      "title": "Missed call text back for tilers: stop losing jobs",
+      "targetKeyword": "missed call text back for tilers"
+    },
+    {
+      "date": "2026-11-18",
+      "type": "service",
+      "key": "service:trade-leads:loft-conversion",
+      "status": "generated",
+      "slug": "how-to-get-more-loft-conversion-leads",
+      "title": "How to get more loft conversion leads",
+      "targetKeyword": "how to get more loft conversion leads"
+    },
+    {
+      "date": "2026-11-20",
+      "type": "service",
+      "key": "service:ai-receptionist:joiners",
+      "status": "generated",
+      "slug": "how-an-ai-receptionist-for-joiners-actually-works",
+      "title": "How an AI receptionist for joiners actually works",
+      "targetKeyword": "ai receptionist for joiners"
     }
   ]
 }

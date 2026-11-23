@@ -45,7 +45,7 @@ const nicheItems: ShowcaseItem[] = NICHES.map((n) => ({
   brand: n.mock.brand,
   descriptor: `${n.singular} website`,
   industry: n.category,
-  image: `/portfolio/${n.slug}.jpg`,
+  image: n.cover?.src ?? `/portfolio/${n.slug}.jpg`,
   domain: n.mock.domain,
   href: n.demo ?? `/web-design/${n.slug}`,
   caseStudy: `/web-design/${n.slug}`,

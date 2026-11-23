@@ -15,7 +15,7 @@ export function DemoCredit() {
   return (
     <Link
       href="/web-design"
-      aria-label="Back to Integrate Web Design — this is a representative demo. View the portfolio."
+      aria-label="Back to Integrate Web Design. This is a representative demo. View the portfolio."
       className="group fixed bottom-4 right-4 z-50 flex items-center gap-2.5 rounded-full border border-white/15 bg-[#0d0f14]/90 py-2 pl-3 pr-4 shadow-[0_12px_34px_-12px_rgba(0,0,0,0.7)] ring-1 ring-inset ring-white/5 backdrop-blur-md transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-[#b25dff]/60 hover:shadow-[0_16px_40px_-12px_rgba(160,43,255,0.45)]"
     >
       <svg

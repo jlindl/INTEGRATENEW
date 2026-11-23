@@ -34,7 +34,7 @@
       "name": "Websites",
       "keyword": "websites for {audience}",
       "summary": "Premium, fast, mobile-first websites built to win enquiries: clear services and areas covered, real photos, reviews, and obvious ways to get in touch. Integrate builds these as a standalone service and as part of the lead generation system.",
-      "relatedPaths": ["/web-design", "/web-design/pricing", "/contact"]
+      "relatedPaths": ["/web-design", "/contact"]
     },
     {
       "id": "automation",
@@ -42,7 +42,10 @@
       "keyword": "automation for {audience}",
       "summary": "Taking repetitive admin off the owner's plate with AI and automation: quote follow-ups, appointment reminders, review requests after a job, and passing information between the tools the business already uses.",
       "relatedPaths": ["/contact", "/book"]
-    }
+    },
+    {"id": "trade-leads", "name": "Getting more leads", "keyword": "how to get more {trade} leads", "summary": "The full Integrate system: Meta ads shown to people in the client's area, an instant lead form, an AI WhatsApp agent that replies straight away and qualifies the lead (budget, location, job type, timing), then books qualified jobs into the business's calendar. National guide, not tied to one town.", "relatedPaths": ["/services/lead-generation", "/contact", "/book"]},
+    {"id": "ai-receptionist", "name": "AI receptionist", "keyword": "ai receptionist for {audience}", "summary": "Integrate answers every new enquiry within moments through the AI WhatsApp agent and the AI website assistant, qualifies it (budget, location, job type, timing) and books it into the calendar. It does not answer phone calls with a voice bot: when a call is missed, the enquiry is picked up on WhatsApp instead. The post compares a phone AI receptionist with an instant WhatsApp and website reply.", "relatedPaths": ["/services/ai-whatsapp-assistant", "/services/ai-chatbot", "/contact"]},
+    {"id": "missed-call-text-back", "name": "Missed call text back", "keyword": "missed call text back for {audience}", "summary": "When a call is missed, Integrate's assistant replies on WhatsApp straight away (for example: 'Sorry we missed you, we're on a job. What do you need doing?'), then the AI WhatsApp agent qualifies the enquiry and books the job into the calendar, so missed calls stop turning into lost work.", "relatedPaths": ["/services/ai-automation", "/services/ai-whatsapp-assistant", "/contact"]}
   ],
   "audiences": [
     { "id": "roofers", "name": "roofers", "singular": "roofer", "trade": "roofing", "kind": "trade", "jobs": "roof repairs, re-roofs, flat roofs, guttering, chimney and leadwork, fascias and soffits" },
@@ -74,6 +77,14 @@
     { "id": "website", "keyword": "websites for {audience} in {location}", "angle": "What a {singular} in {location} needs from their website to win local work, and where most fall short." }
   ],
   "excludePairs": [
-    "whatsapp-agent:accountants"
+    "whatsapp-agent:accountants",
+    "trade-leads:cleaning-companies",
+    "trade-leads:removal-firms",
+    "trade-leads:garages",
+    "trade-leads:aesthetics-clinics",
+    "trade-leads:dental-practices",
+    "trade-leads:accountants",
+    "ai-receptionist:accountants",
+    "missed-call-text-back:accountants"
   ]
 }

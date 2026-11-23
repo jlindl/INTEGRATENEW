@@ -1,108 +1,91 @@
-import Image from "next/image";
 import { Reveal } from "./Reveal";
-import { container, displayFont, monoKicker, monoStack } from "./tokens";
+import { display, kicker, mono, serif, wrap } from "./tokens";
 
-const SIDE_QUOTES = [
-  {
-    quote:
-      "Three shortlisted, three interviewed, one hired. Twenty-six days door to door for a role we had been running ourselves for four months.",
-    name: "Priya Shah",
-    role: "VP Engineering, Series C fintech",
-  },
-  {
-    quote:
-      "They told me not to take a role they were being paid to fill, because it was wrong for me. I took the next one they called about. Still there.",
-    name: "Daniel Okafor",
-    role: "Placed as Head of Data, 2024",
-  },
+/* Typographic wordmarks for fictional clients: each set differently, all in ink. */
+const CLIENTS: { name: string; cls: string }[] = [
+  { name: "hatchwork", cls: `${display} text-[1.7rem] font-extrabold tracking-[-0.06em]` },
+  { name: "NORTHLANE", cls: `${mono} text-[1.05rem] font-medium tracking-[0.32em]` },
+  { name: "Quillpay", cls: `${serif} text-[2rem] italic tracking-[-0.02em]` },
+  { name: "FERROUS", cls: `${display} text-[1.55rem] font-black tracking-[0.04em] [transform:scaleY(1.15)]` },
+  { name: "oakhaven.", cls: `${display} text-[1.6rem] font-semibold tracking-[-0.04em]` },
+  { name: "Meridian Labs", cls: `${serif} text-[1.7rem] tracking-[-0.01em]` },
+  { name: "fieldnote/", cls: `${mono} text-[1.15rem] font-medium tracking-[-0.02em]` },
+  { name: "Brightwater", cls: `${display} text-[1.45rem] font-light tracking-[0.02em]` },
 ];
 
-const PROOF_STATS = [
-  { value: "83%", label: "of roles filled from the first shortlist" },
-  { value: "96%", label: "of placements pass their guarantee period" },
-  { value: "71%", label: "of new briefs arrive by referral" },
+const QUOTES = [
+  {
+    q: "They told me the company, the salary and the catch on the very first call. Three years later I'm still here.",
+    who: "Daniel Okafor",
+    role: "Director of Engineering, placed 2022",
+  },
+  {
+    q: "The list of people they ruled out, and why, was almost as useful as the shortlist.",
+    who: "Sam Whitlock",
+    role: "CTO, Quillpay, four searches",
+  },
 ];
 
 export function Proof() {
   return (
-    <section className="border-t border-[#e7e2d8] bg-white py-16 sm:py-24">
-      <div className={container}>
-        <Reveal>
-          <p className={`${monoKicker} text-[#c43a10]`}>What clients say</p>
+    <section aria-labelledby="proof-title" className="bg-[#121317] py-20 text-white sm:py-28 lg:py-32">
+      <div className={wrap}>
+        <h2 id="proof-title" className="sr-only">
+          What clients and candidates say
+        </h2>
+        <p className={`${kicker} text-[#ff8a70]`}>On the record</p>
+
+        <Reveal className="mt-8">
+          <figure className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <blockquote
+              className={`${display} text-[clamp(2rem,4.6vw,4.1rem)] font-bold leading-[1.02] tracking-[-0.04em] lg:col-span-10`}
+            >
+              <span className={`${serif} mr-1 text-[#ff5a3c]`} aria-hidden="true">&ldquo;</span>
+              Every agency says they vet people. Ascend are the first whose
+              shortlist <span className={`${serif} italic tracking-[-0.02em] text-[#ff8a70]`}>proved it.</span>{" "}
+              We hired two of the three and would have taken the third.
+            </blockquote>
+            <figcaption className="flex items-center gap-4 lg:col-span-10">
+              <span className="h-px w-10 bg-[#ff5a3c]" aria-hidden="true" />
+              <span>
+                <span className="block font-semibold">Laura Bennett</span>
+                <span className={`${mono} mt-0.5 block text-[0.7rem] uppercase tracking-[0.14em] text-white/55`}>
+                  COO, Hatchwork, three searches since 2021
+                </span>
+              </span>
+            </figcaption>
+          </figure>
         </Reveal>
 
-        <div className="mt-8 grid gap-12 lg:mt-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-          <Reveal>
-            <figure>
-              <blockquote
-                className={`${displayFont} text-[clamp(1.55rem,3.4vw,2.6rem)] font-bold leading-[1.16] tracking-tight text-[#16181d]`}
-              >
-                &ldquo;Every agency says they vet people.{" "}
-                <span className="text-[#c43a10]">Ascend are the first
-                whose shortlist proved it.</span>{" "}
-                We hired two of the five and would have taken a third.&rdquo;
-              </blockquote>
-              <figcaption className="mt-7 flex items-center gap-4">
-                <span className="relative h-12 w-12 overflow-hidden rounded-full">
-                  <Image
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=96&q=70"
-                    alt=""
-                    fill
-                    sizes="48px"
-                    className="object-cover"
-                  />
-                </span>
-                <span>
-                  <span className="block font-semibold text-[#16181d]">
-                    Laura Bennett
-                  </span>
-                  <span className={`${monoStack} mt-0.5 block text-[0.65rem] uppercase tracking-[0.14em] text-[#5c5f68]`}>
-                    COO, Hatchwork · 3 searches with Ascend
-                  </span>
-                </span>
-              </figcaption>
-            </figure>
-          </Reveal>
-
-          <div className="space-y-8">
-            {SIDE_QUOTES.map((item, i) => (
-              <Reveal key={item.name} delay={i * 110}>
-                <figure className="border-l-2 border-[#ff5a3c] pl-5">
-                  <blockquote className="text-[0.95rem] leading-relaxed text-[#16181d]/85">
-                    &ldquo;{item.quote}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-3">
-                    <span className="text-sm font-semibold text-[#16181d]">
-                      {item.name}
-                    </span>
-                    <span className={`${monoStack} mt-0.5 block text-[0.62rem] uppercase tracking-[0.14em] text-[#5c5f68]`}>
-                      {item.role}
-                    </span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
+        <div className="mt-16 grid grid-cols-1 gap-8 border-t border-white/12 pt-10 md:grid-cols-2 md:gap-12">
+          {QUOTES.map((q, i) => (
+            <Reveal key={q.who} delay={i * 100}>
+              <figure>
+                <blockquote className="text-[1.15rem] leading-relaxed text-white/85">&ldquo;{q.q}&rdquo;</blockquote>
+                <figcaption className="mt-4">
+                  <span className="text-[0.95rem] font-semibold">{q.who}</span>
+                  <span className={`${mono} mt-0.5 block text-[0.66rem] uppercase tracking-[0.14em] text-white/55`}>{q.role}</span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
         </div>
 
-        <Reveal className="mt-14 lg:mt-16">
-          <dl className="grid grid-cols-1 gap-6 border-t border-[#e7e2d8] pt-8 sm:grid-cols-3 sm:gap-10">
-            {PROOF_STATS.map((stat) => (
-              <div key={stat.value}>
-                <dd
-                  className={`${displayFont} text-3xl font-bold tracking-tight text-[#16181d] sm:text-4xl`}
-                >
-                  {stat.value}
-                </dd>
-                <dt
-                  className={`${monoStack} mt-1.5 text-[0.68rem] uppercase tracking-[0.14em] text-[#5c5f68]`}
-                >
-                  {stat.label}
-                </dt>
-              </div>
+        <div className="mt-20">
+          <p className={`${mono} text-[0.7rem] uppercase tracking-[0.14em] text-white/55`}>
+            Hiring with us this year
+          </p>
+          <ul className="mt-6 grid grid-cols-2 border-l border-t border-white/12 md:grid-cols-4">
+            {CLIENTS.map((c) => (
+              <li
+                key={c.name}
+                className="group flex h-24 items-center justify-center border-b border-r border-white/12 px-3 text-white/60 transition-colors duration-300 hover:bg-white/[0.03] hover:text-white sm:h-32"
+              >
+                <span className={`${c.cls} inline-block whitespace-nowrap leading-none`}>{c.name}</span>
+              </li>
             ))}
-          </dl>
-        </Reveal>
+          </ul>
+        </div>
       </div>
     </section>
   );

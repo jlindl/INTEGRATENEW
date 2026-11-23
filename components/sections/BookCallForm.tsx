@@ -15,6 +15,7 @@
  */
 import { useState, type FormEvent, type ReactNode } from "react";
 import { track } from "@/lib/gtag";
+import { metaServerContext, metaSetUserData, metaTrack, newMetaEventId } from "@/lib/metaPixel";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -124,6 +125,7 @@ export function BookCallForm({
     setError(null);
 
     const focus = interest ?? data.primaryFocus;
+    const metaEventId = newMetaEventId();
     const payload = {
       name: `${data.firstName} ${data.lastName}`.trim(),
       email: data.email.trim(),
@@ -136,6 +138,7 @@ export function BookCallForm({
       primaryFocus: focus,
       company_website: honeypot, // honeypot
       source,
+      meta: metaServerContext(metaEventId),
     };
 
     try {
@@ -147,6 +150,13 @@ export function BookCallForm({
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
       track("generate_lead", { form: "book_call", source });
+      metaSetUserData({
+        email: data.email,
+        phone: data.phone,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+      metaTrack("Lead", { content_name: source }, metaEventId);
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -167,7 +177,7 @@ export function BookCallForm({
           </svg>
         </span>
         <h3 className="font-display-tuned mt-5 text-2xl font-medium text-ink">
-          Thanks, {data.firstName || "there"} — that&apos;s in.
+          Thanks, {data.firstName || "there"}, that&apos;s in.
         </h3>
         <p className="mx-auto mt-3 max-w-sm leading-relaxed text-ink-2">
           We&apos;ll give you a call within one business day to talk through

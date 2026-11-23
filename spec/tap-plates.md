@@ -25,7 +25,7 @@ Customers set up and manage their own plates from any phone, with no app.
 | `/t/[code]` | anyone | The link on the plate. 302 to setup, the chosen link or `/b/slug`. Never cached. |
 | `/tap` | customer | Enter a code by hand, how it works |
 | `/tap/setup/[code]` | customer | Claim a plate: sign up (or, if logged in, add it to the account) |
-| `/tap/login`, `/tap/dashboard` | customer | Tap mode, logo, links, plate names, tap counts |
+| `/tap/login`, `/tap/dashboard` | customer | Tap mode, logo, links, plate names, tap counts, website badge |
 | `/b/[slug]` | anyone | Hosted business page |
 | `/tap/admin` | Integrate | Make batches, see each plate's link, search, disable/enable, release, CSV |
 | `/tap/admin/encode` | Integrate | Android Chrome writer: write + lock + record chip serial; "check a plate" mode |
@@ -34,6 +34,22 @@ Customers set up and manage their own plates from any phone, with no app.
 All `/tap`, `/t`, `/b` routes are `noindex` and disallowed in robots.txt. The public, indexable
 page for the product is `/review-plates` (in the sitemap and the sitewide footer). The "Made with
 Integrate Tap" link on every `/b` page and the footer on every `/tap` page point there.
+
+## Website badge (backlinks)
+
+The dashboard's **Add to your website** section gives each business a copy-paste "Review us on
+Google" (or Tripadvisor) button for their own site, with a small "Made with Integrate Tap" link
+under it. Tap's own pages live on integrate-tech.co.uk, so their credit links are internal and `/b`
+is noindex anyway: a badge on the business's own domain is where real backlinks come from.
+
+- The button goes to their page `/b/SLUG` by default (it keeps working when they change their
+  links) or straight to their review link. The credit link goes to the homepage.
+- UTM tags (`utm_source=integrate-tap&utm_medium=website-badge&utm_content=SLUG`) go on our own
+  URLs only, never on a Google or Tripadvisor link.
+- Inline styles only, no `<style>` or `<script>`, and it paints its own backgrounds, so it reads on
+  light and dark sites and inside iframe embeds like Wix's. Code: `components/tap/WebsiteBadge.tsx`.
+- Keep the credit link visible, followed and branded. Hidden or keyword-rich links in widgets are
+  against Google's spam policies.
 
 ## Encoding a batch
 

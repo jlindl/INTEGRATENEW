@@ -1,144 +1,183 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import { Reveal } from "./Reveal";
-import {
-  Eyebrow,
-  PhoneIcon,
-  container,
-  display,
-  focusRing,
-  h2Heading,
-  sectionSub,
-} from "./ui";
+import { Arrow, Circuit, display, focusRing, h2, lede, mono, wrap } from "./ui";
 
-const chip =
-  "inline-flex items-center rounded-md border border-[#232a35] bg-[#0e1116] px-2.5 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#ffb020]";
-
-const tileTitle = `${display} text-2xl font-semibold uppercase leading-tight tracking-[0.02em] text-[#f4f7fb]`;
-
-const tileBody = "text-base leading-relaxed text-[#93a0b1]";
+const services = [
+  {
+    code: "01",
+    rating: "B32",
+    name: "Emergency fault-finding",
+    body: "Dead circuits, tripping RCDs, a board that won't reset. We trace it, make it safe and fix it on the first visit in nine jobs out of ten.",
+    price: "£89 call-out, first hour included",
+    img: "/web-design/demo/electricians/hands-board.webp",
+    alt: "Electrician's hands fitting a module into a consumer unit",
+  },
+  {
+    code: "02",
+    rating: "B40",
+    name: "Consumer unit upgrades",
+    body: "Out with the old fuse box, in with a metal-clad board and RCBO protection on every circuit. Usually done in a day, power back on by teatime.",
+    price: "From £549 fitted and certified",
+    img: "/web-design/demo/electricians/breakers.webp",
+    alt: "Close-up of a row of circuit breakers on a modern board",
+  },
+  {
+    code: "03",
+    rating: "B20",
+    name: "Full and partial rewires",
+    body: "Room by room or the whole house, with floorboards lifted and relaid and chases filled ready for the decorator. Free survey and a fixed quote.",
+    price: "3-bed semi typically £4,200 to £5,800",
+    img: "/web-design/demo/electricians/terminals.webp",
+    alt: "Neatly dressed cables landing on rows of terminal blocks",
+  },
+  {
+    code: "04",
+    rating: "B32",
+    name: "EV charger installs",
+    body: "Approved installers for Ohme, Zappi, Pod Point and Hypervolt. We check your supply first, so there are no surprises on fitting day.",
+    price: "From £949 supplied and fitted",
+    img: "/web-design/demo/electricians/ev-charge.webp",
+    alt: "Electric car on charge with an orange cable plugged into its port",
+  },
+  {
+    code: "05",
+    rating: "B16",
+    name: "EICRs and landlord certificates",
+    body: "Full condition reports for landlords, letting agents and buyers. Clear write-up, coded honestly, remedials quoted separately and never padded.",
+    price: "From £129, report within 24 hours",
+    img: "/web-design/demo/electricians/multimeter.webp",
+    alt: "A digital multimeter reading voltage beside a cordless drill",
+  },
+  {
+    code: "06",
+    rating: "B10",
+    name: "Lighting, sockets and small works",
+    body: "Extra sockets, outside power, garden lighting, downlights done properly. Booked by the half day so you're not paying for a full one.",
+    price: "Half-day rate £180",
+    img: "/web-design/demo/electricians/lighting.webp",
+    alt: "A warm filament bulb hanging against soft out-of-focus lights",
+  },
+];
 
 export function Services() {
+  const [active, setActive] = useState(0);
+
   return (
-    <section id="services" className="scroll-mt-24">
-      <div className={`${container} py-16 sm:py-20 lg:py-24`}>
-        <Reveal>
-          <Eyebrow>What we do</Eyebrow>
-          <h2 className={h2Heading}>Electrical work, done properly.</h2>
-          <p className={sectionSub}>
-            Domestic and light commercial, across Greater Manchester. Every job
-            tested, certified and covered by our 10 year workmanship warranty.
-          </p>
-        </Reveal>
-
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-12">
-          {/* 01 · Emergency fault-finding (typographic) */}
-          <Reveal className="lg:col-span-7">
-            <article className="flex h-full flex-col justify-between gap-8 rounded-lg border border-[#232a35] bg-[#161b23] p-6 sm:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <p
-                  aria-hidden="true"
-                  className={`${display} text-[clamp(2.75rem,5vw,4rem)] font-bold leading-none text-[#ffb020]`}
-                >
-                  01
-                </p>
-                <p className={chip}>From £89</p>
-              </div>
-              <div>
-                <h3 className={tileTitle}>Emergency fault-finding</h3>
-                <p className={`mt-3 ${tileBody}`}>
-                  Dead sockets, tripping circuits, a burning smell from the
-                  board. We trace the fault, make it safe and fix it. 2 hour
-                  response, day or night.
-                </p>
-              </div>
-            </article>
+    <section id="services" aria-labelledby="services-title" className="scroll-mt-20 py-20 sm:py-28">
+      <div className={wrap}>
+        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <Reveal>
+            <Circuit n="C2">Schedule of work</Circuit>
+            <h2 id="services-title" className={`${h2} mt-6`}>
+              Six circuits.
+              <br />
+              <span className="text-[#9aa4b2]">All of them ours.</span>
+            </h2>
           </Reveal>
-
-          {/* 02 · Full & partial rewires (typographic) */}
-          <Reveal className="lg:col-span-5" delay={80}>
-            <article className="flex h-full flex-col justify-between gap-8 rounded-lg border border-[#232a35] bg-[#161b23] p-6 sm:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <p
-                  aria-hidden="true"
-                  className={`${display} text-[clamp(2.75rem,5vw,4rem)] font-bold leading-none text-[#ffb020]`}
-                >
-                  02
-                </p>
-                <p className={chip}>Free survey</p>
-              </div>
-              <div>
-                <h3 className={tileTitle}>Full &amp; partial rewires</h3>
-                <p className={`mt-3 ${tileBody}`}>
-                  Whole-home or room-by-room, fully certified. Tidy chasing,
-                  minimal disruption, paperwork handed over on the day.
-                </p>
-              </div>
-            </article>
-          </Reveal>
-
-          {/* 03 · EV charger installs (image tile) */}
-          <Reveal className="lg:col-span-5" delay={40}>
-            <article className="flex h-full flex-col overflow-hidden rounded-lg border border-[#232a35] bg-[#161b23]">
-              <div className="relative aspect-[16/10]">
-                <Image
-                  src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=75"
-                  alt="Electric vehicle charging port plugged into a car"
-                  fill
-                  sizes="(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex grow flex-col gap-3 p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className={tileTitle}>EV charger installs</h3>
-                  <p className={chip}>From £949</p>
-                </div>
-                <p className={tileBody}>
-                  OZEV approved installers for every major charger brand.
-                  Supplied, fitted and commissioned, usually in a single visit.
-                </p>
-              </div>
-            </article>
-          </Reveal>
-
-          {/* 04 · Fuse board upgrades & EICR testing (image tile) */}
-          <Reveal className="lg:col-span-7" delay={120}>
-            <article className="flex h-full flex-col overflow-hidden rounded-lg border border-[#232a35] bg-[#161b23]">
-              <div className="relative aspect-[16/10] lg:aspect-[21/9]">
-                <Image
-                  src="https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&w=1400&q=75"
-                  alt="Close-up of a modern consumer unit with labelled circuit breakers"
-                  fill
-                  sizes="(min-width: 1024px) 55vw, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex grow flex-col gap-3 p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className={tileTitle}>
-                    Fuse board upgrades &amp; EICR testing
-                  </h3>
-                  <p className={chip}>Certs from £129</p>
-                </div>
-                <p className={tileBody}>
-                  Modern consumer units with RCBO protection on every circuit,
-                  plus full condition reports. Landlord certificates from £129.
-                </p>
-              </div>
-            </article>
+          <Reveal delay={100}>
+            <p className={lede}>
+              Domestic and light commercial work across Greater Manchester.
+              Every job tested to BS 7671 and certified before we leave, with
+              the paperwork in your inbox the same day.
+            </p>
           </Reveal>
         </div>
 
-        <p className="mt-8 text-base text-[#93a0b1]">
-          Something else? If it involves wiring, we do it.{" "}
-          <a
-            href="tel:01614960100"
-            className={`inline-flex items-center gap-1.5 rounded-md px-0.5 font-semibold text-[#f4f7fb] transition-colors hover:text-[#ffb020] ${focusRing}`}
-          >
-            <PhoneIcon className="h-3.5 w-3.5 text-[#ffb020]" />
-            Call 0161 496 0100
-          </a>
-        </p>
+        <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14">
+          {/* Desktop: sticky image that follows the hovered row */}
+          <div className="hidden lg:block">
+            <div className="sticky top-28">
+              <div className="relative aspect-[4/5] overflow-hidden border border-white/10 bg-[#12161b]">
+                {services.map((s, i) => (
+                  <Image
+                    key={s.img}
+                    src={s.img}
+                    alt={i === active ? s.alt : ""}
+                    fill
+                    sizes="(min-width: 1024px) 38vw, 1px"
+                    className={`object-cover saturate-[.8] transition-[opacity,transform] duration-700 ease-out ${
+                      i === active ? "scale-100 opacity-100" : "scale-[1.06] opacity-0"
+                    }`}
+                  />
+                ))}
+                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0a0c0f]/85 via-transparent to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6">
+                  <p className={`${display} text-[7rem] font-black leading-[0.75] text-[#ffb020]`} aria-hidden="true">
+                    {services[active].code}
+                  </p>
+                  <p className={`${mono} text-right text-[0.7rem] uppercase tracking-[0.16em] text-[#f3f5f8]`}>
+                    Circuit {services[active].code}
+                    <br />
+                    <span className="text-[#9aa4b2]">Rated {services[active].rating}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ol className="border-t border-white/10">
+            {services.map((s, i) => (
+              <li key={s.code}>
+                <Reveal delay={i * 40}>
+                  <article
+                    onMouseEnter={() => setActive(i)}
+                    className="group relative border-b border-white/10 py-7 outline-none sm:py-9"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`absolute left-0 top-[-1px] h-[2px] bg-[#ffb020] transition-[width] duration-500 ease-out ${
+                        active === i ? "w-full" : "w-0"
+                      } hidden lg:block`}
+                    />
+                    <div className="relative mb-6 aspect-[16/9] overflow-hidden border border-white/10 lg:hidden">
+                      <Image
+                        src={s.img}
+                        alt={s.alt}
+                        fill
+                        sizes="(min-width: 640px) 90vw, 100vw"
+                        className="object-cover saturate-[.8]"
+                      />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-[4rem_1fr]">
+                      <p className={`${mono} pt-2 text-xs uppercase tracking-[0.16em] text-[#9aa4b2]`}>
+                        <span className="text-[#ffb020]">{s.code}</span> / {s.rating}
+                      </p>
+                      <div>
+                        <h3
+                          className={`${display} text-[clamp(2rem,3.6vw,3.1rem)] font-extrabold uppercase leading-[0.95] transition-colors duration-300 ${
+                            active === i ? "lg:text-[#f3f5f8]" : "lg:text-[#f3f5f8]/55"
+                          } text-[#f3f5f8]`}
+                        >
+                          {s.name}
+                        </h3>
+                        <p className="mt-3 max-w-xl text-[1.02rem] leading-relaxed text-[#9aa4b2]">{s.body}</p>
+                        <p className={`${mono} mt-4 inline-flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.12em] text-[#f3f5f8]`}>
+                          <span aria-hidden="true" className="h-px w-5 bg-[#ffb020]" />
+                          {s.price}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <Reveal className="mt-10">
+          <p className="text-[#9aa4b2]">
+            Something not on the list?{" "}
+            <a
+              href="#quote"
+              className={`inline-flex items-center gap-1.5 font-semibold text-[#f3f5f8] underline decoration-[#ffb020] decoration-2 underline-offset-4 hover:text-[#ffb020] ${focusRing}`}
+            >
+              Describe the job and we'll price it <Arrow className="h-4 w-4" />
+            </a>
+          </p>
+        </Reveal>
       </div>
     </section>
   );

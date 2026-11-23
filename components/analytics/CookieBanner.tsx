@@ -6,7 +6,8 @@ import { CONSENT_KEY, setConsent } from "@/lib/gtag";
 
 /**
  * Cookie consent banner. Accept and Reject carry equal weight (ICO guidance);
- * analytics cookies are only set after "Accept". The choice is stored in
+ * analytics and advertising cookies (Google Analytics, Meta Pixel) are only
+ * set after "Accept". The choice is stored in
  * localStorage and can be reopened from the footer via the
  * "cookie-consent-open" event.
  */
@@ -42,8 +43,9 @@ export function CookieBanner() {
       className="fixed inset-x-4 bottom-4 z-[90] mx-auto max-w-xl rounded-2xl border border-white/10 bg-[#111114] p-5 text-[#f2f1ec] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] md:inset-x-auto md:right-6 md:bottom-6"
     >
       <p className="text-sm leading-relaxed text-[#c9c8c2]">
-        We use analytics cookies to see which pages help people find us, so we
-        can improve the site. They are only set if you accept. See our{" "}
+        We use cookies to see which pages help people find us and to measure
+        how our Facebook and Instagram ads perform. They are only set if you
+        accept. See our{" "}
         <Link href="/legal/cookies" className="underline underline-offset-2 hover:text-white">
           Cookie Policy
         </Link>

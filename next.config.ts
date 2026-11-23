@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Pages rendered per request (e.g. /black-friday, which checks the offer
+  // deadline on every request) would otherwise stream their <title>, meta
+  // description and Open Graph tags into the <body> for everyone except a
+  // short list of known crawlers. Matching every user agent keeps them in the
+  // <head>, where link previews, SEO tools and Lighthouse look for them.
+  htmlLimitedBots: /.*/,
   // Verification builds set NEXT_DISTDIR to a throwaway dir so a prod build
   // never overwrites the running `next dev` server's shared `.next` chunks.
   distDir: process.env.NEXT_DISTDIR || ".next",
@@ -18,7 +24,17 @@ const nextConfig: NextConfig = {
       "highest-roi-automation",
       "ai-agents-vs-simple-automation",
       "bespoke-vs-off-the-shelf",
-    ].map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true }));
+    ]
+      .map((slug) => ({ source: `/blog/${slug}`, destination: "/blog", permanent: true }))
+      .concat([
+        // Old-site URLs Google still requests (Search Console 404 and
+        // "crawled, not indexed" reports, Nov 2026).
+        { source: "/about", destination: "/", permanent: true },
+        { source: "/insights", destination: "/blog", permanent: true },
+        { source: "/insights/:path*", destination: "/blog", permanent: true },
+        // Prices are no longer published; the old pricing page goes to the portal.
+        { source: "/web-design/pricing", destination: "/web-design", permanent: true },
+      ]);
   },
 };
 

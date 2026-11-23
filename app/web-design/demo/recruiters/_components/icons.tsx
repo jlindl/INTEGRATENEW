@@ -45,3 +45,21 @@ export function CheckMark({ className }: IconProps) {
     </svg>
   );
 }
+
+export function ArrowRight({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className={className}
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2.5 8h11" />
+      <path d="M9 3.5L13.5 8 9 12.5" />
+    </svg>
+  );
+}

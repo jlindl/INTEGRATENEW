@@ -1,85 +1,116 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
-import { Advisory } from "./_components/Advisory";
-import { ContactCta } from "./_components/ContactCta";
+import { Approach } from "./_components/Approach";
+import { Clients } from "./_components/Clients";
+import { Contact } from "./_components/Contact";
+import { FeeBuilder } from "./_components/FeeBuilder";
+import { Figures } from "./_components/Figures";
+import { Footer } from "./_components/Footer";
+import { Header } from "./_components/Header";
 import { Hero } from "./_components/Hero";
 import { Insights } from "./_components/Insights";
-import { Pricing } from "./_components/Pricing";
-import { PullQuote } from "./_components/PullQuote";
+import { MonthEnd } from "./_components/MonthEnd";
+import { Proof } from "./_components/Proof";
 import { Services } from "./_components/Services";
-import { SiteFooter } from "./_components/SiteFooter";
-import { SiteHeader } from "./_components/SiteHeader";
-import { TrustBar } from "./_components/TrustBar";
-import { WhoWeHelp } from "./_components/WhoWeHelp";
 
-/* Serif-led display face: headlines in 500, pull-quote in italic */
+/* Display: Newsreader, a text serif with real optical sizes, set light */
 const newsreader = localFont({
   src: [
     { path: "../../../../assets/fonts/newsreader/newsreader-200-800.woff2", weight: "200 800", style: "normal" },
     { path: "../../../../assets/fonts/newsreader/newsreader-200-800-italic.woff2", weight: "200 800", style: "italic" },
   ],
-  variable: "--font-mc-display",
+  variable: "--font-mc-serif",
   display: "swap",
 });
 
-/* Plain-spoken body face */
-const publicSans = localFont({
+/* Body: Instrument Sans, precise without being cold */
+const instrumentSans = localFont({
+  src: [{ path: "../../../../assets/fonts/instrument-sans/instrument-sans-400-700.woff2", weight: "400 700", style: "normal" }],
+  variable: "--font-mc-sans",
+  display: "swap",
+});
+
+/* Figures and labels: IBM Plex Mono */
+const plexMono = localFont({
   src: [
-    { path: "../../../../assets/fonts/public-sans/public-sans-100-900.woff2", weight: "100 900", style: "normal" },
+    { path: "../../../../assets/fonts/ibm-plex-mono/ibm-plex-mono-400.woff2", weight: "400", style: "normal" },
+    { path: "../../../../assets/fonts/ibm-plex-mono/ibm-plex-mono-500.woff2", weight: "500", style: "normal" },
   ],
-  variable: "--font-mc-body",
+  variable: "--font-mc-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Meridian & Co · Chartered Accountants in London",
+  title: "Meridian & Co · Chartered Accountants, Clerkenwell",
   description:
-    "Proactive accounting and tax for founders and established firms. Fixed fees, real-time dashboards, and an advisor who actually picks up the phone.",
+    "Chartered accountants for founder-led companies. Bookkeeping, tax, payroll, R&D relief and management accounts on one fixed monthly fee, with a named partner.",
   robots: { index: false, follow: false },
 };
 
 /*
- * Scroll-reveal styles live here rather than in globals: the Reveal
- * component only adds .mc-motion after mount, when motion is allowed and
- * the element is below the fold, so content is always visible without JS.
+ * Motion lives here. Hero entrance is pure CSS (it ends visible, with or
+ * without JS). Scroll reveals only apply hidden states after JS has
+ * confirmed motion is allowed and the element is below the fold.
  */
-const revealCss = `
+const css = `
+.mc-root { font-family: var(--font-mc-sans), ui-sans-serif, system-ui, sans-serif; font-optical-sizing: auto; }
+.mc-root ::selection { background: #1b4a3a; color: #f3f0e8; }
+
 @media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
+  html:has(.mc-root) { scroll-behavior: smooth; }
+
+  .mc-line { animation: mc-up 1.1s cubic-bezier(.2,.7,.1,1) both; animation-delay: calc(var(--d, 0ms) + 120ms); }
+  .mc-fade { animation: mc-fade 1s cubic-bezier(.2,.7,.1,1) both; animation-delay: calc(var(--d, 0ms) + 200ms); }
+  .mc-curtain { animation: mc-curtain 1.4s cubic-bezier(.7,0,.2,1) both; animation-delay: 150ms; }
+  .mc-curtain img { animation: mc-settle 2.2s cubic-bezier(.2,.7,.1,1) both; animation-delay: 150ms; }
+  .mc-card { animation: mc-fade 1s cubic-bezier(.2,.7,.1,1) both; animation-delay: 900ms; }
+  .mc-row { animation: mc-fade .6s ease-out both; animation-delay: calc(1100ms + var(--i) * 260ms); }
+  .mc-row .mc-tick { stroke-dasharray: 12; animation: mc-draw .5s ease-out both; animation-delay: calc(1250ms + var(--i) * 260ms); }
+
+  .mc-rise { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.7,.1,1), transform .9s cubic-bezier(.2,.7,.1,1); }
+  .mc-rise.mc-in { opacity: 1; transform: none; }
+
+  @supports (animation-timeline: view()) {
+    .mc-parallax { animation: mc-pan linear both; animation-timeline: view(); scale: 1.14; }
+  }
 }
-.mc-motion {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.65s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.mc-motion.mc-in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .mc-motion { opacity: 1; transform: none; transition: none; }
-}
+
+@keyframes mc-up { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+@keyframes mc-fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes mc-curtain { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes mc-settle { from { transform: scale(1.12); } to { transform: scale(1); } }
+@keyframes mc-draw { from { stroke-dashoffset: 12; } to { stroke-dashoffset: 0; } }
+@keyframes mc-pan { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
+
+.mc-range { -webkit-appearance: none; appearance: none; height: 28px; background: transparent; cursor: pointer; }
+.mc-range::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(to right, #1b4a3a var(--fill), rgba(19,32,27,.2) var(--fill)); }
+.mc-range::-moz-range-track { height: 2px; background: linear-gradient(to right, #1b4a3a var(--fill), rgba(19,32,27,.2) var(--fill)); }
+.mc-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; margin-top: -10px; border-radius: 999px; background: #f3f0e8; border: 1.5px solid #1b4a3a; box-shadow: 0 0 0 5px rgba(27,74,58,.1); transition: box-shadow .3s; }
+.mc-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 999px; background: #f3f0e8; border: 1.5px solid #1b4a3a; box-shadow: 0 0 0 5px rgba(27,74,58,.1); }
+.mc-range:hover::-webkit-slider-thumb { box-shadow: 0 0 0 8px rgba(27,74,58,.14); }
 `;
 
 export default function MeridianDemoPage() {
   return (
     <div
-      className={`${newsreader.variable} ${publicSans.variable} min-h-dvh bg-[#f4f2ec] font-[family-name:var(--font-mc-body)] text-[#15201c] antialiased selection:bg-[#1f5c46] selection:text-[#f4f2ec]`}
+      className={`${newsreader.variable} ${instrumentSans.variable} ${plexMono.variable} mc-root min-h-dvh bg-[#f3f0e8] text-[#13201b] antialiased`}
     >
-      <style>{revealCss}</style>
-      <SiteHeader />
+      <style>{css}</style>
+      <Header />
       <main id="main">
         <Hero />
-        <TrustBar />
-        <WhoWeHelp />
+        <Figures />
+        <Approach />
         <Services />
-        <Pricing />
-        <Advisory />
-        <PullQuote />
+        <MonthEnd />
+        <Clients />
+        <FeeBuilder />
+        <Proof />
         <Insights />
-        <ContactCta />
+        <Contact />
       </main>
-      <SiteFooter />
+      <Footer />
       <DemoCredit />
     </div>
   );

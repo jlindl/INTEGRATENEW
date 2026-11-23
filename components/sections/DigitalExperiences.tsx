@@ -150,7 +150,7 @@ export function DigitalExperiences() {
           <Reveal delay={0.12} className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             {/* TODO(Jack): swap this mailto for your booking link (Cal.com / Calendly). */}
             <MagneticButton
-              href="mailto:hello@integrate.agency?subject=Free%20Audit%20Call"
+              href="mailto:sales@integrate-tech.co.uk?subject=Free%20Audit%20Call"
               variant="primary"
             >
               Book a free audit call

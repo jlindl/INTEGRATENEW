@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { BusinessEditor } from "@/components/tap/BusinessEditor";
 import { Card, Notice, PageTitle, Plate, TapShell, inputClass, secondaryButton } from "@/components/tap/ui";
+import { WebsiteBadge } from "@/components/tap/WebsiteBadge";
 import { logout, renamePlate } from "@/lib/tap/actions";
 import { currentBusiness } from "@/lib/tap/auth";
 import { getStore } from "@/lib/tap/store";
@@ -48,7 +49,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
       {claimed && (
         <div className="mt-5 max-w-[36rem]">
           <Notice tone="ok">
-            <b className="font-medium">Plate {claimed} is live.</b> Tap it with your phone to check it works.
+            <b className="font-medium">Plate {claimed} is live.</b> Tap it with your phone to check it works. To
+            change anything later, log in at{" "}
+            <a href="/tap/login" className="font-medium underline underline-offset-2">integrate-tech.co.uk/tap/login</a>.
           </Notice>
         </div>
       )}
@@ -111,9 +114,15 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           </Card>
         </aside>
 
-        <Card className="lg:col-start-1 lg:row-start-1">
-          <BusinessEditor business={toPublic(business)} />
-        </Card>
+        {/* One column wrapper so the sticky side column stays put past the editor. */}
+        <div className="space-y-6 lg:col-start-1 lg:row-start-1">
+          <Card>
+            <BusinessEditor business={toPublic(business)} />
+          </Card>
+          <Card>
+            <WebsiteBadge slug={business.slug} links={business.links} />
+          </Card>
+        </div>
       </div>
     </TapShell>
   );

@@ -1,55 +1,59 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 
 /**
- * Gentle scroll reveal, safe by default. Content is fully visible unless
- * JavaScript has run, the user allows motion, AND the element starts below
- * the fold. Only then do we add the animating class, so nothing ever
- * flashes or stays hidden without JS.
+ * Scroll reveal that is safe by default. Content is fully visible unless
+ * JavaScript runs, motion is allowed AND the element starts below the fold.
+ * Only then is the hidden state applied, so nothing is lost without JS.
+ * variant "rule" draws a hairline from the left instead of fading.
  */
 export function Reveal({
   children,
   className,
   delay = 0,
+  as: Tag = "div",
+  variant = "rise",
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   delay?: number;
+  as?: "div" | "li" | "figure" | "section";
+  variant?: "rise" | "rule";
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLElement | null>(null);
+  const Comp = Tag as "div";
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
 
-    // Anything already on screen at load never animates, so nothing flashes.
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
-
-    el.classList.add("mc-motion");
+    const cls = variant === "rule" ? "mc-rule" : "mc-rise";
+    el.classList.add(cls);
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             el.classList.add("mc-in");
             io.disconnect();
           }
-        });
+        }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [variant]);
 
   return (
-    <div
-      ref={ref}
+    <Comp
+      ref={ref as RefObject<HTMLDivElement>}
       className={className}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
-    </div>
+    </Comp>
   );
 }

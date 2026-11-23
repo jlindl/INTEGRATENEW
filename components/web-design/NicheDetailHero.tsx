@@ -28,7 +28,7 @@ export function NicheDetailHero({ niche }: { niche: Niche }) {
             id="niche-heading"
             className="mt-6 block font-display-tuned text-[clamp(2.4rem,6vw,4.4rem)] font-medium leading-[1.03] tracking-tight text-ivory"
           >
-            {niche.forLabel}
+            Web design for {niche.name.toLowerCase()}
           </span>
         </Reveal>
 

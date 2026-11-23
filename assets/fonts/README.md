@@ -41,3 +41,7 @@ interpolate.
 2. Take the `src: url(...)` from the block commented `/* latin */`.
 3. Download it to the family's folder using the naming above.
 4. Update the matching `next/font/local` entry if the weight range changed.
+
+## Homepage film subset
+
+`fraunces/fraunces-film-400-italic.woff2` is a static instance of Fraunces italic (opsz 90, SOFT 0, WONK 0, weight 400) subset to basic Latin, made with the `subset-font` npm package from `fraunces-100-900-italic.woff2`. It is declared in `app/page.tsx` for the one Fraunces italic accent word in each homepage headline (the headlines themselves are Instrument Sans).

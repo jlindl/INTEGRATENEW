@@ -1,82 +1,101 @@
 import Image from "next/image";
 import { Reveal } from "./Reveal";
-import { SectionHeading } from "./SectionHeading";
-import { container, display } from "./ui";
+import { IMG, focusRingLight, label, mono, serif, wrap } from "./tokens";
 
-type Person = {
-  name: string;
-  role: string;
-  focus: string;
-  img: string;
-};
-
-const people: Person[] = [
+const partners = [
   {
     name: "Eleanor Halstead",
     role: "Senior Partner",
-    focus: "Private client & estates",
-    img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=75",
+    focus: "Trusts, estate planning and family wealth",
+    aside: "Margaret's daughter. Joined in 1996 after ten years at the Chancery Bar. Still keeps the Quarry Street office.",
+    tel: "020 7946 0401",
+    img: "eleanor-halstead.webp",
+    pos: "50% 25%",
   },
   {
     name: "James Okafor",
-    role: "Partner",
-    focus: "Corporate & commercial",
-    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=75",
+    role: "Partner, Head of Corporate",
+    focus: "Company sales, buyouts and investment",
+    aside: "Trained in the City, left for a firm where clients have his mobile. Has advised on more than 140 founder exits.",
+    tel: "020 7946 0402",
+    img: "james.webp",
+    pos: "50% 20%",
   },
   {
-    name: "Priya Nair",
-    role: "Partner",
-    focus: "Dispute resolution",
-    img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=75",
+    name: "Grace Liang",
+    role: "Partner, Disputes",
+    focus: "Shareholder and commercial litigation",
+    aside: "Former solicitor-advocate with rights of audience in the higher courts. Settles more than she fights, by design.",
+    tel: "020 7946 0403",
+    img: "grace.webp",
+    pos: "50% 25%",
   },
   {
-    name: "Tom Bennett",
-    role: "Associate",
-    focus: "Commercial property",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=75",
+    name: "Sofia Marchetti",
+    role: "Partner, Family",
+    focus: "Divorce, finances and pre-nuptial agreements",
+    aside: "Trained mediator and collaborative lawyer. Believes most family cases are won in the first meeting, not the last.",
+    tel: "01632 960 215",
+    img: "sofia.webp",
+    pos: "50% 20%",
   },
 ];
 
 export function People() {
   return (
-    <section id="people" className="scroll-mt-24">
-      <div className={`${container} py-20 sm:py-24 lg:py-28`}>
-        <Reveal>
-          <SectionHeading
-            eyebrow="People"
-            title="You will know exactly who is acting for you."
-            sub="No faceless case handlers. Every client works with a named solicitor they can reach directly."
-          />
+    <section id="people" aria-labelledby="people-title" className="scroll-mt-16 bg-[#0f0d0b] text-[#f3efe7]">
+      <div className={`${wrap} py-24 sm:py-32 lg:py-40`}>
+        <Reveal className="grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <p className={`${label} text-[#d9c3a0]`}>§ 04 · People</p>
+            <h2
+              id="people-title"
+              className={`${serif} mt-6 text-[clamp(2.6rem,5.4vw,4.75rem)] leading-[1] tracking-[-0.02em]`}
+            >
+              You will know exactly <em className="italic text-[#d9c3a0]">who is acting for you.</em>
+            </h2>
+          </div>
+          <p className="max-w-md text-[1rem] leading-[1.75] text-[#f3efe7]/70 lg:col-span-4 lg:col-start-9 lg:self-end">
+            Nine partners, twenty-two solicitors and a support team who have,
+            on average, been with us for eleven years. These are four of the
+            people you are most likely to meet first.
+          </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
-          {people.map((person, i) => (
-            <Reveal key={person.name} className="h-full" delay={(i % 4) * 70}>
-              <figure className="group h-full overflow-hidden rounded-2xl border border-[#e4ddd0] bg-white">
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image
-                    src={person.img}
-                    alt={`${person.name}, ${person.role} at Halstead Law`}
-                    fill
-                    sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 90vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                  />
-                </div>
-                <figcaption className="p-5">
-                  <p
-                    className={`${display} text-lg font-medium tracking-tight text-[#1a1712]`}
+        <ul className="mt-16 grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4">
+          {partners.map((p, i) => (
+            <li key={p.name}>
+              <Reveal delay={i * 90}>
+                <article className="group">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-[#1d1915]">
+                    <Image
+                      src={`${IMG}/${p.img}`}
+                      alt={`Portrait of ${p.name}, ${p.role}`}
+                      fill
+                      sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                      className="hl-portrait object-cover transition-[transform,filter] duration-[1400ms] ease-[cubic-bezier(0.2,0.7,0.1,1)] group-hover:scale-[1.03]"
+                      style={{ objectPosition: p.pos }}
+                    />
+                    <span className={`${mono} absolute left-4 top-4 text-[0.62rem] uppercase tracking-[0.18em] text-[#f3efe7]/75`}>
+                      0{i + 1}
+                    </span>
+                  </div>
+                  <h3 className={`${serif} mt-6 text-[1.9rem] leading-none`}>{p.name}</h3>
+                  <p className={`${mono} mt-3 text-[0.64rem] uppercase tracking-[0.16em] text-[#d9c3a0]`}>{p.role}</p>
+                  <p className="mt-3 text-[0.92rem] text-[#f3efe7]">{p.focus}</p>
+                  <p className="mt-3 text-[0.86rem] leading-[1.65] text-[#f3efe7]/65">{p.aside}</p>
+                  <a
+                    href={`tel:${p.tel.replace(/\s/g, "")}`}
+                    className={`mt-5 inline-flex items-center gap-2 border-b border-[#f3efe7]/25 pb-1 text-[0.84rem] text-[#f3efe7]/85 transition-colors hover:border-[#d9c3a0] hover:text-[#f3efe7] ${focusRingLight}`}
                   >
-                    {person.name}
-                  </p>
-                  <p className="mt-0.5 text-sm font-semibold text-[#7c2d2d]">
-                    {person.role}
-                  </p>
-                  <p className="mt-1 text-sm text-[#5a544a]">{person.focus}</p>
-                </figcaption>
-              </figure>
-            </Reveal>
+                    <span className={`${mono} text-[0.6rem] uppercase tracking-[0.16em] text-[#f3efe7]/55`}>Direct</span>
+                    {p.tel}
+                  </a>
+                </article>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

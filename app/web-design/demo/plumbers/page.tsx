@@ -1,39 +1,41 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { DemoCredit } from "@/components/web-design/demo/DemoCredit";
-import { BoilerFeature } from "./_components/BoilerFeature";
-import { Contact } from "./_components/Contact";
+import { Accreditations } from "./_components/Accreditations";
+import { AfterYouCall } from "./_components/AfterYouCall";
+import { Booking } from "./_components/Booking";
 import { Coverage } from "./_components/Coverage";
-import { EmergencyBanner } from "./_components/EmergencyBanner";
 import { Footer } from "./_components/Footer";
 import { Header } from "./_components/Header";
 import { Hero } from "./_components/Hero";
-import { PromiseBand } from "./_components/PromiseBand";
+import { MobileCallBar } from "./_components/MobileCallBar";
+import { PlannedWork } from "./_components/PlannedWork";
+import { PriceMenu } from "./_components/PriceMenu";
 import { Reviews } from "./_components/Reviews";
 import { Services } from "./_components/Services";
 
-/* Confident geometric display face for headings and the wordmark */
-const jakarta = localFont({
-  src: [
-    { path: "../../../../assets/fonts/plus-jakarta-sans/plus-jakarta-sans-200-800.woff2", weight: "200 800", style: "normal" },
-  ],
-  variable: "--font-nl-display",
+/* Archivo: one sturdy grotesque, stretched wide for display and pulled narrow for labels */
+const archivo = localFont({
+  src: [{ path: "../../../../assets/fonts/archivo/archivo-wdth-100-900.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-nl-sans",
   display: "swap",
+  declarations: [{ prop: "font-stretch", value: "62% 125%" }],
 });
 
-/* Warm, highly legible body face */
-const manrope = localFont({
+/* IBM Plex Mono: phone numbers, times and prices, the "dispatch" voice */
+const plexMono = localFont({
   src: [
-    { path: "../../../../assets/fonts/manrope/manrope-200-800.woff2", weight: "200 800", style: "normal" },
+    { path: "../../../../assets/fonts/ibm-plex-mono/ibm-plex-mono-400.woff2", weight: "400", style: "normal" },
+    { path: "../../../../assets/fonts/ibm-plex-mono/ibm-plex-mono-500.woff2", weight: "500", style: "normal" },
   ],
-  variable: "--font-nl-body",
+  variable: "--font-nl-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Northline Plumbing & Heating | Leeds & West Yorkshire",
   description:
-    "Local plumbing and heating across Leeds and West Yorkshire. No call-out fee, fixed quotes, Gas Safe registered engineers, and emergencies attended within 2 hours.",
+    "Emergency plumbers, boiler engineers and bathroom fitters across Leeds and West Yorkshire. A person answers 24/7, no call-out fee, fixed prices before any work starts.",
   robots: { index: false, follow: false },
 };
 
@@ -41,20 +43,22 @@ export default function NorthlineDemoPage() {
   return (
     <div
       id="top"
-      className={`${jakarta.variable} ${manrope.variable} min-h-dvh bg-[#f6f9fb] font-[family-name:var(--font-nl-body)] text-[#12212e] antialiased`}
+      className={`${archivo.variable} ${plexMono.variable} min-h-dvh bg-[#f3f6f5] font-[family-name:var(--font-nl-sans)] text-[#0b1a28] antialiased [overflow-x:clip]`}
     >
       <Header />
       <main id="main">
         <Hero />
-        <PromiseBand />
+        <Accreditations />
+        <AfterYouCall />
         <Services />
-        <BoilerFeature />
+        <PriceMenu />
+        <PlannedWork />
         <Reviews />
         <Coverage />
-        <EmergencyBanner />
-        <Contact />
+        <Booking />
       </main>
       <Footer />
+      <MobileCallBar />
       <DemoCredit />
     </div>
   );

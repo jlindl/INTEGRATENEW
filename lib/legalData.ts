@@ -59,7 +59,7 @@ const privacy: LegalDoc = {
   title: "Privacy Policy",
   summary:
     "How Integrate AI Solutions Limited collects, uses, and protects your personal data under UK data protection law.",
-  updated: "18 July 2026",
+  updated: "12 November 2026",
   intro:
     "This Privacy Policy explains how Integrate AI Solutions Limited collects, uses, shares, and protects your personal data when you visit our website or get in touch with us, and sets out your rights under UK data protection law.",
   sections: [
@@ -82,9 +82,9 @@ const privacy: LegalDoc = {
       blocks: [
         p("We collect and process the following categories of personal data:"),
         ul([
-          "Information you give us — such as your name, email address, telephone number, company name, and the contents of any message you send us through our contact form, by email, or via WhatsApp.",
-          "Information we collect automatically — such as your IP address, browser type and version, device information, and how you use our website, collected through cookies and similar technologies (see our Cookie Policy).",
-          "Information from third parties — occasionally we may receive information about you from analytics providers, or from publicly available sources where you have made your business contact details public.",
+          "Information you give us, such as your name, email address, telephone number, company name, and the contents of any message you send us through our contact form, by email, or via WhatsApp.",
+          "Information we collect automatically, such as your IP address, browser type and version, device information, and how you use our website, collected through cookies and similar technologies (see our Cookie Policy).",
+          "Information from third parties: occasionally we may receive information about you from analytics providers, or from publicly available sources where you have made your business contact details public.",
         ]),
         p(
           "We do not intentionally collect any special category (sensitive) personal data through our website. Please do not send us such information unless we specifically ask for it.",
@@ -98,11 +98,11 @@ const privacy: LegalDoc = {
           "We only use your personal data where the law allows us to. The lawful bases we rely on are:",
         ),
         ul([
-          "To respond to your enquiries and provide quotes — on the basis of taking steps at your request prior to entering into a contract, and our legitimate interests in running our business.",
-          "To provide our services and manage our relationship with you — on the basis of performing a contract with you.",
-          "To send you updates or marketing about our services — on the basis of your consent, or our legitimate interests where you are an existing client (you can opt out at any time).",
-          "To operate, secure, and improve our website — on the basis of our legitimate interests in maintaining a safe and effective website.",
-          "To comply with our legal and regulatory obligations — on the basis of legal obligation.",
+          "To respond to your enquiries and provide quotes, on the basis of taking steps at your request prior to entering into a contract, and our legitimate interests in running our business.",
+          "To provide our services and manage our relationship with you, on the basis of performing a contract with you.",
+          "To send you updates or marketing about our services, on the basis of your consent, or our legitimate interests where you are an existing client (you can opt out at any time).",
+          "To operate, secure, and improve our website, on the basis of our legitimate interests in maintaining a safe and effective website.",
+          "To comply with our legal and regulatory obligations, on the basis of legal obligation.",
         ]),
       ],
     },
@@ -110,7 +110,7 @@ const privacy: LegalDoc = {
       heading: "4. Cookies and analytics",
       blocks: [
         p(
-          "Our website uses cookies and similar technologies to function correctly and to help us understand how it is used. For full details of the cookies we use and how to control them, please see our Cookie Policy.",
+          "Our website uses cookies and similar technologies to function correctly, to help us understand how it is used and, with your consent, to measure our Facebook and Instagram ads. For full details of the cookies we use and how to control them, please see our Cookie Policy.",
         ),
       ],
     },
@@ -119,12 +119,13 @@ const privacy: LegalDoc = {
       blocks: [
         p("We may share your personal data with:"),
         ul([
-          "Service providers who help us run our business and website — for example hosting, email, analytics, and communication providers (including messaging platforms such as WhatsApp) — who process data on our behalf under contract.",
+          "Service providers who help us run our business and website (for example hosting, email, analytics, and communication providers, including messaging platforms such as WhatsApp), who process data on our behalf under contract.",
+          "Advertising platforms: with your consent, Meta Platforms Ireland Limited (Facebook and Instagram) receives information about your visit through the Meta Pixel, so we can measure our ads and show them to relevant people. If you arrive on our trades page (/trades) from one of our Facebook or Instagram ads and have not made a cookie choice, our server tells Meta that the ad click reached the page, using only the ad click reference in the page address and your device's IP address and browser type, without any cookies. When you send an enquiry through the form on our trades page (/trades), we also send Meta your email address, phone number and name in hashed (scrambled) form, together with the ad click reference in the page address, so we can measure which ads produce enquiries. We do this in our legitimate interest in measuring our advertising, and we do not do it if you have rejected cookies. Meta also uses this information under its own privacy policy.",
           "Professional advisers such as accountants and lawyers, where necessary.",
           "Regulators, law enforcement, or other authorities where we are legally required to do so.",
         ]),
         p(
-          "We do not sell your personal data, and we do not share it with third parties for their own marketing purposes.",
+          "We do not sell your personal data. Apart from the advertising platforms described above, we do not share it with third parties for their own marketing purposes.",
         ),
       ],
     },
@@ -244,7 +245,7 @@ const terms: LegalDoc = {
       heading: "3. Intellectual property",
       blocks: [
         p(
-          "All content on this website — including text, graphics, logos, designs, images, and code — is owned by or licensed to Integrate AI Solutions Limited and is protected by copyright and other intellectual property laws. You may not use it without our prior written consent, except as permitted for normal viewing of the site.",
+          "All content on this website, including text, graphics, logos, designs, images, and code, is owned by or licensed to Integrate AI Solutions Limited and is protected by copyright and other intellectual property laws. You may not use it without our prior written consent, except as permitted for normal viewing of the site.",
         ),
       ],
     },
@@ -326,7 +327,7 @@ const cookies: LegalDoc = {
   title: "Cookie Policy",
   summary:
     "How Integrate AI Solutions Limited uses cookies and similar technologies, and how you can control them.",
-  updated: "8 October 2026",
+  updated: "12 November 2026",
   intro:
     "This Cookie Policy explains what cookies are, how we use them on our website, and how you can manage your preferences.",
   sections: [
@@ -343,15 +344,19 @@ const cookies: LegalDoc = {
       blocks: [
         p("We use cookies for the following purposes:"),
         ul([
-          "Strictly necessary cookies — required for the website to function and to keep it secure. These cannot be switched off in our systems.",
-          "Performance and analytics cookies — help us understand how visitors use the site so we can improve it. The information collected is aggregated and used to measure and improve performance.",
-          "Functional cookies — remember choices you make to give you a better, more personalised experience.",
+          "Strictly necessary cookies: required for the website to function and to keep it secure. These cannot be switched off in our systems.",
+          "Performance and analytics cookies: help us understand how visitors use the site so we can improve it. The information collected is aggregated and used to measure and improve performance.",
+          "Functional cookies: remember choices you make to give you a better, more personalised experience.",
+          "Advertising cookies: with your consent, help us measure how our Facebook and Instagram ads perform and show our ads to people who have visited the site.",
         ]),
         p(
           "Analytics: we use Vercel Web Analytics to understand how the site is used, for example which pages are visited and how visitors found us. It does not use cookies. Visitors are counted using a hash of the incoming request, which is discarded after 24 hours, and page views are recorded anonymously and reported only as aggregated statistics, not linked to any individual or IP address.",
         ),
         p(
-          "Google Analytics: with your consent, we use Google Analytics 4 (provided by Google Ireland Limited) to understand how visitors find and use the site, for example which pages are visited, how people arrived, and when an enquiry form is submitted. Google Analytics sets first-party cookies (named _ga and _ga_<ID>) that last up to 2 years. These cookies are only set if you click \"Accept\" in our cookie banner. If you click \"Reject\", or make no choice, no Google Analytics cookies are set and Google receives only basic, cookieless signals without identifiers. You can change your choice at any time using the \"Cookie settings\" link in the footer of every page. We do not use advertising cookies.",
+          "Google Analytics: with your consent, we use Google Analytics 4 (provided by Google Ireland Limited) to understand how visitors find and use the site, for example which pages are visited, how people arrived, and when an enquiry form is submitted. Google Analytics sets first-party cookies (named _ga and _ga_<ID>) that last up to 2 years. These cookies are only set if you click \"Accept\" in our cookie banner. If you click \"Reject\", or make no choice, no Google Analytics cookies are set and Google receives only basic, cookieless signals without identifiers. You can change your choice at any time using the \"Cookie settings\" link in the footer of every page.",
+        ),
+        p(
+          "Meta Pixel: with your consent, we use the Meta Pixel (provided by Meta Platforms Ireland Limited) to measure how our Facebook and Instagram ads perform, for example how many people visit the site from an ad and then send an enquiry, and to show our ads to people who have visited the site. It sets a first-party cookie named _fbp that lasts up to 90 days, and Meta may also use its own cookies (such as fr) if you are logged in to Facebook or Instagram. When you send an enquiry form, Meta may receive details you entered, such as your email address or phone number, in hashed form so it can match the visit to a Facebook or Instagram account. The pixel is only loaded if you click \"Accept\" in our cookie banner. If you click \"Reject\", or make no choice, it is not loaded and no cookies are set. There are two exceptions, both on our trades page (/trades) and both without cookies. If you arrive there from one of our Facebook or Instagram ads without having made a cookie choice, our server tells Meta that the ad click reached the page, using only the ad click reference in the page address, your IP address and your browser type. And if you send the enquiry form there without having made a cookie choice, we send Meta the details you entered, in hashed form, from our server so we can measure our ads. No cookies are used for either, and neither happens if you have clicked \"Reject\". You can change your choice at any time using the \"Cookie settings\" link in the footer of every page. Meta's own use of this information is described in its privacy policy at facebook.com/privacy/policy.",
         ),
         p(
           "We also use Integrate Analytics, our own analytics tool, to see which pages are visited, how visitors found us, and when someone taps a phone, email or WhatsApp link or submits a form. It does not use cookies or store anything on your device. Visitors are counted using an anonymous code created from the incoming request that changes every day, IP addresses are not stored, and the contents of forms are never collected.",
@@ -362,7 +367,7 @@ const cookies: LegalDoc = {
       heading: "3. Third-party cookies",
       blocks: [
         p(
-          "Some cookies may be set by third-party services that appear on our pages, such as analytics providers. We do not control the setting of these cookies, so we recommend you check the relevant third party's website for more information about their cookies and how to manage them.",
+          "Some cookies may be set by third-party services that appear on our pages, such as analytics and advertising providers (Google and Meta). We do not control the setting of these cookies, so we recommend you check the relevant third party's website for more information about their cookies and how to manage them.",
         ),
       ],
     },
