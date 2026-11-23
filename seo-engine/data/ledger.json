@@ -414,6 +414,15 @@
       "slug": "how-an-ai-receptionist-for-joiners-actually-works",
       "title": "How an AI receptionist for joiners actually works",
       "targetKeyword": "ai receptionist for joiners"
+    },
+    {
+      "date": "2026-11-23",
+      "type": "service",
+      "key": "service:ai-receptionist:roofers",
+      "status": "generated",
+      "slug": "an-ai-receptionist-for-roofers-that-never-misses-an-enquiry",
+      "title": "An AI receptionist for roofers that never misses an enquiry",
+      "targetKeyword": "ai receptionist for roofers"
     }
   ]
 }
