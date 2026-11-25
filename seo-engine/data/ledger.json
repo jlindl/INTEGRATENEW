@@ -423,6 +423,15 @@
       "slug": "an-ai-receptionist-for-roofers-that-never-misses-an-enquiry",
       "title": "An AI receptionist for roofers that never misses an enquiry",
       "targetKeyword": "ai receptionist for roofers"
+    },
+    {
+      "date": "2026-11-25",
+      "type": "service",
+      "key": "service:missed-call-text-back:glaziers",
+      "status": "generated",
+      "slug": "missed-call-text-back-for-window-and-door-installers",
+      "title": "Missed call text back for window and door installers",
+      "targetKeyword": "missed call text back for window and door installers"
     }
   ]
 }
