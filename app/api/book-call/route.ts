@@ -24,7 +24,8 @@ const GHL_API_VERSION = "2021-07-28";
 
 type Lead = {
   name: string;
-  email: string;
+  /** Optional when there is a phone number (the /trades form asks for no email). */
+  email?: string;
   phone?: string;
   company?: string;
   interest?: string;
@@ -64,6 +65,11 @@ function cleanTags(value: unknown): string[] {
 
 function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+/** Loose on format, strict on "is there actually a number here". */
+function isPhone(value: string): boolean {
+  return (value.match(/\d/g) || []).length >= 10;
 }
 
 /** POST a JSON body with a hard timeout so a slow upstream can't hang the route. */
@@ -183,9 +189,13 @@ export async function POST(req: Request) {
 
   const name = (data.name || "").trim();
   const email = (data.email || "").trim();
-  if (!name || !isEmail(email)) {
+  const phone = (data.phone || "").trim();
+  // A name plus a way to reach them: a valid email, or (for forms like
+  // /trades that only ask for a number) a phone number. An email that is
+  // given must still be valid.
+  if (!name || (email ? !isEmail(email) : !isPhone(phone))) {
     return NextResponse.json(
-      { ok: false, error: "Please enter your name and a valid email." },
+      { ok: false, error: "Please enter your name and a valid email or phone number." },
       { status: 422 },
     );
   }
@@ -193,8 +203,8 @@ export async function POST(req: Request) {
   const str = (v: unknown) => (typeof v === "string" ? v.trim() : "") || undefined;
   const lead: Lead = {
     name,
-    email,
-    phone: (data.phone || "").trim() || undefined,
+    email: email || undefined,
+    phone: phone || undefined,
     company: (data.company || "").trim() || undefined,
     interest: (data.interest || "").trim() || undefined,
     message: (data.message || "").trim() || undefined,
@@ -259,14 +269,14 @@ export async function POST(req: Request) {
       // 200 here does NOT prove a contact was created. Say so in the log.
       await forwardToWebhook(usableWebhook, lead);
       console.log(
-        `[book-call] delivered via webhook (${lead.email}) — contact creation depends on the GHL Workflow`,
+        `[book-call] delivered via webhook (${lead.email || lead.phone}): contact creation depends on the GHL Workflow`,
       );
       reportToMeta();
       return NextResponse.json({ ok: true, via: "webhook" });
     }
     if (token && locationId) {
       const contactId = await upsertContact(token, locationId, lead);
-      console.log(`[book-call] delivered via contacts API (${lead.email}) — contact ${contactId ?? "id unknown"}`);
+      console.log(`[book-call] delivered via contacts API (${lead.email || lead.phone}): contact ${contactId ?? "id unknown"}`);
       reportToMeta();
       return NextResponse.json({ ok: true, via: "contacts-api" });
     }

@@ -30,7 +30,7 @@ export type MetaClientContext = {
 };
 
 type LeadForMeta = {
-  email: string;
+  email?: string;
   phone?: string;
   firstName?: string;
   lastName?: string;
@@ -140,9 +140,9 @@ export async function sendMetaLead(req: Request, lead: LeadForMeta, ctx: MetaCli
     return;
   }
 
-  const userData: Record<string, unknown> = {
-    em: [sha256(lead.email.trim().toLowerCase())],
-  };
+  const userData: Record<string, unknown> = {};
+  const em = lead.email?.trim().toLowerCase();
+  if (em) userData.em = [sha256(em)];
   const ph = lead.phone ? normalisePhone(lead.phone) : "";
   if (ph) userData.ph = [sha256(ph)];
   const fn = lead.firstName?.trim().toLowerCase();

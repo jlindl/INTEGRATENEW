@@ -14,10 +14,12 @@ import { LEGAL_DOCS } from "@/lib/legalData";
  * construction firms.
  *
  * Built to convert paid traffic: no nav and no links out except the legal
- * footer. The VSL and the page's own three-step form (TradesLeadForm) sit
- * side by side at the top; everything below answers the questions people have
- * before they hand over a number, with calls to action back to the form. It is
- * noindex because it repeats the lead generation service page.
+ * footer. The first screen is only the VSL and the page's own four-field form
+ * (TradesLeadForm), side by side on desktop and stacked on phones. Nothing else
+ * sits above the fold. Everything below answers the questions people have
+ * before they hand over a number, with calls to action back to the form. There
+ * is no call to book: Jack gets in touch after the form is sent. It is noindex
+ * because it repeats the lead generation service page.
  *
  * Copy is drawn from the lead generation hub (lib/serviceHubs.ts) and the VSL.
  * Don't add numbers or testimonials here unless they are real and approved.
@@ -69,12 +71,6 @@ const COMPARE = [
   { row: "What you do next", them: "Chase them", us: "Turn up to a booked visit" },
 ];
 
-const CALL = [
-  { title: "Your area and your work", text: "Which jobs you want more of, which you'd rather not do, and the postcodes you cover." },
-  { title: "How it would run for you", text: "What the ads would say, the questions the WhatsApp agent would ask, and how bookings land in your diary." },
-  { title: "A straight answer", text: "Whether it's a good fit for your trade and area. If it isn't, we'll say so." },
-];
-
 const FIT = [
   "You're a UK trade or construction firm with a set area you cover.",
   "You want more higher-value jobs, not just more enquiries.",
@@ -87,8 +83,8 @@ const FAQS = [
   { q: "Will the AI agent pretend to be me?", a: "It replies in your business's name and tone, asks the qualifying questions you agree on, and hands over to you for anything it shouldn't answer." },
   { q: "Does it use my WhatsApp number?", a: "It runs on a WhatsApp Business number set up for your business, so customers see your business name. You can step in and take over any conversation." },
   { q: "Can it book into my existing calendar?", a: "Yes. It books into the calendar you already use, and only into the times you make available." },
-  { q: "How much should I spend on ads?", a: "It depends on your area, your trade and the jobs you want. We talk it through on the call, and nothing is spent until we've agreed a plan." },
-  { q: "How quickly can it be set up?", a: "It depends on your trade, area and calendar. The quickest way to a clear answer is the free call, where we look at what you want more of." },
+  { q: "How much should I spend on ads?", a: "It depends on your area, your trade and the jobs you want. We talk it through when I get in touch, and nothing is spent until we've agreed a plan." },
+  { q: "How quickly can it be set up?", a: "It depends on your trade, area and calendar. Send your details and I'll get in touch with a clear answer for your business." },
 ];
 
 const eyebrow = "font-mono text-[0.72rem] uppercase tracking-[0.14em] text-ink-3";
@@ -101,7 +97,7 @@ const Tick = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-function CtaButton({ label = "Book my free call" }: { label?: string }) {
+function CtaButton({ label = "Send my details" }: { label?: string }) {
   return (
     <a
       href="#get-started"
@@ -123,80 +119,44 @@ export default function TradesPage() {
     <main id="main" className="relative overflow-x-clip">
       <div className="glow-accent pointer-events-none absolute inset-x-0 top-0 h-[60rem]" aria-hidden="true" />
 
-      {/* Header: logo and one way forward */}
-      <header className="relative mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
-        <span className="inline-flex items-center gap-2.5">
-          <LogoMark className="h-7 w-7" />
-          <span className="font-display-tuned text-lg font-medium text-ink">Integrate</span>
-        </span>
-        <a
-          href="#get-started"
-          className="inline-flex min-h-10 items-center rounded-full border border-line-2 bg-card/70 px-4 text-[0.88rem] font-medium text-ink transition-colors hover:border-ink"
-        >
-          Free 20-min call
-        </a>
-      </header>
-
-      {/* Hero */}
-      <section aria-labelledby="hero-title" className="relative mx-auto max-w-6xl px-5 pb-14 pt-10 sm:px-8 sm:pt-14 lg:pb-20">
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12">
-          <div>
-            <Reveal>
-              <p className={eyebrow}>For UK trades and construction firms</p>
-              <h1 id="hero-title" className="font-display-tuned mt-4 text-[clamp(2.4rem,8vw,4.4rem)] font-medium leading-[1.02] tracking-[-0.01em] text-ink">
-                A diary full of jobs <br />
-                <span className={italic}>worth quoting.</span>
-              </h1>
-              <p className="mt-5 max-w-[52ch] text-[1.06rem] leading-relaxed text-ink-2 sm:text-[1.12rem]">
-                We run local Facebook and Instagram ads for your business, answer every enquiry on
-                WhatsApp within seconds, and book the good ones straight into your calendar.
-              </p>
-              {/* The promise the Meta ads make, repeated here so the page matches the ad. */}
-              <p className="mt-5 flex max-w-[52ch] items-start gap-2.5 rounded-2xl border border-line bg-card/70 px-4 py-3 text-[0.98rem] leading-snug text-ink-2">
-                <Tick className="mt-0.5 text-[#2f9e6b]" />
-                <span>
-                  <strong className="font-medium text-ink">10 booked quotes in your first 30 days.</strong> If we
-                  miss, we keep working without charging our fee until you have them.
-                </span>
-              </p>
-            </Reveal>
-  
-            <Reveal delay={0.08} className="mt-9 lg:mt-10">
-              {hasVideo ? (
-                <>
-                  <AdVideo src={`/${VIDEO_FILE}`} poster={poster} />
-                  <p className="mt-3 flex items-center gap-2 text-[0.85rem] text-ink-3">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-                      <path d="M8 5.5v13l11-6.5-11-6.5Z" />
-                    </svg>
-                    How it works, in under two minutes
-                  </p>
-                </>
-              ) : (
-                <ul className="space-y-3">
-                  {PROMISES.map((p) => (
-                    <li key={p} className="flex gap-3 text-[1rem] text-ink-2">
-                      <Tick className="mt-0.5 text-ink" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Reveal>
+      {/* First screen: the video and the form, nothing else. */}
+      <section aria-label="Get started" className="relative mx-auto max-w-6xl px-3 pb-12 pt-3 sm:px-8 sm:pt-8 lg:pb-16">
+        <div className={`grid items-start gap-3 sm:gap-6 ${hasVideo ? "lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-10" : "mx-auto max-w-md"}`}>
+          {hasVideo ? <AdVideo src={`/${VIDEO_FILE}`} poster={poster} /> : null}
+          {/* On desktop the form stays in view while the visitor scrolls past the video. */}
+          <div id="get-started" className="scroll-mt-4 lg:sticky lg:top-6">
+            <TradesLeadForm />
           </div>
-
-          {/* On desktop the form starts level with the headline and stays in
-              view while the visitor scrolls past the video. */}
-          <Reveal delay={0.16} className="lg:sticky lg:top-6">
-            <div id="get-started" className="scroll-mt-6">
-              <TradesLeadForm />
-            </div>
-          </Reveal>
         </div>
+      </section>
 
-        {/* Promises */}
+      {/* What it is: the headline, the promise and the trust points, below the fold */}
+      <section aria-labelledby="hero-title" className="relative mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:py-20">
+        <Reveal>
+          <span className="inline-flex items-center gap-2.5">
+            <LogoMark className="h-7 w-7" />
+            <span className="font-display-tuned text-lg font-medium text-ink">Integrate</span>
+          </span>
+          <p className={`${eyebrow} mt-8`}>For UK trades and construction firms</p>
+          <h1 id="hero-title" className="font-display-tuned mt-4 text-[clamp(2.4rem,8vw,4.4rem)] font-medium leading-[1.02] tracking-[-0.01em] text-ink">
+            A diary full of jobs <br />
+            <span className={italic}>worth quoting.</span>
+          </h1>
+          <p className="mt-5 max-w-[52ch] text-[1.06rem] leading-relaxed text-ink-2 sm:text-[1.12rem]">
+            We run local Facebook and Instagram ads for your business, answer every enquiry on
+            WhatsApp within seconds, and book the good ones straight into your calendar.
+          </p>
+          {/* The promise the Meta ads make, repeated here so the page matches the ad. */}
+          <p className="mt-5 flex max-w-[52ch] items-start gap-2.5 rounded-2xl border border-line bg-card/70 px-4 py-3 text-[0.98rem] leading-snug text-ink-2">
+            <Tick className="mt-0.5 text-[#2f9e6b]" />
+            <span>
+              <strong className="font-medium text-ink">10 booked quotes in your first 30 days.</strong> If we
+              miss, we keep working without charging our fee until you have them.
+            </span>
+          </p>
+        </Reveal>
         <Reveal delay={0.1}>
-          <ul className="mt-10 grid gap-x-8 gap-y-3 border-t border-line pt-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-x-8 gap-y-3 border-t border-line pt-6 sm:grid-cols-2 lg:grid-cols-4">
             {PROMISES.map((p) => (
               <li key={p} className="flex items-start gap-2.5 text-[0.93rem] leading-snug text-ink-2">
                 <Tick className="mt-px text-ink" />
@@ -311,45 +271,22 @@ export default function TradesPage() {
         </Reveal>
       </section>
 
-      {/* The call */}
-      <section aria-labelledby="call" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
-          <div>
-            <Reveal>
-              <p className={eyebrow}>The free call</p>
-              <h2 id="call" className={h2}>
-                Twenty minutes, <span className={italic}>no pressure.</span>
-              </h2>
-            </Reveal>
-            <ol className="mt-9 space-y-6">
-              {CALL.map((c, i) => (
-                <Reveal as="li" key={c.title} delay={0.06 * i} className="flex gap-4">
-                  <span className="font-display-tuned flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line-2 text-[0.98rem] text-ink">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-[1.05rem] font-medium text-ink">{c.title}</h3>
-                    <p className="mt-1 leading-relaxed text-ink-2">{c.text}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </ol>
+      {/* Who it's for */}
+      <section aria-labelledby="fit" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+        <Reveal className="mx-auto max-w-2xl rounded-2xl border border-line bg-card p-6 sm:p-8">
+          <h2 id="fit" className="font-display-tuned text-[1.45rem] font-medium text-ink">It&apos;s a good fit if…</h2>
+          <ul className="mt-5 space-y-4">
+            {FIT.map((f) => (
+              <li key={f} className="flex gap-3 leading-relaxed text-ink-2">
+                <Tick className="mt-1 text-[#2f9e6b]" />
+                {f}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-7">
+            <CtaButton />
           </div>
-          <Reveal delay={0.1} className="self-start rounded-2xl border border-line bg-card p-6 sm:p-8">
-            <h3 className="font-display-tuned text-[1.45rem] font-medium text-ink">It&apos;s a good fit if…</h3>
-            <ul className="mt-5 space-y-4">
-              {FIT.map((f) => (
-                <li key={f} className="flex gap-3 leading-relaxed text-ink-2">
-                  <Tick className="mt-1 text-[#2f9e6b]" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-7">
-              <CtaButton />
-            </div>
-          </Reveal>
-        </div>
+        </Reveal>
       </section>
 
       {/* FAQs */}
@@ -358,10 +295,10 @@ export default function TradesPage() {
           <Reveal className="self-start lg:sticky lg:top-8">
             <p className={eyebrow}>Questions</p>
             <h2 id="faqs" className={h2}>
-              Before you <span className={italic}>book.</span>
+              Before you <span className={italic}>send it.</span>
             </h2>
             <p className="mt-5 max-w-[40ch] leading-relaxed text-ink-2">
-              Anything else, ask us on the call. It&apos;s free, and there&apos;s no obligation.
+              Anything else, ask me when I get in touch. There&apos;s no obligation.
             </p>
           </Reveal>
           <Reveal delay={0.08}>
@@ -394,13 +331,13 @@ export default function TradesPage() {
               More of the right jobs, <span className="whitespace-nowrap italic text-[#a5a8f6]">booked in for you.</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[44ch] leading-relaxed text-mist">
-              Three quick questions and we&apos;ll call you within one business day.
+              Four quick details and I&apos;ll be in touch.
             </p>
             <a
               href="#get-started"
               className="group mt-8 inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 rounded-full bg-ivory px-7 py-4 text-base font-medium text-carbon transition-colors duration-300 hover:bg-white"
             >
-              Book my free call
+              Send my details
               <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
@@ -421,7 +358,7 @@ export default function TradesPage() {
         <p className="mt-3 font-mono text-[0.7rem] text-ink-3">© 2026 Integrate AI Solutions Limited</p>
       </footer>
 
-      <StickyCta />
+      <StickyCta label="Send my details" note="· 4 quick details" />
     </main>
   );
 }

@@ -4,10 +4,10 @@
  * TradesLeadForm — the /trades landing page's own lead form, for people
  * arriving from the Meta ads.
  *
- * Three short steps: two one-tap questions (trade, typical job value), then
- * contact details. The taps get people moving before we ask for a number, and
- * the answers give the call-back some context. Inputs are 16px so iOS doesn't
- * zoom on focus.
+ * One screen, four fields: business name, trade, name and phone number. No
+ * email and no call to book, so the ask is as small as possible: Jack gets in
+ * touch after they submit. Fields carry autocomplete hints so phones and
+ * browsers can fill them in. Inputs are 16px so iOS doesn't zoom on focus.
  *
  * Submits to /api/book-call (→ GoHighLevel). The answers go in `industry` and
  * `message` (a note on the contact), `interest` adds a "Trades lead
@@ -33,18 +33,12 @@ const TRADES = [
   "Another trade",
 ];
 
-const JOB_VALUES = ["Under £1,000", "£1,000 to £5,000", "£5,000 to £20,000", "Over £20,000"];
+/** The number Jack calls trades leads from, so they know to pick up. */
+const CALL_FROM = "07710206066";
 
-const STEPS = [
-  { title: "What trade are you in?", hint: "Tap one to start. It takes about 30 seconds." },
-  { title: "What's a typical job worth?", hint: "Roughly. It helps us plan the ads around the work you want more of." },
-  { title: "Where should we call you?", hint: "We'll ring within one business day for a free 20-minute chat." },
-];
-
-type Contact = { name: string; business: string; phone: string; email: string; area: string };
+type Contact = { business: string; trade: string; name: string; phone: string };
 type Status = "idle" | "submitting" | "success" | "error";
 
-const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 /** Loose on format, strict on "is there actually a number here". */
 const isPhone = (v: string) => (v.match(/\d/g) || []).length >= 10;
 
@@ -53,34 +47,9 @@ const isPhone = (v: string) => (v.match(/\d/g) || []).length >= 10;
    outline-none, so the ring is switched off inline. */
 const NO_OUTLINE = { outline: "none" } as const;
 
-const label = "mb-1.5 block text-[0.82rem] font-medium text-ink-2";
+const label = "mb-1 block text-[0.82rem] font-medium text-ink-2 sm:mb-1.5";
 const field =
-  "w-full rounded-xl border border-line bg-white px-4 py-3 text-base text-ink placeholder:text-ink-3/70 transition-colors duration-200 focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10";
-
-function Choice({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: ReactNode }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={selected}
-      onClick={onClick}
-      className={`group flex min-h-[3.25rem] w-full items-center gap-2.5 rounded-xl border px-3.5 py-3 text-left text-[0.9rem] font-medium leading-snug sm:gap-3 sm:px-4 sm:text-[0.95rem] transition-[border-color,background-color,box-shadow] duration-200 ${
-        selected
-          ? "border-ink bg-ink/[0.04] text-ink shadow-[inset_0_0_0_1px_var(--color-ink)]"
-          : "border-line bg-white text-ink-2 hover:border-ink/40 hover:text-ink"
-      }`}
-    >
-      <span
-        aria-hidden="true"
-        className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border transition-colors ${
-          selected ? "border-ink" : "border-line-2 group-hover:border-ink/50"
-        }`}
-      >
-        {selected && <span className="h-2 w-2 rounded-full bg-ink" />}
-      </span>
-      {children}
-    </button>
-  );
-}
+  "w-full rounded-xl border border-line bg-white px-4 py-2.5 text-base sm:py-3 text-ink placeholder:text-ink-3/70 transition-colors duration-200 focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10";
 
 function FieldError({ children }: { children: ReactNode }) {
   return <p className="mt-1.5 text-[0.8rem] text-[#8a3b23]">{children}</p>;
@@ -93,10 +62,7 @@ const Check = ({ className = "" }: { className?: string }) => (
 );
 
 export function TradesLeadForm() {
-  const [step, setStep] = useState(0);
-  const [trade, setTrade] = useState("");
-  const [jobValue, setJobValue] = useState("");
-  const [contact, setContact] = useState<Contact>({ name: "", business: "", phone: "", email: "", area: "" });
+  const [contact, setContact] = useState<Contact>({ business: "", trade: "", name: "", phone: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
@@ -105,7 +71,6 @@ export function TradesLeadForm() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const honeypotRef = useRef<HTMLInputElement>(null);
   const utm = useRef<string[]>([]);
-  const interacted = useRef(false);
   const started = useRef(false);
 
   // Keep the ad's UTM tags so the lead note says which ad it came from.
@@ -115,34 +80,24 @@ export function TradesLeadForm() {
     if (params.get("fbclid")) utm.current.push("from a Facebook or Instagram click");
   }, []);
 
-  // After the visitor moves between steps, put focus on the new step's heading
-  // (for screen readers and keyboards) and keep the card in view on phones.
+  // After a successful send, move focus to the thank-you heading (for screen
+  // readers and keyboards) and keep the card in view on phones.
   useEffect(() => {
-    if (!interacted.current) return;
+    if (status !== "success") return;
     headingRef.current?.focus({ preventScroll: true });
     const top = cardRef.current?.getBoundingClientRect().top ?? 0;
     if (top < 0) cardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [step, status]);
+  }, [status]);
 
-  const go = (next: number) => {
-    interacted.current = true;
-    setStep(next);
-    track("trades_form_step", { step: next + 1 });
-  };
-
-  const choose = (setter: (v: string) => void, value: string, next: number) => {
-    setter(value);
+  const set = (key: keyof Contact, value: string) => {
     if (!started.current) {
       started.current = true;
       track("form_start", { form: "trades_lead" });
     }
-    // A beat so the tick is seen before the step changes.
-    window.setTimeout(() => go(next), 220);
+    setContact((c) => ({ ...c, [key]: value }));
   };
 
-  const set = (key: keyof Contact, value: string) => setContact((c) => ({ ...c, [key]: value }));
-
-  const valid = !!contact.name.trim() && !!contact.business.trim() && isPhone(contact.phone) && isEmail(contact.email.trim());
+  const valid = !!contact.business.trim() && !!contact.trade && !!contact.name.trim() && isPhone(contact.phone);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -157,11 +112,10 @@ export function TradesLeadForm() {
 
     const name = contact.name.trim().replace(/\s+/g, " ");
     const [firstName, ...rest] = name.split(" ");
+    const trade = contact.trade;
     const message = [
       `Business: ${contact.business.trim()}`,
-      `Trade: ${trade || "not given"}`,
-      `Typical job value: ${jobValue || "not given"}`,
-      `Area covered: ${contact.area.trim() || "not given"}`,
+      `Trade: ${trade}`,
       utm.current.length ? `Ad: ${utm.current.join(", ")}` : "",
     ]
       .filter(Boolean)
@@ -179,7 +133,6 @@ export function TradesLeadForm() {
           firstName,
           lastName: rest.join(" ") || undefined,
           company: contact.business.trim(),
-          email: contact.email.trim(),
           phone: contact.phone.trim(),
           industry: trade,
           interest: INTEREST,
@@ -191,13 +144,12 @@ export function TradesLeadForm() {
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong. Please try again.");
-      track("generate_lead", { form: "trades_lead", source: SOURCE, trade, job_value: jobValue });
+      track("generate_lead", { form: "trades_lead", source: SOURCE, trade });
       // Browser copy of the Lead the ads optimise for (only if cookies were accepted).
       // The server sends it either way unless cookies were rejected; the shared
       // event id stops Meta counting it twice.
-      metaSetUserData({ email: contact.email, phone: contact.phone, firstName, lastName: rest.join(" ") });
-      metaTrack("Lead", { content_name: SOURCE, content_category: trade || "not given" }, metaEventId);
-      interacted.current = true;
+      metaSetUserData({ phone: contact.phone, firstName, lastName: rest.join(" ") });
+      metaTrack("Lead", { content_name: SOURCE, content_category: trade }, metaEventId);
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -210,7 +162,7 @@ export function TradesLeadForm() {
   return (
     <div
       ref={cardRef}
-      className="scroll-mt-4 rounded-[1.4rem] border border-line bg-card p-5 shadow-[0_40px_90px_-50px_rgba(27,26,22,0.45),0_2px_6px_-2px_rgba(27,26,22,0.06)] sm:p-7"
+      className="scroll-mt-4 rounded-[1.4rem] border border-line bg-card p-4 shadow-[0_40px_90px_-50px_rgba(27,26,22,0.45),0_2px_6px_-2px_rgba(27,26,22,0.06)] sm:p-7"
     >
       {status === "success" ? (
         <div role="status" aria-live="polite">
@@ -218,26 +170,13 @@ export function TradesLeadForm() {
             <Check className="h-5 w-5" />
           </span>
           <h3 ref={headingRef} tabIndex={-1} style={NO_OUTLINE} className="font-display-tuned mt-5 text-[1.6rem] font-medium leading-tight text-ink">
-            Thanks{firstName ? `, ${firstName}` : ""}. You&apos;re booked in for a call back.
+            Thanks{firstName ? `, ${firstName}` : ""}. I&apos;ll be in touch.
           </h3>
           <p className="mt-3 leading-relaxed text-ink-2">
-            We&apos;ll ring you on <span className="font-medium text-ink">{contact.phone.trim()}</span> within one business day.
+            I&apos;ll call you on <span className="font-medium text-ink">{contact.phone.trim()}</span> from{" "}
+            <span className="whitespace-nowrap font-medium text-ink">{CALL_FROM}</span>, so save it if you like.
           </p>
-          <p className="mt-7 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-3">What happens next</p>
-          <ol className="mt-3 space-y-3">
-            {[
-              "We call you for a free 20-minute chat.",
-              "We look at your area and the jobs you want more of.",
-              "If it's a good fit, we agree a plan together. Nothing is spent before that.",
-            ].map((t, i) => (
-              <li key={t} className="flex gap-3 text-[0.95rem] leading-relaxed text-ink-2">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line font-mono text-[0.72rem] text-ink">
-                  {i + 1}
-                </span>
-                {t}
-              </li>
-            ))}
-          </ol>
+          <p className="mt-4 text-[0.95rem] leading-relaxed text-ink-3">Jack, Integrate</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} noValidate>
@@ -249,112 +188,70 @@ export function TradesLeadForm() {
             </label>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <p className="inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#2f9e6b]" aria-hidden="true" />
-              Free 20-minute call
-            </p>
-            <p className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-3" aria-live="polite">
-              Step {step + 1} of 3
-            </p>
-          </div>
-          <div className="mt-3 grid grid-cols-3 gap-1.5" aria-hidden="true">
-            {STEPS.map((_, i) => (
-              <span key={i} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? "bg-ink" : "bg-line"}`} />
-            ))}
-          </div>
+          <h3 className="font-display-tuned text-[1.3rem] font-medium leading-tight text-ink sm:text-[1.45rem]">Get more jobs booked in</h3>
+          <p className="mt-1 text-[0.92rem] leading-relaxed text-ink-3">Four quick details and I&apos;ll be in touch.</p>
 
-          <h3 ref={headingRef} tabIndex={-1} style={NO_OUTLINE} className="font-display-tuned mt-6 text-[1.55rem] font-medium leading-tight text-ink">
-            {STEPS[step].title}
-          </h3>
-          <p className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-3">{STEPS[step].hint}</p>
-
-          {step === 0 && (
-            <div className="mt-5 grid grid-cols-2 gap-2.5">
-              {TRADES.map((t) => (
-                <Choice key={t} selected={trade === t} onClick={() => choose(setTrade, t, 1)}>
-                  {t}
-                </Choice>
-              ))}
+          <div className="mt-4 grid gap-3 sm:mt-5 sm:gap-3.5">
+            <div>
+              <label htmlFor="tl-business" className={label}>Business name</label>
+              <input id="tl-business" name="organization" className={field} autoComplete="organization" enterKeyHint="next" value={contact.business} onChange={(e) => set("business", e.target.value)} />
+              {showErrors && !contact.business.trim() && <FieldError>Please enter your business name.</FieldError>}
             </div>
-          )}
-
-          {step === 1 && (
-            <div className="mt-5 grid gap-2.5">
-              {JOB_VALUES.map((v) => (
-                <Choice key={v} selected={jobValue === v} onClick={() => choose(setJobValue, v, 2)}>
-                  {v}
-                </Choice>
-              ))}
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="mt-5 grid gap-4">
-              <div>
-                <label htmlFor="tl-name" className={label}>Your name</label>
-                <input id="tl-name" className={field} autoComplete="name" enterKeyHint="next" value={contact.name} onChange={(e) => set("name", e.target.value)} />
-                {showErrors && !contact.name.trim() && <FieldError>Please enter your name.</FieldError>}
-              </div>
-              <div>
-                <label htmlFor="tl-business" className={label}>Business name</label>
-                <input id="tl-business" className={field} autoComplete="organization" enterKeyHint="next" value={contact.business} onChange={(e) => set("business", e.target.value)} />
-                {showErrors && !contact.business.trim() && <FieldError>Please enter your business name.</FieldError>}
-              </div>
-              <div>
-                <label htmlFor="tl-phone" className={label}>Mobile number</label>
-                <input id="tl-phone" type="tel" inputMode="tel" className={field} autoComplete="tel" enterKeyHint="next" value={contact.phone} onChange={(e) => set("phone", e.target.value)} />
-                {showErrors && !isPhone(contact.phone) && <FieldError>Please enter a number we can call you on.</FieldError>}
-              </div>
-              <div>
-                <label htmlFor="tl-email" className={label}>Email</label>
-                <input id="tl-email" type="email" inputMode="email" className={field} autoComplete="email" enterKeyHint="next" value={contact.email} onChange={(e) => set("email", e.target.value)} />
-                {showErrors && !isEmail(contact.email.trim()) && <FieldError>Please enter a valid email.</FieldError>}
-              </div>
-              <div>
-                <label htmlFor="tl-area" className={label}>
-                  Town or postcode you cover <span className="font-normal text-ink-3">(optional)</span>
-                </label>
-                <input id="tl-area" className={field} autoComplete="address-level2" enterKeyHint="send" value={contact.area} onChange={(e) => set("area", e.target.value)} />
-              </div>
-
-              {status === "error" && error ? (
-                <p className="rounded-xl border border-[#d9b4a6] bg-[#f6e9e2] px-4 py-3 text-sm text-[#8a3b23]" role="alert">
-                  {error}
-                </p>
-              ) : null}
-
-              <button
-                type="submit"
-                disabled={status === "submitting"}
-                className="group mt-1 inline-flex min-h-[3.4rem] w-full items-center justify-center gap-2.5 rounded-full bg-ink px-7 py-4 text-base font-medium text-paper transition-colors duration-300 hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-70"
+            <div>
+              <label htmlFor="tl-trade" className={label}>Trade</label>
+              <select
+                id="tl-trade"
+                name="trade"
+                className={`${field} appearance-none bg-[url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6a64' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")] bg-[length:12px] bg-[right_1rem_center] bg-no-repeat pr-10 ${contact.trade ? "" : "text-ink-3"}`}
+                autoComplete="off"
+                value={contact.trade}
+                onChange={(e) => set("trade", e.target.value)}
               >
-                {status === "submitting" ? "Sending…" : "Book my free call"}
-                {status !== "submitting" && (
-                  <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-                )}
-              </button>
-              <p className="text-[0.78rem] leading-relaxed text-ink-3">
-                We use your details to arrange your call.{" "}
-                <a href="/legal/privacy" className="underline underline-offset-2 hover:text-ink">Privacy Policy</a>
-              </p>
+                <option value="" disabled>
+                  Choose your trade
+                </option>
+                {TRADES.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+              {showErrors && !contact.trade && <FieldError>Please choose your trade.</FieldError>}
             </div>
-          )}
+            <div>
+              <label htmlFor="tl-name" className={label}>Your name</label>
+              <input id="tl-name" name="name" className={field} autoComplete="name" enterKeyHint="next" value={contact.name} onChange={(e) => set("name", e.target.value)} />
+              {showErrors && !contact.name.trim() && <FieldError>Please enter your name.</FieldError>}
+            </div>
+            <div>
+              <label htmlFor="tl-phone" className={label}>Phone number</label>
+              <input id="tl-phone" name="tel" type="tel" inputMode="tel" className={field} autoComplete="tel" enterKeyHint="send" value={contact.phone} onChange={(e) => set("phone", e.target.value)} />
+              {showErrors && !isPhone(contact.phone) && <FieldError>Please enter a number I can call you on.</FieldError>}
+            </div>
 
-          <div className="mt-5 flex items-center justify-between gap-4">
-            {step > 0 ? (
-              <button type="button" onClick={() => go(step - 1)} className="inline-flex min-h-10 items-center gap-1.5 text-[0.88rem] text-ink-3 transition-colors hover:text-ink">
-                <span aria-hidden="true">←</span> Back
-              </button>
-            ) : (
-              <span />
-            )}
-            <p className="flex items-center gap-1.5 text-[0.78rem] text-ink-3">
+            {status === "error" && error ? (
+              <p className="rounded-xl border border-[#d9b4a6] bg-[#f6e9e2] px-4 py-3 text-sm text-[#8a3b23]" role="alert">
+                {error}
+              </p>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className="group mt-1 inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2.5 rounded-full bg-ink px-7 py-4 text-base font-medium text-paper transition-colors duration-300 hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {status === "submitting" ? "Sending…" : "Send my details"}
+              {status !== "submitting" && (
+                <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              )}
+            </button>
+            <p className="flex flex-wrap items-center gap-x-1.5 text-[0.78rem] leading-relaxed text-ink-3">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="5" y="11" width="14" height="9" rx="2" />
                 <path d="M8 11V8a4 4 0 0 1 8 0v3" />
               </svg>
-              No obligation. Never shared.
+              No obligation. Never shared.{" "}
+              <a href="/legal/privacy" className="underline underline-offset-2 hover:text-ink">Privacy Policy</a>
             </p>
           </div>
         </form>
