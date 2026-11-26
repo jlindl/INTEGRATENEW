@@ -13,8 +13,9 @@ import { LEGAL_DOCS } from "@/lib/legalData";
  * /trades — the landing page for the Integrate Meta ads aimed at UK trades and
  * construction firms.
  *
- * Built to convert paid traffic: no nav and no links out except the legal
- * footer. The first screen is only the VSL and the page's own four-field form
+ * Built to convert paid traffic: no nav. The only links out are the logo
+ * below the fold and the footer (main site and legal pages), so nothing
+ * competes with the form on the first screen. The first screen is only the VSL and the page's own four-field form
  * (TradesLeadForm), side by side on desktop and stacked on phones. Nothing else
  * sits above the fold. Everything below answers the questions people have
  * before they hand over a number, with calls to action back to the form. There
@@ -133,10 +134,10 @@ export default function TradesPage() {
       {/* What it is: the headline, the promise and the trust points, below the fold */}
       <section aria-labelledby="hero-title" className="relative mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:py-20">
         <Reveal>
-          <span className="inline-flex items-center gap-2.5">
+          <a href="/" className="inline-flex items-center gap-2.5" aria-label="Integrate home page">
             <LogoMark className="h-7 w-7" />
             <span className="font-display-tuned text-lg font-medium text-ink">Integrate</span>
-          </span>
+          </a>
           <p className={`${eyebrow} mt-8`}>For UK trades and construction firms</p>
           <h1 id="hero-title" className="font-display-tuned mt-4 text-[clamp(2.4rem,8vw,4.4rem)] font-medium leading-[1.02] tracking-[-0.01em] text-ink">
             A diary full of jobs <br />
@@ -348,7 +349,13 @@ export default function TradesPage() {
 
       {/* Footer */}
       <footer className="mx-auto max-w-6xl px-5 pb-28 pt-8 text-center sm:px-8 lg:pb-12">
-        <nav aria-label="Legal" className="flex flex-wrap justify-center gap-x-5">
+        <a
+          href="/"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-2 px-5 text-[0.9rem] font-medium text-ink transition-colors duration-300 hover:border-ink"
+        >
+          <span aria-hidden="true">←</span> Visit the main Integrate website
+        </a>
+        <nav aria-label="Legal" className="mt-6 flex flex-wrap justify-center gap-x-5">
           {LEGAL_DOCS.map((doc) => (
             <a key={doc.slug} href={`/legal/${doc.slug}`} className="inline-block py-2.5 text-[0.75rem] text-ink-3 transition-colors duration-300 hover:text-ink sm:py-1">
               {doc.label}
